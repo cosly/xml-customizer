@@ -18,7 +18,8 @@
     "wrangler": "^3.57.0"
   },
   "dependencies": {
-    "@xml-customizer/shared": "*"
+    "@xml-customizer/shared": "*",
+    "apexcharts": "^5.3.6"
   },
   "type": "module"
 }

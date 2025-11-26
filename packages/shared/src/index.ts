@@ -104,3 +104,71 @@ export interface ApiError {
   error: string;
   message: string;
 }
+
+// Feed Analyzer types
+export interface PriceRange {
+  label: string;
+  min: number;
+  max: number;
+  count: number;
+  properties: PropertySummary[];
+}
+
+export interface CategoryCount {
+  name: string;
+  count: number;
+  percentage: number;
+  properties: PropertySummary[];
+}
+
+export interface LocationStats {
+  town: string;
+  province: string;
+  count: number;
+  avgPrice: number;
+  properties: PropertySummary[];
+}
+
+export interface SurfaceStats {
+  range: string;
+  min: number;
+  max: number;
+  count: number;
+  avgPrice: number;
+  pricePerSqm: number;
+  properties: PropertySummary[];
+}
+
+export interface FeedAnalytics {
+  feedId: number;
+  feedName: string;
+  totalProperties: number;
+  analyzedAt: string;
+
+  // Key metrics
+  metrics: {
+    totalValue: number;
+    avgPrice: number;
+    medianPrice: number;
+    minPrice: number;
+    maxPrice: number;
+    avgPricePerSqm: number;
+    avgBeds: number;
+    avgBaths: number;
+  };
+
+  // Distribution data
+  priceDistribution: PriceRange[];
+  typeDistribution: CategoryCount[];
+  bedroomDistribution: CategoryCount[];
+  bathroomDistribution: CategoryCount[];
+  locationByTown: LocationStats[];
+  locationByProvince: CategoryCount[];
+  poolDistribution: CategoryCount[];
+  newBuildDistribution: CategoryCount[];
+  energyRatingDistribution: CategoryCount[];
+  surfaceDistribution: SurfaceStats[];
+
+  // Features analysis
+  topFeatures: CategoryCount[];
+}

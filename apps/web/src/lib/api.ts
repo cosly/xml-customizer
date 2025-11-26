@@ -6,6 +6,7 @@ import type {
   CreateFeedRequest,
   UpdateSelectionsRequest,
   CustomerWithSelections,
+  FeedAnalytics,
 } from '@xml-customizer/shared';
 
 // Auto-detect production vs local development
@@ -201,6 +202,8 @@ export const feedsApi = {
     fetchApi<{ success: boolean }>(`/api/feeds/${id}/purge-cache`, {
       method: 'POST',
     }),
+
+  analyze: (id: number) => fetchApi<FeedAnalytics>(`/api/feeds/${id}/analyze`),
 };
 
 // Get public feed URL

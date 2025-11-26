@@ -50,6 +50,9 @@
         <a href="/customers" class="nav-link" class:active={$page.url.pathname.startsWith('/customers')}>
           Klanten
         </a>
+        <a href="/analyzer" class="nav-link" class:active={$page.url.pathname.startsWith('/analyzer')}>
+          Analyzer
+        </a>
       </div>
       <div class="nav-user">
         <span class="user-name">{$auth.user?.name}</span>

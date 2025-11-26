@@ -3,6 +3,7 @@ import type { Env, Variables } from '../types';
 import type { SourceFeed, CreateFeedRequest } from '@xml-customizer/shared';
 import { FeedService } from '../services/feed-service';
 import { xmlParser } from '../services/xml-parser';
+import { analyzerService } from '../services/analyzer-service';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -229,6 +230,41 @@ app.post('/:id/purge-cache', async (c) => {
   await feedService.invalidateFeedCache(Number(id));
 
   return c.json({ success: true, message: 'Cache purged' });
+});
+
+/**
+ * GET /api/feeds/:id/analyze - Analyze feed and return statistics
+ */
+app.get('/:id/analyze', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  const id = c.req.param('id');
+
+  const feed = await c.env.DB.prepare('SELECT * FROM source_feeds WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
+    .first<SourceFeed>();
+
+  if (!feed) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
+
+  const feedService = new FeedService(c.env);
+  const xmlContent = await feedService.getFeedXml(Number(id));
+
+  if (!xmlContent) {
+    return c.json({ error: 'Not found', message: 'Feed has no content. Please refresh the feed first.' }, 404);
+  }
+
+  try {
+    const analytics = analyzerService.analyzeFeed(feed.id, feed.name, xmlContent);
+    return c.json(analytics);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return c.json({ error: 'Analysis failed', message }, 500);
+  }
 });
 
 export default app;

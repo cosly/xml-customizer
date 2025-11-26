@@ -29,13 +29,13 @@
 </script>
 
 <svelte:head>
-  <title>Inloggen - XML Customizer</title>
+  <title>Inloggen - Tesoro</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <h1 class="auth-title">XML Customizer</h1>
+      <img src="/logo.png" alt="Tesoro" class="auth-logo" />
       <p class="auth-subtitle">Log in om door te gaan</p>
     </div>
 
@@ -107,11 +107,10 @@
     margin-bottom: 2rem;
   }
 
-  .auth-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin: 0 0 0.5rem 0;
+  .auth-logo {
+    height: 60px;
+    width: auto;
+    margin-bottom: 0.5rem;
   }
 
   .auth-subtitle {

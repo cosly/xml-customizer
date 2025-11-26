@@ -29,7 +29,7 @@ export class EmailService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: this.env.EMAIL_FROM || 'XML Customizer <noreply@example.com>',
+          from: this.env.EMAIL_FROM || 'Tesoro <noreply@example.com>',
           to: Array.isArray(options.to) ? options.to : [options.to],
           subject: options.subject,
           html: options.html,
@@ -61,7 +61,7 @@ export class EmailService {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 24px; font-weight: 700; color: #2563eb; }
+          .logo { height: 50px; width: auto; }
           .content { background: #f8fafc; border-radius: 8px; padding: 30px; }
           h1 { font-size: 20px; margin: 0 0 20px 0; }
           p { margin: 0 0 15px 0; }
@@ -72,12 +72,12 @@ export class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">XML Customizer</div>
+            <img src="${this.env.APP_URL || ''}/logo.png" alt="Tesoro" class="logo" />
           </div>
           <div class="content">
             <h1>Welkom, ${name}!</h1>
-            <p>Bedankt voor je registratie bij XML Customizer. Je account is nu actief en je kunt direct aan de slag.</p>
-            <p>Met XML Customizer kun je:</p>
+            <p>Bedankt voor je registratie bij Tesoro. Je account is nu actief en je kunt direct aan de slag.</p>
+            <p>Met Tesoro kun je:</p>
             <ul>
               <li>XML feeds importeren en beheren</li>
               <li>Per klant aangepaste property selecties maken</li>
@@ -94,11 +94,11 @@ export class EmailService {
     `;
 
     const text = `
-Welkom bij XML Customizer, ${name}!
+Welkom bij Tesoro, ${name}!
 
 Bedankt voor je registratie. Je account is nu actief.
 
-Met XML Customizer kun je:
+Met Tesoro kun je:
 - XML feeds importeren en beheren
 - Per klant aangepaste property selecties maken
 - Unieke feed URLs genereren voor je klanten
@@ -106,7 +106,7 @@ Met XML Customizer kun je:
 Heb je vragen? Neem gerust contact met ons op.
     `.trim();
 
-    return this.send({ to, subject: `Welkom bij XML Customizer, ${name}!`, html, text });
+    return this.send({ to, subject: `Welkom bij Tesoro, ${name}!`, html, text });
   }
 
   async sendFeedShareEmail(
@@ -125,7 +125,7 @@ Heb je vragen? Neem gerust contact met ons op.
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 24px; font-weight: 700; color: #2563eb; }
+          .logo { height: 50px; width: auto; }
           .content { background: #f8fafc; border-radius: 8px; padding: 30px; }
           h1 { font-size: 20px; margin: 0 0 20px 0; }
           p { margin: 0 0 15px 0; }
@@ -138,7 +138,7 @@ Heb je vragen? Neem gerust contact met ons op.
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">XML Customizer</div>
+            <img src="${this.env.APP_URL || ''}/logo.png" alt="Tesoro" class="logo" />
           </div>
           <div class="content">
             <h1>Je XML Feed is klaar!</h1>
@@ -195,7 +195,7 @@ Feed voor: ${customerName}
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 24px; font-weight: 700; color: #2563eb; }
+          .logo { height: 50px; width: auto; }
           .content { background: #f8fafc; border-radius: 8px; padding: 30px; }
           h1 { font-size: 20px; margin: 0 0 20px 0; }
           p { margin: 0 0 15px 0; }
@@ -207,7 +207,7 @@ Feed voor: ${customerName}
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">XML Customizer</div>
+            <img src="${this.env.APP_URL || ''}/logo.png" alt="Tesoro" class="logo" />
           </div>
           <div class="content">
             <h1>Wachtwoord resetten</h1>
@@ -247,7 +247,7 @@ Als je geen wachtwoord reset hebt aangevraagd, kun je deze email negeren.
 
     return this.send({
       to,
-      subject: 'Wachtwoord resetten - XML Customizer',
+      subject: 'Wachtwoord resetten - Tesoro',
       html,
       text,
     });

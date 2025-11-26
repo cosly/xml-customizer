@@ -42,7 +42,9 @@
 {:else if $isAuthenticated}
   <nav class="nav">
     <div class="container nav-content">
-      <a href="/" class="nav-brand">XML Customizer</a>
+      <a href="/" class="nav-brand">
+          <img src="/logo.png" alt="Tesoro" class="nav-logo" />
+        </a>
       <div class="nav-links">
         <a href="/feeds" class="nav-link" class:active={$page.url.pathname.startsWith('/feeds')}>
           Feeds

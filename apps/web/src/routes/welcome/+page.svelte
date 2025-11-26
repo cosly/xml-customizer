@@ -3,7 +3,7 @@
 	import { _ } from 'svelte-i18n';
 	import { locale } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
-	import { supportedLocales, getVisitorInfo, saveLocale, type VisitorInfo } from '$lib/i18n';
+	import { supportedLocales, localeGroups, getVisitorInfo, saveLocale, type VisitorInfo } from '$lib/i18n';
 	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
 	let visitorInfo: VisitorInfo | null = null;
@@ -34,7 +34,8 @@
 		document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
 	}
 
-	$: currentLocaleName = supportedLocales.find(l => l.code === selectedLocale)?.name || 'Español';
+	$: currentLocale = supportedLocales.find(l => l.code === selectedLocale);
+	$: currentLocaleName = currentLocale?.native || 'Español';
 </script>
 
 <svelte:head>
@@ -163,18 +164,26 @@
 					{/if}
 
 					<p class="select-prompt">{$_('landing.languages.selectLanguage')}:</p>
-					<div class="language-grid">
-						{#each supportedLocales as loc}
-							<button
-								class="language-btn"
-								class:active={loc.code === selectedLocale}
-								on:click={() => selectLanguage(loc.code)}
-							>
-								<span class="lang-flag">{loc.flag}</span>
-								<span class="lang-name">{loc.name}</span>
-							</button>
-						{/each}
-					</div>
+					{#each localeGroups as group}
+						<div class="language-group">
+							<h4 class="group-title">{group.name}</h4>
+							<div class="language-grid">
+								{#each group.locales as loc}
+									<button
+										class="language-btn"
+										class:active={loc.code === selectedLocale}
+										on:click={() => selectLanguage(loc.code)}
+									>
+										<span class="lang-flag">{loc.flag}</span>
+										<div class="lang-info">
+											<span class="lang-name">{loc.native}</span>
+											<span class="lang-english">{loc.name}</span>
+										</div>
+									</button>
+								{/each}
+							</div>
+						</div>
+					{/each}
 				</div>
 			</div>
 		</div>
@@ -614,13 +623,32 @@
 
 	.select-prompt {
 		color: #475569;
-		margin-bottom: 1rem;
+		margin-bottom: 1.5rem;
 		font-weight: 500;
+	}
+
+	.language-group {
+		margin-bottom: 1.5rem;
+	}
+
+	.language-group:last-child {
+		margin-bottom: 0;
+	}
+
+	.group-title {
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: #64748b;
+		margin: 0 0 0.75rem 0;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid #e2e8f0;
 	}
 
 	.language-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 		gap: 0.75rem;
 	}
 
@@ -631,13 +659,15 @@
 		padding: 0.875rem 1rem;
 		background: #f8fafc;
 		border: 2px solid #e2e8f0;
-		border-radius: 0.5rem;
+		border-radius: 0.75rem;
 		cursor: pointer;
 		transition: all 0.2s ease;
+		text-align: left;
 	}
 
 	.language-btn:hover {
 		border-color: var(--primary, #2563eb);
+		background: #f1f5f9;
 	}
 
 	.language-btn.active {
@@ -646,12 +676,25 @@
 	}
 
 	.lang-flag {
-		font-size: 1.5rem;
+		font-size: 1.75rem;
+		line-height: 1;
+	}
+
+	.lang-info {
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
 	}
 
 	.lang-name {
-		font-weight: 500;
-		color: #1e293b;
+		font-weight: 600;
+		color: #0f172a;
+		font-size: 0.9375rem;
+	}
+
+	.lang-english {
+		font-size: 0.75rem;
+		color: #64748b;
 	}
 
 	/* Features */

@@ -1,25 +1,77 @@
 import { browser } from '$app/environment';
 import { init, register, getLocaleFromNavigator, locale } from 'svelte-i18n';
 
-// Supported languages for Spanish real estate market
-export const supportedLocales = [
-	{ code: 'es', name: 'Español', flag: '🇪🇸' },
-	{ code: 'en', name: 'English', flag: '🇬🇧' },
-	{ code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-	{ code: 'fr', name: 'Français', flag: '🇫🇷' },
-	{ code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
-	{ code: 'ru', name: 'Русский', flag: '🇷🇺' },
-	{ code: 'sv', name: 'Svenska', flag: '🇸🇪' }
+// Locale definition with native name
+export interface LocaleInfo {
+	code: string;
+	name: string;
+	native: string;
+	flag: string;
+}
+
+// Locale group for drawer organization
+export interface LocaleGroup {
+	name: string;
+	locales: LocaleInfo[];
+}
+
+// All supported languages for Spanish real estate market
+export const supportedLocales: LocaleInfo[] = [
+	// Spanish & Regional Languages
+	{ code: 'es', name: 'Spanish', native: 'Español', flag: '🇪🇸' },
+	{ code: 'ca', name: 'Catalan', native: 'Català', flag: '🏴󠁥󠁳󠁣󠁴󠁿' },
+	{ code: 'eu', name: 'Basque', native: 'Euskara', flag: '🏴' },
+	{ code: 'gl', name: 'Galician', native: 'Galego', flag: '🏴󠁥󠁳󠁧󠁡󠁿' },
+	// International Languages
+	{ code: 'en', name: 'English', native: 'English', flag: '🇬🇧' },
+	{ code: 'de', name: 'German', native: 'Deutsch', flag: '🇩🇪' },
+	{ code: 'fr', name: 'French', native: 'Français', flag: '🇫🇷' },
+	{ code: 'nl', name: 'Dutch', native: 'Nederlands', flag: '🇳🇱' },
+	{ code: 'pt', name: 'Portuguese', native: 'Português', flag: '🇵🇹' },
+	{ code: 'pl', name: 'Polish', native: 'Polski', flag: '🇵🇱' },
+	{ code: 'ru', name: 'Russian', native: 'Русский', flag: '🇷🇺' },
+	{ code: 'sv', name: 'Swedish', native: 'Svenska', flag: '🇸🇪' }
+];
+
+// Grouped locales for drawer display
+export const localeGroups: LocaleGroup[] = [
+	{
+		name: 'Español & Lenguas Regionales',
+		locales: [
+			{ code: 'es', name: 'Spanish', native: 'Español', flag: '🇪🇸' },
+			{ code: 'ca', name: 'Catalan', native: 'Català', flag: '🏴󠁥󠁳󠁣󠁴󠁿' },
+			{ code: 'eu', name: 'Basque', native: 'Euskara', flag: '🏴' },
+			{ code: 'gl', name: 'Galician', native: 'Galego', flag: '🏴󠁥󠁳󠁧󠁡󠁿' }
+		]
+	},
+	{
+		name: 'International',
+		locales: [
+			{ code: 'en', name: 'English', native: 'English', flag: '🇬🇧' },
+			{ code: 'de', name: 'German', native: 'Deutsch', flag: '🇩🇪' },
+			{ code: 'fr', name: 'French', native: 'Français', flag: '🇫🇷' },
+			{ code: 'nl', name: 'Dutch', native: 'Nederlands', flag: '🇳🇱' },
+			{ code: 'pt', name: 'Portuguese', native: 'Português', flag: '🇵🇹' },
+			{ code: 'pl', name: 'Polish', native: 'Polski', flag: '🇵🇱' },
+			{ code: 'ru', name: 'Russian', native: 'Русский', flag: '🇷🇺' },
+			{ code: 'sv', name: 'Swedish', native: 'Svenska', flag: '🇸🇪' }
+		]
+	}
 ];
 
 export const defaultLocale = 'es';
 
 // Register all locales
 register('es', () => import('./locales/es.json'));
+register('ca', () => import('./locales/ca.json'));
+register('eu', () => import('./locales/eu.json'));
+register('gl', () => import('./locales/gl.json'));
 register('en', () => import('./locales/en.json'));
 register('de', () => import('./locales/de.json'));
 register('fr', () => import('./locales/fr.json'));
 register('nl', () => import('./locales/nl.json'));
+register('pt', () => import('./locales/pt.json'));
+register('pl', () => import('./locales/pl.json'));
 register('ru', () => import('./locales/ru.json'));
 register('sv', () => import('./locales/sv.json'));
 
@@ -119,6 +171,10 @@ export function getVisitorInfo(): VisitorInfo {
 		country = 'FR';
 	} else if (timezone.includes('Amsterdam')) {
 		country = 'NL';
+	} else if (timezone.includes('Lisbon')) {
+		country = 'PT';
+	} else if (timezone.includes('Warsaw')) {
+		country = 'PL';
 	} else if (timezone.includes('Moscow')) {
 		country = 'RU';
 	} else if (timezone.includes('Stockholm')) {

@@ -1,0 +1,27 @@
+name = "xml-customizer-api"
+main = "src/index.ts"
+compatibility_date = "2024-05-01"
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "xml-customizer-db"
+database_id = "YOUR_D1_DATABASE_ID" # Replace after creating with: wrangler d1 create xml-customizer-db
+
+# R2 Bucket for XML storage
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "xml-customizer-feeds"
+
+# KV for caching
+[[kv_namespaces]]
+binding = "KV"
+id = "YOUR_KV_NAMESPACE_ID" # Replace after creating with: wrangler kv:namespace create KV
+
+[vars]
+ADMIN_API_KEY = "change-this-in-production"
+CORS_ORIGIN = "http://localhost:5173"
+
+# Environment specific settings
+[env.production]
+vars = { CORS_ORIGIN = "https://your-frontend-domain.pages.dev" }

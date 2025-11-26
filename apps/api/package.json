@@ -1,0 +1,22 @@
+{
+  "name": "@xml-customizer/api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 migrations apply xml-customizer-db --remote",
+    "db:migrate:local": "wrangler d1 migrations apply xml-customizer-db --local",
+    "tail": "wrangler tail"
+  },
+  "dependencies": {
+    "hono": "^4.3.0",
+    "fast-xml-parser": "^4.3.4",
+    "@xml-customizer/shared": "*"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240512.0",
+    "wrangler": "^3.57.0",
+    "typescript": "^5.3.3"
+  }
+}

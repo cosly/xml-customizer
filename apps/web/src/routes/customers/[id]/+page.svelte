@@ -25,6 +25,24 @@
   let filterBeds = '';
   let filterTown = '';
 
+  // View mode
+  let viewMode: 'grid' | 'table' = 'grid';
+
+  // Computed values for header checkbox
+  $: allFilteredSelected = filteredProperties.length > 0 && filteredProperties.every(p => selectedPropertyIds.has(p.id));
+  $: someFilteredSelected = filteredProperties.some(p => selectedPropertyIds.has(p.id));
+  $: headerCheckboxIndeterminate = someFilteredSelected && !allFilteredSelected;
+
+  // Action to handle indeterminate state (can't be set via HTML attribute)
+  function indeterminate(node: HTMLInputElement, value: boolean) {
+    node.indeterminate = value;
+    return {
+      update(newValue: boolean) {
+        node.indeterminate = newValue;
+      }
+    };
+  }
+
   // Derive unique values for filter dropdowns
   $: propertyTypes = [...new Set(properties.map(p => p.type).filter(Boolean))].sort();
   $: propertyTowns = [...new Set(properties.map(p => p.town).filter(Boolean))].sort();
@@ -404,7 +422,7 @@
         </div>
 
         <div class="select-all-bar">
-          <div>
+          <div style="display: flex; align-items: center; gap: 1rem;">
             <span class="selection-count">
               {selectedPropertyIds.size} geselecteerd
               {#if hasActiveFilters}
@@ -417,6 +435,33 @@
                 </span>
               {/if}
             </span>
+            <div class="view-toggle">
+              <button
+                class="view-btn"
+                class:active={viewMode === 'grid'}
+                on:click={() => viewMode = 'grid'}
+                title="Grid weergave"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <rect x="1" y="1" width="6" height="6" rx="1"/>
+                  <rect x="9" y="1" width="6" height="6" rx="1"/>
+                  <rect x="1" y="9" width="6" height="6" rx="1"/>
+                  <rect x="9" y="9" width="6" height="6" rx="1"/>
+                </svg>
+              </button>
+              <button
+                class="view-btn"
+                class:active={viewMode === 'table'}
+                on:click={() => viewMode = 'table'}
+                title="Tabel weergave"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <rect x="1" y="1" width="14" height="3" rx="1"/>
+                  <rect x="1" y="6" width="14" height="3" rx="1"/>
+                  <rect x="1" y="11" width="14" height="3" rx="1"/>
+                </svg>
+              </button>
+            </div>
           </div>
           <div style="display: flex; gap: 0.5rem;">
             <button class="btn btn-secondary btn-sm" on:click={selectAll}>
@@ -445,7 +490,71 @@
               Wis filters
             </button>
           </div>
+        {:else if viewMode === 'table'}
+          <!-- Table View -->
+          <div class="table-container">
+            <table class="table property-table">
+              <thead>
+                <tr>
+                  <th class="checkbox-col">
+                    <input
+                      type="checkbox"
+                      class="checkbox"
+                      checked={allFilteredSelected}
+                      use:indeterminate={headerCheckboxIndeterminate}
+                      on:change={() => {
+                        if (allFilteredSelected) {
+                          deselectAll();
+                        } else {
+                          selectAll();
+                        }
+                      }}
+                    />
+                  </th>
+                  <th>Afbeelding</th>
+                  <th>Referentie</th>
+                  <th>Type</th>
+                  <th>Locatie</th>
+                  <th>Slaapkamers</th>
+                  <th>Badkamers</th>
+                  <th>Prijs</th>
+                </tr>
+              </thead>
+              <tbody>
+                {#each filteredProperties as property}
+                  <tr
+                    class:selected={selectedPropertyIds.has(property.id)}
+                    on:click={() => toggleProperty(property.id)}
+                    style="cursor: pointer;"
+                  >
+                    <td class="checkbox-col">
+                      <input
+                        type="checkbox"
+                        class="checkbox"
+                        checked={selectedPropertyIds.has(property.id)}
+                        on:click|stopPropagation={() => toggleProperty(property.id)}
+                      />
+                    </td>
+                    <td>
+                      {#if property.image_url}
+                        <img src={property.image_url} alt={property.ref} class="table-image" />
+                      {:else}
+                        <div class="table-image table-image-placeholder">📷</div>
+                      {/if}
+                    </td>
+                    <td class="ref-col">{property.ref}</td>
+                    <td>{property.type}</td>
+                    <td>{property.town}</td>
+                    <td>{property.beds}</td>
+                    <td>{property.baths}</td>
+                    <td class="price-col">{formatPrice(property.price)}</td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          </div>
         {:else}
+          <!-- Grid View -->
           <div class="grid grid-3">
             {#each filteredProperties as property}
             <div
@@ -482,6 +591,7 @@
             </div>
             {/each}
           </div>
+        {/if}
 
           {#if hasChanges}
             <div style="position: sticky; bottom: 1rem; margin-top: 1rem;">
@@ -553,3 +663,95 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .view-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .view-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem 0.5rem;
+    border: none;
+    background: var(--bg-card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .view-btn:hover {
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .view-btn.active {
+    background: var(--primary);
+    color: white;
+  }
+
+  .view-btn:first-child {
+    border-right: 1px solid var(--border);
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+  }
+
+  .property-table {
+    min-width: 800px;
+  }
+
+  .property-table tbody tr {
+    transition: background 0.15s ease;
+  }
+
+  .property-table tbody tr:hover {
+    background: var(--bg);
+  }
+
+  .property-table tbody tr.selected {
+    background: rgba(37, 99, 235, 0.08);
+  }
+
+  .property-table tbody tr.selected:hover {
+    background: rgba(37, 99, 235, 0.12);
+  }
+
+  .checkbox-col {
+    width: 40px;
+    text-align: center;
+  }
+
+  .table-image {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: var(--bg);
+  }
+
+  .table-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+
+  .ref-col {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .price-col {
+    font-weight: 600;
+    color: var(--primary);
+    white-space: nowrap;
+  }
+</style>

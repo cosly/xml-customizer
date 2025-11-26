@@ -174,10 +174,14 @@ body {
 }
 
 .nav-brand {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--primary);
+  display: flex;
+  align-items: center;
   text-decoration: none;
+}
+
+.nav-logo {
+  height: 40px;
+  width: auto;
 }
 
 .nav-links {

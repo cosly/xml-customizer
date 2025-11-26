@@ -1,8 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { _ } from 'svelte-i18n';
   import { auth } from '$lib/stores/auth';
-  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   let name = '';
   let email = '';
@@ -15,17 +13,17 @@
     error = '';
 
     if (!name || !email || !password) {
-      error = $_('errors.required');
+      error = 'Vul alle velden in';
       return;
     }
 
     if (password.length < 8) {
-      error = $_('errors.minLength', { values: { min: 8 }});
+      error = 'Wachtwoord moet minimaal 8 karakters zijn';
       return;
     }
 
     if (password !== confirmPassword) {
-      error = $_('auth.passwordsDoNotMatch');
+      error = 'Wachtwoorden komen niet overeen';
       return;
     }
 
@@ -38,23 +36,20 @@
     if (result.success) {
       goto('/');
     } else {
-      error = result.error || $_('errors.general');
+      error = result.error || 'Registratie mislukt';
     }
   }
 </script>
 
 <svelte:head>
-  <title>{$_('auth.register')} - Tesoro CRM</title>
+  <title>Registreren - Tesoro</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
-    <div class="auth-language">
-      <LanguageSwitcher />
-    </div>
     <div class="auth-header">
-      <h1 class="auth-title">Tesoro CRM</h1>
-      <p class="auth-subtitle">{$_('auth.registerSubtitle')}</p>
+      <img src="/logo.png" alt="Tesoro" class="auth-logo" />
+      <p class="auth-subtitle">Maak een account aan</p>
     </div>
 
     {#if error}
@@ -63,49 +58,49 @@
 
     <form on:submit|preventDefault={handleSubmit}>
       <div class="form-group">
-        <label class="label" for="name">{$_('auth.companyName')}</label>
+        <label class="label" for="name">Naam</label>
         <input
           class="input"
           type="text"
           id="name"
           bind:value={name}
-          placeholder=""
+          placeholder="Je bedrijfsnaam"
           autocomplete="name"
         />
       </div>
 
       <div class="form-group">
-        <label class="label" for="email">{$_('auth.email')}</label>
+        <label class="label" for="email">Email</label>
         <input
           class="input"
           type="email"
           id="email"
           bind:value={email}
-          placeholder="email@example.com"
+          placeholder="jouw@email.nl"
           autocomplete="email"
         />
       </div>
 
       <div class="form-group">
-        <label class="label" for="password">{$_('auth.password')}</label>
+        <label class="label" for="password">Wachtwoord</label>
         <input
           class="input"
           type="password"
           id="password"
           bind:value={password}
-          placeholder="********"
+          placeholder="Minimaal 8 karakters"
           autocomplete="new-password"
         />
       </div>
 
       <div class="form-group">
-        <label class="label" for="confirmPassword">{$_('auth.confirmPassword')}</label>
+        <label class="label" for="confirmPassword">Bevestig wachtwoord</label>
         <input
           class="input"
           type="password"
           id="confirmPassword"
           bind:value={confirmPassword}
-          placeholder="********"
+          placeholder="Herhaal wachtwoord"
           autocomplete="new-password"
         />
       </div>
@@ -114,12 +109,12 @@
         {#if loading}
           <span class="spinner"></span>
         {/if}
-        {$_('auth.register')}
+        Registreren
       </button>
     </form>
 
     <div class="auth-footer">
-      <p>{$_('auth.haveAccount')} <a href="/login">{$_('auth.login')}</a></p>
+      <p>Al een account? <a href="/login">Log hier in</a></p>
     </div>
   </div>
 </div>
@@ -141,13 +136,6 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 2rem;
-    position: relative;
-  }
-
-  .auth-language {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
   }
 
   .auth-header {
@@ -155,11 +143,10 @@
     margin-bottom: 2rem;
   }
 
-  .auth-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin: 0 0 0.5rem 0;
+  .auth-logo {
+    height: 60px;
+    width: auto;
+    margin-bottom: 0.5rem;
   }
 
   .auth-subtitle {

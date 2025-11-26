@@ -1,15 +1,12 @@
 <script lang="ts">
   import '../app.css';
-  import '$lib/i18n';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
-  import { _, isLoading as i18nLoading } from 'svelte-i18n';
   import { auth, isAuthenticated } from '$lib/stores/auth';
-  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/register', '/welcome', '/forgot-password', '/reset-password'];
+  const publicRoutes = ['/login', '/register'];
 
   $: isPublicRoute = publicRoutes.some((route) => $page.url.pathname.startsWith(route));
 
@@ -23,7 +20,7 @@
     if ($auth.initialized && !$auth.loading) {
       if (!$isAuthenticated && !isPublicRoute) {
         goto('/login');
-      } else if ($isAuthenticated && isPublicRoute && !$page.url.pathname.startsWith('/welcome')) {
+      } else if ($isAuthenticated && isPublicRoute) {
         goto('/');
       }
     }
@@ -35,30 +32,31 @@
   }
 </script>
 
-{#if $i18nLoading || ($auth.loading && !$auth.initialized)}
+{#if $auth.loading && !$auth.initialized}
   <div class="loading-screen">
     <div class="spinner"></div>
-    <p>{$_('common.loading')}</p>
+    <p>Laden...</p>
   </div>
 {:else if isPublicRoute}
   <slot />
 {:else if $isAuthenticated}
   <nav class="nav">
     <div class="container nav-content">
-      <a href="/" class="nav-brand">Tesoro CRM</a>
+      <a href="/" class="nav-brand">
+          <img src="/logo.png" alt="Tesoro" class="nav-logo" />
+        </a>
       <div class="nav-links">
         <a href="/feeds" class="nav-link" class:active={$page.url.pathname.startsWith('/feeds')}>
-          {$_('nav.feeds')}
+          Feeds
         </a>
         <a href="/customers" class="nav-link" class:active={$page.url.pathname.startsWith('/customers')}>
-          {$_('nav.customers')}
+          Klanten
         </a>
       </div>
       <div class="nav-user">
-        <LanguageSwitcher />
         <span class="user-name">{$auth.user?.name}</span>
         <button class="btn btn-secondary btn-sm" on:click={handleLogout}>
-          {$_('nav.logout')}
+          Uitloggen
         </button>
       </div>
     </div>

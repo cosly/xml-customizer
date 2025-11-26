@@ -29,13 +29,13 @@
 </script>
 
 <svelte:head>
-  <title>Wachtwoord vergeten - Tesoro CRM Tools</title>
+  <title>Wachtwoord vergeten - Tesoro</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <img src="/logo.svg" alt="Tesoro" class="auth-logo" />
+      <img src="/logo.png" alt="Tesoro" class="auth-logo" />
       <p class="auth-subtitle">Wachtwoord vergeten?</p>
     </div>
 
@@ -103,8 +103,8 @@
   }
 
   .auth-logo {
-    max-width: 200px;
-    height: auto;
+    height: 60px;
+    width: auto;
     margin-bottom: 0.5rem;
   }
 

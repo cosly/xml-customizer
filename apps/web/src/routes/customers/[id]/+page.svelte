@@ -226,13 +226,13 @@
 </script>
 
 <svelte:head>
-  <title>{customer?.name || 'Klant'} - XML Customizer</title>
+  <title>{customer?.name || 'Relatie'} - Tesoro</title>
 </svelte:head>
 
 <div class="page-header">
   <div>
     <a href="/customers" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem;">
-      ← Terug naar klanten
+      ← Terug naar relaties
     </a>
     <h1 class="page-title" style="margin-top: 0.5rem;">
       {#if loading}
@@ -240,7 +240,7 @@
       {:else if customer}
         {customer.name}
       {:else}
-        Klant niet gevonden
+        Relatie niet gevonden
       {/if}
     </h1>
   </div>
@@ -263,7 +263,7 @@
   <div class="card" style="margin-bottom: 1.5rem;">
     <div class="grid grid-2" style="gap: 2rem;">
       <div>
-        <h3 style="margin-bottom: 1rem;">Klant Informatie</h3>
+        <h3 style="margin-bottom: 1rem;">Relatie Informatie</h3>
         <div style="display: grid; gap: 0.5rem;">
           <div>
             <span style="color: var(--text-muted); font-size: 0.875rem;">Naam:</span>
@@ -284,7 +284,7 @@
       <div>
         <h3 style="margin-bottom: 1rem;">XML Feed URL</h3>
         <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-          Dit is de unieke URL die deze klant kan gebruiken om hun gepersonaliseerde XML feed op te halen.
+          Dit is de unieke URL die deze relatie kan gebruiken om hun gepersonaliseerde XML feed op te halen.
         </p>
         <div class="link-box">
           <span style="flex: 1; overflow: hidden; text-overflow: ellipsis;">{publicUrl}</span>

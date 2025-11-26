@@ -27,8 +27,11 @@
   }
 
   async function handleLogout() {
-    await auth.logout();
-    goto('/login');
+    try {
+      await auth.logout();
+    } finally {
+      goto('/login');
+    }
   }
 </script>
 

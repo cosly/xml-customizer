@@ -29,7 +29,7 @@ export class EmailService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: this.env.EMAIL_FROM || 'XML Customizer <noreply@example.com>',
+          from: this.env.EMAIL_FROM || 'XML Customizer <onboarding@resend.dev>',
           to: Array.isArray(options.to) ? options.to : [options.to],
           subject: options.subject,
           html: options.html,

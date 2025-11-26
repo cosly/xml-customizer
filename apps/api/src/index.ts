@@ -8,6 +8,7 @@ import customersRoutes from './routes/customers';
 import feedsRoutes from './routes/feeds';
 import publicRoutes from './routes/public';
 import adminRoutes from './routes/admin';
+import { FeedService } from './services/feed-service';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -83,4 +84,13 @@ app.onError((err, c) => {
   );
 });
 
-export default app;
+// Export with scheduled handler for cron triggers
+export default {
+  fetch: app.fetch,
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+    // Check all feeds for updates (runs 4x per day via cron)
+    const feedService = new FeedService(env);
+    const result = await feedService.checkAllFeedsForUpdates();
+    console.log(`Cron: Checked ${result.checked} feeds, ${result.withUpdates} have updates available`);
+  },
+};

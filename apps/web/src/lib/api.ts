@@ -11,6 +11,7 @@ import type {
   CompanyDetail,
   ActivityLogEntry,
   GrowthDataPoint,
+  CheckUpdateResult,
 } from '@xml-customizer/shared';
 
 // Auto-detect production vs local development
@@ -206,6 +207,11 @@ export const feedsApi = {
 
   purgeCache: (id: number) =>
     fetchApi<{ success: boolean }>(`/api/feeds/${id}/purge-cache`, {
+      method: 'POST',
+    }),
+
+  checkForUpdates: (id: number) =>
+    fetchApi<CheckUpdateResult>(`/api/feeds/${id}/check-updates`, {
       method: 'POST',
     }),
 };

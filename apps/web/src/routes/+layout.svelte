@@ -6,7 +6,7 @@
   import { auth, isAuthenticated } from '$lib/stores/auth';
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/register'];
+  const publicRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
 
   $: isPublicRoute = publicRoutes.some((route) => $page.url.pathname.startsWith(route));
 

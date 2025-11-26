@@ -19,8 +19,47 @@ export interface User {
   id: number;
   email: string;
   name: string;
+  organization_id: number | null;
   created_at: string;
   updated_at: string;
+}
+
+// Organization types
+export interface Organization {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrganizationMember {
+  id: number;
+  name: string;
+  email: string;
+  role: 'owner' | 'admin' | 'member';
+}
+
+export interface PendingInvitation {
+  id: number;
+  email: string;
+  role: 'admin' | 'member';
+  expires_at: string;
+  invited_by_name: string;
+}
+
+export interface TeamData {
+  organization: Organization;
+  role: string;
+  members: OrganizationMember[];
+  pendingInvitations: PendingInvitation[];
+}
+
+export interface InvitationDetails {
+  email: string;
+  organization_name: string;
+  invited_by_name: string;
+  role: string;
+  expires_at: string;
 }
 
 // Session storage for token (when cookies don't work cross-domain)
@@ -76,12 +115,12 @@ async function fetchApi<T>(
 
 // Auth API
 export const authApi = {
-  register: async (email: string, password: string, name: string) => {
+  register: async (email: string, password: string, name: string, invitationToken?: string) => {
     const result = await fetchApi<{ user: User; session: { id: string; expires_at: string } }>(
       '/api/auth/register',
       {
         method: 'POST',
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({ email, password, name, invitationToken }),
       }
     );
     // Store session token for cross-domain requests
@@ -208,3 +247,47 @@ export function getPublicFeedUrl(hashId: string, feedId?: number): string {
   const base = `${API_URL}/feed/${hashId}`;
   return feedId ? `${base}?feed=${feedId}` : base;
 }
+
+// Team API
+export const teamApi = {
+  get: () => fetchApi<TeamData>('/api/team'),
+
+  updateOrganization: (name: string) =>
+    fetchApi<{ success: boolean }>('/api/team', {
+      method: 'PUT',
+      body: JSON.stringify({ name }),
+    }),
+
+  sendInvitation: (email: string, role: 'admin' | 'member' = 'member') =>
+    fetchApi<{ success: boolean; invitation: { id: number; email: string; role: string; expires_at: string } }>(
+      '/api/team/invitations',
+      {
+        method: 'POST',
+        body: JSON.stringify({ email, role }),
+      }
+    ),
+
+  getInvitation: (token: string) =>
+    fetchApi<InvitationDetails>(`/api/team/invitations/${token}`),
+
+  cancelInvitation: (id: number) =>
+    fetchApi<{ success: boolean }>(`/api/team/invitations/${id}`, {
+      method: 'DELETE',
+    }),
+
+  resendInvitation: (id: number) =>
+    fetchApi<{ success: boolean }>(`/api/team/invitations/${id}/resend`, {
+      method: 'POST',
+    }),
+
+  updateMemberRole: (memberId: number, role: 'admin' | 'member') =>
+    fetchApi<{ success: boolean }>(`/api/team/members/${memberId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ role }),
+    }),
+
+  removeMember: (memberId: number) =>
+    fetchApi<{ success: boolean }>(`/api/team/members/${memberId}`, {
+      method: 'DELETE',
+    }),
+};

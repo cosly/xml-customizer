@@ -7,6 +7,7 @@ import authRoutes from './routes/auth';
 import customersRoutes from './routes/customers';
 import feedsRoutes from './routes/feeds';
 import publicRoutes from './routes/public';
+import teamRoutes from './routes/team';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -59,6 +60,9 @@ app.use('/api/customers/*', sessionAuth);
 app.use('/api/feeds/*', sessionAuth);
 app.route('/api/customers', customersRoutes);
 app.route('/api/feeds', feedsRoutes);
+
+// Team routes (some require auth, some don't - handled in route)
+app.route('/api/team', teamRoutes);
 
 // 404 handler
 app.notFound((c) => {

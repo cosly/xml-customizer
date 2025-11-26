@@ -10,14 +10,14 @@ const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 // Register new user
 app.post('/register', async (c) => {
   try {
-    const { email, password, name } = await c.req.json();
+    const { email, password, name, invitationToken } = await c.req.json();
 
     if (!email || !password || !name) {
       return c.json({ error: 'Email, wachtwoord en naam zijn verplicht' }, 400);
     }
 
     const authService = new AuthService(c.env.DB);
-    const user = await authService.register(email, password, name);
+    const user = await authService.register(email, password, name, invitationToken);
 
     // Auto-login after registration
     const { session } = await authService.login(email, password);

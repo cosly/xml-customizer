@@ -22,7 +22,7 @@ function generateHashId(): string {
 }
 
 /**
- * GET /api/customers - List all customers for current user
+ * GET /api/customers - List all customers for current user's organization
  */
 app.get('/', async (c) => {
   const user = c.get('user');
@@ -30,15 +30,19 @@ app.get('/', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json([]);
+  }
+
   const customers = await c.env.DB.prepare(
     `SELECT c.*,
        (SELECT COUNT(DISTINCT feed_id) FROM customer_selections WHERE customer_id = c.id) as feed_count,
        (SELECT COUNT(*) FROM customer_selections WHERE customer_id = c.id) as selection_count
      FROM customers c
-     WHERE c.user_id = ?
+     WHERE c.organization_id = ?
      ORDER BY c.created_at DESC`
   )
-    .bind(user.id)
+    .bind(user.organization_id)
     .all();
 
   return c.json(customers.results);
@@ -53,27 +57,31 @@ app.get('/:id', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
+  }
+
   const id = c.req.param('id');
 
   const customer = await c.env.DB.prepare(
-    'SELECT * FROM customers WHERE id = ? AND user_id = ?'
+    'SELECT * FROM customers WHERE id = ? AND organization_id = ?'
   )
-    .bind(id, user.id)
+    .bind(id, user.organization_id)
     .first<Customer>();
 
   if (!customer) {
     return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
   }
 
-  // Get selections grouped by feed (only from user's feeds)
+  // Get selections grouped by feed (only from organization's feeds)
   const selections = await c.env.DB.prepare(
     `SELECT cs.feed_id, sf.name as feed_name, cs.property_id
      FROM customer_selections cs
      JOIN source_feeds sf ON cs.feed_id = sf.id
-     WHERE cs.customer_id = ? AND sf.user_id = ?
+     WHERE cs.customer_id = ? AND sf.organization_id = ?
      ORDER BY sf.name, cs.property_id`
   )
-    .bind(id, user.id)
+    .bind(id, user.organization_id)
     .all<{ feed_id: number; feed_name: string; property_id: string }>();
 
   // Group selections by feed
@@ -106,6 +114,10 @@ app.post('/', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'No organization', message: 'Je hebt geen organisatie' }, 400);
+  }
+
   const body = await c.req.json<CreateCustomerRequest>();
 
   if (!body.name || body.name.trim() === '') {
@@ -115,10 +127,10 @@ app.post('/', async (c) => {
   const hashId = generateHashId();
 
   const result = await c.env.DB.prepare(
-    `INSERT INTO customers (name, email, hash_id, user_id) VALUES (?, ?, ?, ?)
+    `INSERT INTO customers (name, email, hash_id, user_id, organization_id) VALUES (?, ?, ?, ?, ?)
      RETURNING *`
   )
-    .bind(body.name.trim(), body.email || null, hashId, user.id)
+    .bind(body.name.trim(), body.email || null, hashId, user.id, user.organization_id)
     .first<Customer>();
 
   return c.json(result, 201);
@@ -133,16 +145,20 @@ app.put('/:id', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
+  }
+
   const id = c.req.param('id');
   const body = await c.req.json<Partial<CreateCustomerRequest>>();
 
   const result = await c.env.DB.prepare(
     `UPDATE customers
      SET name = COALESCE(?, name), email = COALESCE(?, email), updated_at = datetime('now')
-     WHERE id = ? AND user_id = ?
+     WHERE id = ? AND organization_id = ?
      RETURNING *`
   )
-    .bind(body.name || null, body.email || null, id, user.id)
+    .bind(body.name || null, body.email || null, id, user.organization_id)
     .first<Customer>();
 
   if (!result) {
@@ -161,14 +177,18 @@ app.delete('/:id', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
+  }
+
   const id = c.req.param('id');
 
   // Invalidate cache first
   const feedService = new FeedService(c.env);
   await feedService.invalidateCustomerCache(Number(id));
 
-  const result = await c.env.DB.prepare('DELETE FROM customers WHERE id = ? AND user_id = ?')
-    .bind(id, user.id)
+  const result = await c.env.DB.prepare('DELETE FROM customers WHERE id = ? AND organization_id = ?')
+    .bind(id, user.organization_id)
     .run();
 
   if (result.meta.changes === 0) {
@@ -187,6 +207,10 @@ app.put('/:id/selections', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
+  }
+
   const id = c.req.param('id');
   const body = await c.req.json<UpdateSelectionsRequest>();
 
@@ -197,22 +221,22 @@ app.put('/:id/selections', async (c) => {
     );
   }
 
-  // Verify customer exists and belongs to user
+  // Verify customer exists and belongs to organization
   const customer = await c.env.DB.prepare(
-    'SELECT id FROM customers WHERE id = ? AND user_id = ?'
+    'SELECT id FROM customers WHERE id = ? AND organization_id = ?'
   )
-    .bind(id, user.id)
+    .bind(id, user.organization_id)
     .first();
 
   if (!customer) {
     return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
   }
 
-  // Verify feed belongs to user
+  // Verify feed belongs to organization
   const feed = await c.env.DB.prepare(
-    'SELECT id FROM source_feeds WHERE id = ? AND user_id = ?'
+    'SELECT id FROM source_feeds WHERE id = ? AND organization_id = ?'
   )
-    .bind(body.feed_id, user.id)
+    .bind(body.feed_id, user.organization_id)
     .first();
 
   if (!feed) {
@@ -254,14 +278,18 @@ app.get('/:id/selections/:feedId', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
+  }
+
   const customerId = c.req.param('id');
   const feedId = c.req.param('feedId');
 
-  // Verify customer belongs to user
+  // Verify customer belongs to organization
   const customer = await c.env.DB.prepare(
-    'SELECT id FROM customers WHERE id = ? AND user_id = ?'
+    'SELECT id FROM customers WHERE id = ? AND organization_id = ?'
   )
-    .bind(customerId, user.id)
+    .bind(customerId, user.organization_id)
     .first();
 
   if (!customer) {
@@ -290,6 +318,10 @@ app.post('/:id/share', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
+  }
+
   const customerId = c.req.param('id');
   const { email, feedId, message } = await c.req.json<{
     email: string;
@@ -301,11 +333,11 @@ app.post('/:id/share', async (c) => {
     return c.json({ error: 'Email is verplicht' }, 400);
   }
 
-  // Verify customer belongs to user
+  // Verify customer belongs to organization
   const customer = await c.env.DB.prepare(
-    'SELECT * FROM customers WHERE id = ? AND user_id = ?'
+    'SELECT * FROM customers WHERE id = ? AND organization_id = ?'
   )
-    .bind(customerId, user.id)
+    .bind(customerId, user.organization_id)
     .first<Customer>();
 
   if (!customer) {

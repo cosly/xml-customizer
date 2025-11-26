@@ -6,7 +6,7 @@
   import { auth, isAuthenticated } from '$lib/stores/auth';
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/register'];
+  const publicRoutes = ['/login', '/register', '/invite', '/forgot-password', '/reset-password'];
 
   $: isPublicRoute = publicRoutes.some((route) => $page.url.pathname.startsWith(route));
 
@@ -49,6 +49,9 @@
         </a>
         <a href="/customers" class="nav-link" class:active={$page.url.pathname.startsWith('/customers')}>
           Klanten
+        </a>
+        <a href="/team" class="nav-link" class:active={$page.url.pathname.startsWith('/team')}>
+          Team
         </a>
       </div>
       <div class="nav-user">

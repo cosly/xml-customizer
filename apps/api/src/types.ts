@@ -15,6 +15,7 @@ export interface AuthUser {
   id: number;
   email: string;
   name: string;
+  organization_id: number | null;
   created_at: string;
   updated_at: string;
 }

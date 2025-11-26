@@ -96,4 +96,66 @@ app.get('/me', sessionAuth, async (c) => {
   return c.json({ user });
 });
 
+// Request password reset
+app.post('/forgot-password', async (c) => {
+  try {
+    const { email } = await c.req.json();
+
+    if (!email) {
+      return c.json({ error: 'Email is verplicht' }, 400);
+    }
+
+    const authService = new AuthService(c.env.DB);
+    const result = await authService.createPasswordResetToken(email);
+
+    // Always return success to prevent email enumeration
+    if (result) {
+      const emailService = new EmailService(c.env);
+
+      // Build reset URL - use the request origin or fall back to config
+      const origin = c.req.header('origin') || c.env.APP_URL || 'http://localhost:5173';
+      const resetUrl = `${origin}/reset-password?token=${result.token}`;
+
+      // Send email (non-blocking)
+      c.executionCtx.waitUntil(
+        emailService.sendPasswordResetEmail(result.user.email, result.user.name, resetUrl)
+      );
+    }
+
+    return c.json({
+      success: true,
+      message: 'Als dit email adres bij ons bekend is, ontvang je binnen enkele minuten een email met instructies.',
+    });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    return c.json({ error: 'Er is iets misgegaan' }, 500);
+  }
+});
+
+// Reset password with token
+app.post('/reset-password', async (c) => {
+  try {
+    const { token, password } = await c.req.json();
+
+    if (!token || !password) {
+      return c.json({ error: 'Token en wachtwoord zijn verplicht' }, 400);
+    }
+
+    const authService = new AuthService(c.env.DB);
+    const user = await authService.resetPassword(token, password);
+
+    if (!user) {
+      return c.json({ error: 'Ongeldige of verlopen reset link' }, 400);
+    }
+
+    return c.json({
+      success: true,
+      message: 'Je wachtwoord is succesvol gewijzigd. Je kunt nu inloggen met je nieuwe wachtwoord.',
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Wachtwoord reset mislukt';
+    return c.json({ error: message }, 400);
+  }
+});
+
 export default app;

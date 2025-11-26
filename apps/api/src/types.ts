@@ -8,6 +8,7 @@ export interface Env {
   CORS_ORIGIN: string;
   RESEND_API_KEY: string;
   EMAIL_FROM: string;
+  APP_URL?: string;
 }
 
 export interface AuthUser {

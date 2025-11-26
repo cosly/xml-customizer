@@ -180,4 +180,76 @@ Feed voor: ${customerName}
       text,
     });
   }
+
+  async sendPasswordResetEmail(
+    to: string,
+    name: string,
+    resetUrl: string
+  ): Promise<{ success: boolean }> {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; }
+          .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+          .header { text-align: center; margin-bottom: 30px; }
+          .logo { font-size: 24px; font-weight: 700; color: #2563eb; }
+          .content { background: #f8fafc; border-radius: 8px; padding: 30px; }
+          h1 { font-size: 20px; margin: 0 0 20px 0; }
+          p { margin: 0 0 15px 0; }
+          .button { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; }
+          .warning { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; padding: 15px; margin: 20px 0; font-size: 14px; }
+          .footer { text-align: center; margin-top: 30px; font-size: 14px; color: #64748b; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <div class="logo">XML Customizer</div>
+          </div>
+          <div class="content">
+            <h1>Wachtwoord resetten</h1>
+            <p>Hallo ${name},</p>
+            <p>We hebben een verzoek ontvangen om je wachtwoord te resetten. Klik op de onderstaande knop om een nieuw wachtwoord in te stellen.</p>
+            <p style="text-align: center; margin: 25px 0;">
+              <a href="${resetUrl}" class="button">Wachtwoord resetten</a>
+            </p>
+            <div class="warning">
+              <strong>Let op:</strong> Deze link is 1 uur geldig. Als je geen wachtwoord reset hebt aangevraagd, kun je deze email negeren.
+            </div>
+            <p style="font-size: 14px; color: #64748b;">Als de knop niet werkt, kopieer dan deze link naar je browser:</p>
+            <p style="font-size: 12px; word-break: break-all; color: #64748b;">${resetUrl}</p>
+          </div>
+          <div class="footer">
+            <p>Dit is een automatisch gegenereerde email.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const text = `
+Wachtwoord resetten
+
+Hallo ${name},
+
+We hebben een verzoek ontvangen om je wachtwoord te resetten.
+
+Klik op deze link om een nieuw wachtwoord in te stellen:
+${resetUrl}
+
+Let op: Deze link is 1 uur geldig.
+
+Als je geen wachtwoord reset hebt aangevraagd, kun je deze email negeren.
+    `.trim();
+
+    return this.send({
+      to,
+      subject: 'Wachtwoord resetten - XML Customizer',
+      html,
+      text,
+    });
+  }
 }

@@ -66,6 +66,7 @@
           placeholder="********"
           autocomplete="current-password"
         />
+        <a href="/forgot-password" class="forgot-link">Wachtwoord vergeten?</a>
       </div>
 
       <button type="submit" class="btn btn-primary btn-block" disabled={loading}>
@@ -151,5 +152,17 @@
 
   .alert {
     margin-bottom: 1rem;
+  }
+
+  .forgot-link {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .forgot-link:hover {
+    text-decoration: underline;
   }
 </style>

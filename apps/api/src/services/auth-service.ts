@@ -15,6 +15,15 @@ export interface Session {
   created_at: string;
 }
 
+export interface PasswordResetToken {
+  id: number;
+  user_id: number;
+  token: string;
+  expires_at: string;
+  used_at: string | null;
+  created_at: string;
+}
+
 // Password hashing using Web Crypto API (PBKDF2)
 async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -196,5 +205,100 @@ export class AuthService {
       .prepare("DELETE FROM sessions WHERE expires_at < datetime('now')")
       .run();
     return result.meta.changes || 0;
+  }
+
+  // Generate password reset token
+  async createPasswordResetToken(email: string): Promise<{ token: string; user: User } | null> {
+    const user = await this.db
+      .prepare('SELECT id, email, name, created_at, updated_at FROM users WHERE email = ?')
+      .bind(email.toLowerCase())
+      .first<User>();
+
+    if (!user) {
+      return null;
+    }
+
+    // Invalidate existing tokens for this user
+    await this.db
+      .prepare('DELETE FROM password_reset_tokens WHERE user_id = ?')
+      .bind(user.id)
+      .run();
+
+    // Generate token (64 bytes = 128 hex chars)
+    const tokenBytes = crypto.getRandomValues(new Uint8Array(64));
+    const token = Array.from(tokenBytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    // Token expires in 1 hour
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+
+    await this.db
+      .prepare('INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)')
+      .bind(user.id, token, expiresAt)
+      .run();
+
+    return { token, user };
+  }
+
+  // Validate and use password reset token
+  async resetPassword(token: string, newPassword: string): Promise<User | null> {
+    // Validate password
+    if (newPassword.length < 8) {
+      throw new Error('Wachtwoord moet minimaal 8 karakters zijn');
+    }
+
+    const resetToken = await this.db
+      .prepare(`
+        SELECT prt.*, u.id as uid, u.email, u.name, u.created_at, u.updated_at
+        FROM password_reset_tokens prt
+        JOIN users u ON prt.user_id = u.id
+        WHERE prt.token = ? AND prt.used_at IS NULL
+      `)
+      .bind(token)
+      .first<PasswordResetToken & { uid: number; email: string; name: string }>();
+
+    if (!resetToken) {
+      throw new Error('Ongeldige of verlopen reset link');
+    }
+
+    // Check if token expired
+    if (new Date(resetToken.expires_at) < new Date()) {
+      throw new Error('Reset link is verlopen');
+    }
+
+    // Hash new password
+    const passwordHash = await hashPassword(newPassword);
+
+    // Update password
+    await this.db
+      .prepare('UPDATE users SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?')
+      .bind(passwordHash, resetToken.user_id)
+      .run();
+
+    // Mark token as used
+    await this.db
+      .prepare('UPDATE password_reset_tokens SET used_at = CURRENT_TIMESTAMP WHERE id = ?')
+      .bind(resetToken.id)
+      .run();
+
+    // Logout all sessions for security
+    await this.logoutAll(resetToken.user_id);
+
+    return {
+      id: resetToken.uid,
+      email: resetToken.email,
+      name: resetToken.name,
+      created_at: resetToken.created_at,
+      updated_at: new Date().toISOString(),
+    };
+  }
+
+  // Get user by email (for password reset)
+  async getUserByEmail(email: string): Promise<User | null> {
+    return this.db
+      .prepare('SELECT id, email, name, created_at, updated_at FROM users WHERE email = ?')
+      .bind(email.toLowerCase())
+      .first<User>();
   }
 }

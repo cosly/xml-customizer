@@ -28,6 +28,21 @@
   // View mode
   let viewMode: 'grid' | 'table' = 'grid';
 
+  // Computed values for header checkbox
+  $: allFilteredSelected = filteredProperties.length > 0 && filteredProperties.every(p => selectedPropertyIds.has(p.id));
+  $: someFilteredSelected = filteredProperties.some(p => selectedPropertyIds.has(p.id));
+  $: headerCheckboxIndeterminate = someFilteredSelected && !allFilteredSelected;
+
+  // Action to handle indeterminate state (can't be set via HTML attribute)
+  function indeterminate(node: HTMLInputElement, value: boolean) {
+    node.indeterminate = value;
+    return {
+      update(newValue: boolean) {
+        node.indeterminate = newValue;
+      }
+    };
+  }
+
   // Derive unique values for filter dropdowns
   $: propertyTypes = [...new Set(properties.map(p => p.type).filter(Boolean))].sort();
   $: propertyTowns = [...new Set(properties.map(p => p.town).filter(Boolean))].sort();
@@ -485,11 +500,10 @@
                     <input
                       type="checkbox"
                       class="checkbox"
-                      checked={filteredProperties.every(p => selectedPropertyIds.has(p.id))}
-                      indeterminate={filteredProperties.some(p => selectedPropertyIds.has(p.id)) && !filteredProperties.every(p => selectedPropertyIds.has(p.id))}
+                      checked={allFilteredSelected}
+                      use:indeterminate={headerCheckboxIndeterminate}
                       on:change={() => {
-                        const allSelected = filteredProperties.every(p => selectedPropertyIds.has(p.id));
-                        if (allSelected) {
+                        if (allFilteredSelected) {
                           deselectAll();
                         } else {
                           selectAll();

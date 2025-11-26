@@ -12,6 +12,29 @@ interface ResendResponse {
   error?: string;
 }
 
+// Tesoro logo as inline SVG for emails
+const TESORO_LOGO_SVG = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="200" height="40">
+  <g transform="translate(0, 0)">
+    <polygon points="8,0 24,0 24,16 8,16" fill="#F7B928"/>
+    <polygon points="24,0 40,0 40,16 24,16" fill="#F26522"/>
+    <polygon points="8,16 24,16 24,32 8,32" fill="#ED1C24"/>
+    <polygon points="24,16 40,16 32,24" fill="#C1272D"/>
+    <polygon points="8,32 24,32 16,40 8,40" fill="#BE1E2D"/>
+    <polygon points="24,32 40,32 40,48 24,48" fill="#9E1F63"/>
+    <polygon points="8,32 8,48 16,40" fill="#ED1E79"/>
+    <polygon points="8,48 24,48 16,56" fill="#C6168D"/>
+    <polygon points="24,48 40,48 40,64 24,64" fill="#662D91"/>
+    <polygon points="24,48 24,64 16,56" fill="#92278F"/>
+    <polygon points="24,64 40,64 32,72" fill="#2E3192"/>
+    <polygon points="24,64 24,80 32,72" fill="#1B75BC"/>
+    <polygon points="32,72 40,64 40,80" fill="#27AAE1"/>
+    <polygon points="24,80 32,72 40,80" fill="#00AEEF"/>
+  </g>
+  <text x="56" y="54" font-family="'Helvetica Neue', Arial, sans-serif" font-size="48" font-weight="700" fill="#1B2B4B" letter-spacing="2">TESORO</text>
+</svg>
+`;
+
 export class EmailService {
   constructor(private env: Env) {}
 
@@ -29,7 +52,7 @@ export class EmailService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: this.env.EMAIL_FROM || 'XML Customizer <noreply@example.com>',
+          from: this.env.EMAIL_FROM || 'Tesoro CRM Tools <noreply@example.com>',
           to: Array.isArray(options.to) ? options.to : [options.to],
           subject: options.subject,
           html: options.html,
@@ -61,7 +84,7 @@ export class EmailService {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 24px; font-weight: 700; color: #2563eb; }
+          .logo { display: inline-block; }
           .content { background: #f8fafc; border-radius: 8px; padding: 30px; }
           h1 { font-size: 20px; margin: 0 0 20px 0; }
           p { margin: 0 0 15px 0; }
@@ -72,12 +95,12 @@ export class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">XML Customizer</div>
+            <div class="logo">${TESORO_LOGO_SVG}</div>
           </div>
           <div class="content">
             <h1>Welkom, ${name}!</h1>
-            <p>Bedankt voor je registratie bij XML Customizer. Je account is nu actief en je kunt direct aan de slag.</p>
-            <p>Met XML Customizer kun je:</p>
+            <p>Bedankt voor je registratie bij Tesoro CRM Tools. Je account is nu actief en je kunt direct aan de slag.</p>
+            <p>Met Tesoro CRM Tools kun je:</p>
             <ul>
               <li>XML feeds importeren en beheren</li>
               <li>Per klant aangepaste property selecties maken</li>
@@ -94,11 +117,11 @@ export class EmailService {
     `;
 
     const text = `
-Welkom bij XML Customizer, ${name}!
+Welkom bij Tesoro CRM Tools, ${name}!
 
 Bedankt voor je registratie. Je account is nu actief.
 
-Met XML Customizer kun je:
+Met Tesoro CRM Tools kun je:
 - XML feeds importeren en beheren
 - Per klant aangepaste property selecties maken
 - Unieke feed URLs genereren voor je klanten
@@ -106,7 +129,7 @@ Met XML Customizer kun je:
 Heb je vragen? Neem gerust contact met ons op.
     `.trim();
 
-    return this.send({ to, subject: `Welkom bij XML Customizer, ${name}!`, html, text });
+    return this.send({ to, subject: `Welkom bij Tesoro CRM Tools, ${name}!`, html, text });
   }
 
   async sendFeedShareEmail(
@@ -125,7 +148,7 @@ Heb je vragen? Neem gerust contact met ons op.
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 24px; font-weight: 700; color: #2563eb; }
+          .logo { display: inline-block; }
           .content { background: #f8fafc; border-radius: 8px; padding: 30px; }
           h1 { font-size: 20px; margin: 0 0 20px 0; }
           p { margin: 0 0 15px 0; }
@@ -138,7 +161,7 @@ Heb je vragen? Neem gerust contact met ons op.
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">XML Customizer</div>
+            <div class="logo">${TESORO_LOGO_SVG}</div>
           </div>
           <div class="content">
             <h1>Je XML Feed is klaar!</h1>
@@ -195,7 +218,7 @@ Feed voor: ${customerName}
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 24px; font-weight: 700; color: #2563eb; }
+          .logo { display: inline-block; }
           .content { background: #f8fafc; border-radius: 8px; padding: 30px; }
           h1 { font-size: 20px; margin: 0 0 20px 0; }
           p { margin: 0 0 15px 0; }
@@ -207,7 +230,7 @@ Feed voor: ${customerName}
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">XML Customizer</div>
+            <div class="logo">${TESORO_LOGO_SVG}</div>
           </div>
           <div class="content">
             <h1>Wachtwoord resetten</h1>
@@ -247,7 +270,7 @@ Als je geen wachtwoord reset hebt aangevraagd, kun je deze email negeren.
 
     return this.send({
       to,
-      subject: 'Wachtwoord resetten - XML Customizer',
+      subject: 'Wachtwoord resetten - Tesoro CRM Tools',
       html,
       text,
     });

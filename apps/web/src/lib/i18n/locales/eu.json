@@ -2,6 +2,7 @@
 	"common": {
 		"loading": "Kargatzen...",
 		"save": "Gorde",
+		"saved": "Gordeta",
 		"cancel": "Utzi",
 		"delete": "Ezabatu",
 		"edit": "Editatu",

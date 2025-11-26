@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { authApi } from '$lib/api';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   let password = '';
   let confirmPassword = '';
@@ -13,22 +15,22 @@
 
   async function handleSubmit() {
     if (!token) {
-      error = 'Ongeldige reset link';
+      error = $_('errors.validation');
       return;
     }
 
     if (!password) {
-      error = 'Vul een nieuw wachtwoord in';
+      error = $_('errors.required');
       return;
     }
 
     if (password.length < 8) {
-      error = 'Wachtwoord moet minimaal 8 karakters zijn';
+      error = $_('errors.minLength', { values: { min: 8 }});
       return;
     }
 
     if (password !== confirmPassword) {
-      error = 'Wachtwoorden komen niet overeen';
+      error = $_('auth.passwordsDoNotMatch');
       return;
     }
 
@@ -38,14 +40,14 @@
 
     try {
       const result = await authApi.resetPassword(token, password);
-      success = result.message;
+      success = result.message || $_('auth.passwordReset');
 
       // Redirect to login after 3 seconds
       setTimeout(() => {
         goto('/login');
       }, 3000);
     } catch (e) {
-      error = e instanceof Error ? e.message : 'Er is iets misgegaan';
+      error = e instanceof Error ? e.message : $_('errors.general');
     } finally {
       loading = false;
     }
@@ -53,27 +55,30 @@
 </script>
 
 <svelte:head>
-  <title>Wachtwoord resetten - XML Customizer</title>
+  <title>{$_('auth.resetPasswordTitle')} - Tesoro CRM</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
+    <div class="auth-language">
+      <LanguageSwitcher />
+    </div>
     <div class="auth-header">
-      <h1 class="auth-title">XML Customizer</h1>
-      <p class="auth-subtitle">Nieuw wachtwoord instellen</p>
+      <h1 class="auth-title">Tesoro CRM</h1>
+      <p class="auth-subtitle">{$_('auth.resetPasswordTitle')}</p>
     </div>
 
     {#if !token}
       <div class="alert alert-error">
-        Ongeldige reset link. Vraag een nieuwe link aan via de "Wachtwoord vergeten" pagina.
+        {$_('errors.validation')}
       </div>
       <div class="auth-footer">
-        <p><a href="/forgot-password">Nieuwe link aanvragen</a></p>
+        <p><a href="/forgot-password">{$_('auth.forgotPassword')}</a></p>
       </div>
     {:else if success}
       <div class="alert alert-success">
         {success}
-        <p style="margin-top: 0.5rem; font-size: 0.875rem;">Je wordt doorgestuurd naar de login pagina...</p>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem;">{$_('common.loading')}</p>
       </div>
     {:else}
       {#if error}
@@ -82,25 +87,25 @@
 
       <form on:submit|preventDefault={handleSubmit}>
         <div class="form-group">
-          <label class="label" for="password">Nieuw wachtwoord</label>
+          <label class="label" for="password">{$_('auth.password')}</label>
           <input
             class="input"
             type="password"
             id="password"
             bind:value={password}
-            placeholder="Minimaal 8 karakters"
+            placeholder="********"
             autocomplete="new-password"
           />
         </div>
 
         <div class="form-group">
-          <label class="label" for="confirm-password">Bevestig wachtwoord</label>
+          <label class="label" for="confirm-password">{$_('auth.confirmPassword')}</label>
           <input
             class="input"
             type="password"
             id="confirm-password"
             bind:value={confirmPassword}
-            placeholder="Herhaal je wachtwoord"
+            placeholder="********"
             autocomplete="new-password"
           />
         </div>
@@ -109,12 +114,12 @@
           {#if loading}
             <span class="spinner"></span>
           {/if}
-          Wachtwoord wijzigen
+          {$_('auth.resetPassword')}
         </button>
       </form>
 
       <div class="auth-footer">
-        <p><a href="/login">Terug naar inloggen</a></p>
+        <p><a href="/login">{$_('auth.backToLogin')}</a></p>
       </div>
     {/if}
   </div>
@@ -137,6 +142,13 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 2rem;
+    position: relative;
+  }
+
+  .auth-language {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
   }
 
   .auth-header {

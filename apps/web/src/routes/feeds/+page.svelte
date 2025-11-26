@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
   import { onMount } from 'svelte';
   import { feedsApi } from '$lib/api';
   import type { SourceFeed } from '@xml-customizer/shared';
@@ -38,7 +39,7 @@
 
   async function handleSubmit() {
     if (!formData.name.trim() || !formData.url.trim()) {
-      error = 'Naam en URL zijn verplicht';
+      error = $_('errors.required');
       return;
     }
 
@@ -58,7 +59,7 @@
   }
 
   async function deleteFeed(id: number) {
-    if (!confirm('Weet je zeker dat je deze feed wilt verwijderen?')) return;
+    if (!confirm($_('feeds.confirmDelete'))) return;
 
     try {
       await feedsApi.delete(id);
@@ -79,13 +80,13 @@
 </script>
 
 <svelte:head>
-  <title>Feeds - XML Customizer</title>
+  <title>{$_('feeds.title')} - Tesoro CRM</title>
 </svelte:head>
 
 <div class="page-header">
-  <h1 class="page-title">Feeds</h1>
+  <h1 class="page-title">{$_('feeds.title')}</h1>
   <button class="btn btn-primary" on:click={() => (showModal = true)}>
-    + Nieuwe Feed
+    + {$_('feeds.newFeed')}
   </button>
 </div>
 
@@ -98,11 +99,11 @@
     <input
       class="input"
       type="text"
-      placeholder="Zoek op naam of URL..."
+      placeholder={$_('feeds.searchFeeds')}
       bind:value={searchQuery}
     />
     {#if searchQuery}
-      <span class="search-results">{filteredFeeds.length} van {feeds.length} feeds</span>
+      <span class="search-results">{filteredFeeds.length} / {feeds.length}</span>
     {/if}
   </div>
 {/if}
@@ -114,18 +115,18 @@
 {:else if feeds.length === 0}
   <div class="card">
     <div class="empty-state">
-      <p>Nog geen feeds toegevoegd.</p>
+      <p>{$_('feeds.noFeeds')}</p>
       <button class="btn btn-primary" style="margin-top: 1rem;" on:click={() => (showModal = true)}>
-        Voeg je eerste feed toe
+        + {$_('feeds.newFeed')}
       </button>
     </div>
   </div>
 {:else if filteredFeeds.length === 0}
   <div class="card">
     <div class="empty-state">
-      <p>Geen feeds gevonden voor "{searchQuery}"</p>
+      <p>{$_('errors.notFound')}</p>
       <button class="btn btn-secondary" style="margin-top: 1rem;" on:click={() => (searchQuery = '')}>
-        Wis zoekopdracht
+        {$_('common.refresh')}
       </button>
     </div>
   </div>
@@ -134,11 +135,11 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Naam</th>
+          <th>{$_('feeds.feedName')}</th>
           <th>URL</th>
-          <th>Properties</th>
-          <th>Laatst vernieuwd</th>
-          <th style="width: 150px;">Acties</th>
+          <th>{$_('properties.title')}</th>
+          <th>{$_('feeds.lastUpdated')}</th>
+          <th style="width: 150px;">{$_('common.actions')}</th>
         </tr>
       </thead>
       <tbody>
@@ -160,19 +161,19 @@
             <td>
               {#if feed.last_fetched_at}
                 <span style="font-size: 0.875rem;">
-                  {new Date(feed.last_fetched_at).toLocaleString('nl-NL')}
+                  {new Date(feed.last_fetched_at).toLocaleString()}
                 </span>
               {:else}
-                <span style="color: var(--text-muted);">Nooit</span>
+                <span style="color: var(--text-muted);">-</span>
               {/if}
             </td>
             <td>
               <div style="display: flex; gap: 0.25rem;">
                 <button class="btn btn-secondary btn-sm" on:click={() => refreshFeed(feed.id)}>
-                  Vernieuwen
+                  {$_('feeds.refresh')}
                 </button>
                 <button class="btn btn-danger btn-sm" on:click={() => deleteFeed(feed.id)}>
-                  Verwijder
+                  {$_('common.delete')}
                 </button>
               </div>
             </td>
@@ -187,23 +188,23 @@
   <div class="modal-overlay" on:click={() => (showModal = false)} on:keydown={(e) => e.key === 'Escape' && (showModal = false)}>
     <div class="modal" on:click|stopPropagation>
       <div class="modal-header">
-        <h3 class="modal-title">Nieuwe Feed</h3>
+        <h3 class="modal-title">{$_('feeds.newFeed')}</h3>
         <button class="btn btn-secondary btn-sm" on:click={() => (showModal = false)}>×</button>
       </div>
       <form on:submit|preventDefault={handleSubmit}>
         <div class="modal-body">
           <div class="form-group">
-            <label class="label" for="name">Naam</label>
+            <label class="label" for="name">{$_('feeds.feedName')}</label>
             <input
               class="input"
               type="text"
               id="name"
               bind:value={formData.name}
-              placeholder="Bijv. Tesoro XML Feed"
+              placeholder="Tesoro XML Feed"
             />
           </div>
           <div class="form-group">
-            <label class="label" for="url">XML URL</label>
+            <label class="label" for="url">{$_('feeds.feedUrl')}</label>
             <input
               class="input"
               type="url"
@@ -215,13 +216,13 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" on:click={() => (showModal = false)}>
-            Annuleren
+            {$_('common.cancel')}
           </button>
           <button type="submit" class="btn btn-primary" disabled={submitting}>
             {#if submitting}
               <span class="spinner"></span>
             {/if}
-            Toevoegen
+            {$_('common.create')}
           </button>
         </div>
       </form>

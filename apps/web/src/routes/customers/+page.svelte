@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
   import { onMount } from 'svelte';
   import { customersApi, getPublicFeedUrl } from '$lib/api';
   import type { Customer } from '@xml-customizer/shared';
@@ -39,7 +40,7 @@
 
   async function handleSubmit() {
     if (!formData.name.trim()) {
-      error = 'Naam is verplicht';
+      error = $_('errors.required');
       return;
     }
 
@@ -59,7 +60,7 @@
   }
 
   async function deleteCustomer(id: number) {
-    if (!confirm('Weet je zeker dat je deze klant wilt verwijderen?')) return;
+    if (!confirm($_('customers.confirmDelete'))) return;
 
     try {
       await customersApi.delete(id);
@@ -75,13 +76,13 @@
 </script>
 
 <svelte:head>
-  <title>Klanten - XML Customizer</title>
+  <title>{$_('customers.title')} - Tesoro CRM</title>
 </svelte:head>
 
 <div class="page-header">
-  <h1 class="page-title">Klanten</h1>
+  <h1 class="page-title">{$_('customers.title')}</h1>
   <button class="btn btn-primary" on:click={() => (showModal = true)}>
-    + Nieuwe Klant
+    + {$_('customers.newCustomer')}
   </button>
 </div>
 
@@ -94,11 +95,11 @@
     <input
       class="input"
       type="text"
-      placeholder="Zoek op naam, email of hash ID..."
+      placeholder={$_('customers.searchCustomers')}
       bind:value={searchQuery}
     />
     {#if searchQuery}
-      <span class="search-results">{filteredCustomers.length} van {customers.length} klanten</span>
+      <span class="search-results">{filteredCustomers.length} / {customers.length}</span>
     {/if}
   </div>
 {/if}
@@ -110,18 +111,18 @@
 {:else if customers.length === 0}
   <div class="card">
     <div class="empty-state">
-      <p>Nog geen klanten toegevoegd.</p>
+      <p>{$_('customers.noCustomers')}</p>
       <button class="btn btn-primary" style="margin-top: 1rem;" on:click={() => (showModal = true)}>
-        Voeg je eerste klant toe
+        + {$_('customers.newCustomer')}
       </button>
     </div>
   </div>
 {:else if filteredCustomers.length === 0}
   <div class="card">
     <div class="empty-state">
-      <p>Geen klanten gevonden voor "{searchQuery}"</p>
+      <p>{$_('errors.notFound')}</p>
       <button class="btn btn-secondary" style="margin-top: 1rem;" on:click={() => (searchQuery = '')}>
-        Wis zoekopdracht
+        {$_('common.refresh')}
       </button>
     </div>
   </div>
@@ -130,12 +131,12 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Naam</th>
-          <th>Email</th>
-          <th>Feeds</th>
-          <th>Selecties</th>
-          <th>Feed URL</th>
-          <th style="width: 200px;">Acties</th>
+          <th>{$_('customers.customerName')}</th>
+          <th>{$_('customers.email')}</th>
+          <th>{$_('feeds.title')}</th>
+          <th>{$_('customers.selections')}</th>
+          <th>{$_('customers.feedUrl')}</th>
+          <th style="width: 200px;">{$_('common.actions')}</th>
         </tr>
       </thead>
       <tbody>
@@ -165,17 +166,17 @@
                   /feed/{customer.hash_id}
                 </span>
                 <button class="btn btn-secondary btn-sm" on:click={() => copyLink(customer.hash_id)}>
-                  Kopieer
+                  {$_('common.copy')}
                 </button>
               </div>
             </td>
             <td>
               <div style="display: flex; gap: 0.25rem;">
                 <a href="/customers/{customer.id}" class="btn btn-secondary btn-sm">
-                  Beheren
+                  {$_('common.edit')}
                 </a>
                 <button class="btn btn-danger btn-sm" on:click={() => deleteCustomer(customer.id)}>
-                  Verwijder
+                  {$_('common.delete')}
                 </button>
               </div>
             </td>
@@ -190,23 +191,23 @@
   <div class="modal-overlay" on:click={() => (showModal = false)} on:keydown={(e) => e.key === 'Escape' && (showModal = false)}>
     <div class="modal" on:click|stopPropagation>
       <div class="modal-header">
-        <h3 class="modal-title">Nieuwe Klant</h3>
+        <h3 class="modal-title">{$_('customers.newCustomer')}</h3>
         <button class="btn btn-secondary btn-sm" on:click={() => (showModal = false)}>×</button>
       </div>
       <form on:submit|preventDefault={handleSubmit}>
         <div class="modal-body">
           <div class="form-group">
-            <label class="label" for="name">Naam *</label>
+            <label class="label" for="name">{$_('customers.customerName')} *</label>
             <input
               class="input"
               type="text"
               id="name"
               bind:value={formData.name}
-              placeholder="Bijv. Idealista"
+              placeholder="Idealista"
             />
           </div>
           <div class="form-group">
-            <label class="label" for="email">Email (optioneel)</label>
+            <label class="label" for="email">{$_('customers.email')}</label>
             <input
               class="input"
               type="email"
@@ -218,13 +219,13 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" on:click={() => (showModal = false)}>
-            Annuleren
+            {$_('common.cancel')}
           </button>
           <button type="submit" class="btn btn-primary" disabled={submitting}>
             {#if submitting}
               <span class="spinner"></span>
             {/if}
-            Toevoegen
+            {$_('common.create')}
           </button>
         </div>
       </form>

@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
   import { authApi } from '$lib/api';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   let email = '';
   let error = '';
@@ -8,7 +10,7 @@
 
   async function handleSubmit() {
     if (!email) {
-      error = 'Vul je email adres in';
+      error = $_('errors.required');
       return;
     }
 
@@ -18,10 +20,10 @@
 
     try {
       const result = await authApi.forgotPassword(email);
-      success = result.message;
+      success = result.message || $_('auth.emailSent');
       email = '';
     } catch (e) {
-      error = e instanceof Error ? e.message : 'Er is iets misgegaan';
+      error = e instanceof Error ? e.message : $_('errors.general');
     } finally {
       loading = false;
     }
@@ -29,14 +31,17 @@
 </script>
 
 <svelte:head>
-  <title>Wachtwoord vergeten - XML Customizer</title>
+  <title>{$_('auth.forgotPasswordTitle')} - Tesoro CRM</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
+    <div class="auth-language">
+      <LanguageSwitcher />
+    </div>
     <div class="auth-header">
-      <h1 class="auth-title">XML Customizer</h1>
-      <p class="auth-subtitle">Wachtwoord vergeten?</p>
+      <h1 class="auth-title">Tesoro CRM</h1>
+      <p class="auth-subtitle">{$_('auth.forgotPasswordTitle')}</p>
     </div>
 
     {#if error}
@@ -47,18 +52,18 @@
       <div class="alert alert-success">{success}</div>
     {:else}
       <p class="description">
-        Vul je email adres in en we sturen je een link om je wachtwoord te resetten.
+        {$_('auth.forgotPasswordSubtitle')}
       </p>
 
       <form on:submit|preventDefault={handleSubmit}>
         <div class="form-group">
-          <label class="label" for="email">Email</label>
+          <label class="label" for="email">{$_('auth.email')}</label>
           <input
             class="input"
             type="email"
             id="email"
             bind:value={email}
-            placeholder="jouw@email.nl"
+            placeholder="email@example.com"
             autocomplete="email"
           />
         </div>
@@ -67,13 +72,13 @@
           {#if loading}
             <span class="spinner"></span>
           {/if}
-          Reset link versturen
+          {$_('auth.sendResetLink')}
         </button>
       </form>
     {/if}
 
     <div class="auth-footer">
-      <p><a href="/login">Terug naar inloggen</a></p>
+      <p><a href="/login">{$_('auth.backToLogin')}</a></p>
     </div>
   </div>
 </div>
@@ -95,6 +100,13 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 2rem;
+    position: relative;
+  }
+
+  .auth-language {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
   }
 
   .auth-header {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
   import { feedsApi } from '$lib/api';
@@ -45,7 +46,7 @@
   }
 
   function formatPrice(price: number): string {
-    return new Intl.NumberFormat('nl-NL', {
+    return new Intl.NumberFormat('es-ES', {
       style: 'currency',
       currency: 'EUR',
       maximumFractionDigits: 0
@@ -54,21 +55,21 @@
 </script>
 
 <svelte:head>
-  <title>{feed?.name || 'Feed'} - XML Customizer</title>
+  <title>{feed?.name || $_('feeds.title')} - Tesoro CRM</title>
 </svelte:head>
 
 <div class="page-header">
   <div>
     <a href="/feeds" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem;">
-      ← Terug naar feeds
+      ← {$_('common.back')} {$_('feeds.title').toLowerCase()}
     </a>
     <h1 class="page-title" style="margin-top: 0.5rem;">
       {#if loading}
-        Laden...
+        {$_('common.loading')}
       {:else if feed}
         {feed.name}
       {:else}
-        Feed niet gevonden
+        {$_('errors.notFound')}
       {/if}
     </h1>
   </div>
@@ -77,7 +78,7 @@
       {#if refreshing}
         <span class="spinner"></span>
       {/if}
-      Feed vernieuwen
+      {$_('feeds.refresh')}
     </button>
   {/if}
 </div>
@@ -93,21 +94,21 @@
 {:else if feed}
   <div class="grid grid-4" style="margin-bottom: 1.5rem;">
     <div class="card">
-      <div class="stat-label">Properties</div>
+      <div class="stat-label">{$_('properties.title')}</div>
       <div class="stat-value">{properties.length}</div>
     </div>
     <div class="card">
-      <div class="stat-label">Laatst vernieuwd</div>
+      <div class="stat-label">{$_('feeds.lastUpdated')}</div>
       <div style="font-weight: 500;">
         {#if feed.last_fetched_at}
-          {new Date(feed.last_fetched_at).toLocaleString('nl-NL')}
+          {new Date(feed.last_fetched_at).toLocaleString()}
         {:else}
-          Nooit
+          -
         {/if}
       </div>
     </div>
     <div class="card" style="grid-column: span 2;">
-      <div class="stat-label">Bron URL</div>
+      <div class="stat-label">{$_('feeds.feedUrl')}</div>
       <div style="font-size: 0.875rem; word-break: break-all; color: var(--text-muted);">
         {feed.url}
       </div>
@@ -115,13 +116,13 @@
   </div>
 
   <div class="card">
-    <h2 style="margin-bottom: 1rem;">Properties ({properties.length})</h2>
+    <h2 style="margin-bottom: 1rem;">{$_('properties.title')} ({properties.length})</h2>
 
     {#if properties.length === 0}
       <div class="empty-state">
-        <p>Geen properties in deze feed.</p>
+        <p>{$_('feeds.noFeeds')}</p>
         <button class="btn btn-primary" style="margin-top: 1rem;" on:click={refreshFeed}>
-          Feed ophalen
+          {$_('feeds.refresh')}
         </button>
       </div>
     {:else}
@@ -138,10 +139,10 @@
             <div class="property-info">
               <div class="property-ref">{property.ref}</div>
               <div class="property-details">
-                {property.type} in {property.town}
+                {property.type} • {property.town}
               </div>
               <div class="property-details">
-                {property.beds} slaapkamers • {property.baths} badkamers
+                {property.beds} {$_('properties.bedrooms')} • {property.baths} {$_('properties.bathrooms')}
               </div>
               <div class="property-price">{formatPrice(property.price)}</div>
             </div>

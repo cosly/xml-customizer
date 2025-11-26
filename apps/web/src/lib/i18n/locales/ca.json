@@ -2,6 +2,7 @@
 	"common": {
 		"loading": "Carregant...",
 		"save": "Desar",
+		"saved": "Desat",
 		"cancel": "Cancel·lar",
 		"delete": "Eliminar",
 		"edit": "Editar",

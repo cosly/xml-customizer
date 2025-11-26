@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { _ } from 'svelte-i18n';
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
   import { customersApi, feedsApi, getPublicFeedUrl } from '$lib/api';
@@ -166,14 +167,14 @@
       });
 
       originalPropertyIds = new Set(selectedPropertyIds);
-      success = 'Selecties opgeslagen!';
+      success = $_('common.saved');
 
       // Refresh customer data
       customer = await customersApi.get(customerId);
 
       setTimeout(() => success = '', 3000);
     } catch (e) {
-      error = e instanceof Error ? e.message : 'Failed to save selections';
+      error = e instanceof Error ? e.message : $_('errors.general');
     } finally {
       saving = false;
     }
@@ -181,7 +182,7 @@
 
   function copyUrl() {
     navigator.clipboard.writeText(publicUrl);
-    success = 'URL gekopieerd!';
+    success = $_('common.copied');
     setTimeout(() => success = '', 2000);
   }
 
@@ -204,20 +205,20 @@
         message: shareMessage.trim() || undefined,
       });
 
-      success = 'Email verzonden!';
+      success = $_('auth.emailSent');
       showShareModal = false;
       shareEmail = '';
       shareMessage = '';
       setTimeout(() => success = '', 3000);
     } catch (e) {
-      error = e instanceof Error ? e.message : 'Email verzenden mislukt';
+      error = e instanceof Error ? e.message : $_('errors.general');
     } finally {
       sharing = false;
     }
   }
 
   function formatPrice(price: number): string {
-    return new Intl.NumberFormat('nl-NL', {
+    return new Intl.NumberFormat('es-ES', {
       style: 'currency',
       currency: 'EUR',
       maximumFractionDigits: 0
@@ -226,21 +227,21 @@
 </script>
 
 <svelte:head>
-  <title>{customer?.name || 'Klant'} - XML Customizer</title>
+  <title>{customer?.name || $_('customers.title')} - Tesoro CRM</title>
 </svelte:head>
 
 <div class="page-header">
   <div>
     <a href="/customers" style="color: var(--text-muted); text-decoration: none; font-size: 0.875rem;">
-      ← Terug naar klanten
+      ← {$_('common.back')} {$_('customers.title').toLowerCase()}
     </a>
     <h1 class="page-title" style="margin-top: 0.5rem;">
       {#if loading}
-        Laden...
+        {$_('common.loading')}
       {:else if customer}
         {customer.name}
       {:else}
-        Klant niet gevonden
+        {$_('errors.notFound')}
       {/if}
     </h1>
   </div>
@@ -263,34 +264,34 @@
   <div class="card" style="margin-bottom: 1.5rem;">
     <div class="grid grid-2" style="gap: 2rem;">
       <div>
-        <h3 style="margin-bottom: 1rem;">Klant Informatie</h3>
+        <h3 style="margin-bottom: 1rem;">{$_('customers.title')}</h3>
         <div style="display: grid; gap: 0.5rem;">
           <div>
-            <span style="color: var(--text-muted); font-size: 0.875rem;">Naam:</span>
+            <span style="color: var(--text-muted); font-size: 0.875rem;">{$_('customers.customerName')}:</span>
             <span style="margin-left: 0.5rem; font-weight: 500;">{customer.name}</span>
           </div>
           {#if customer.email}
             <div>
-              <span style="color: var(--text-muted); font-size: 0.875rem;">Email:</span>
+              <span style="color: var(--text-muted); font-size: 0.875rem;">{$_('customers.email')}:</span>
               <span style="margin-left: 0.5rem;">{customer.email}</span>
             </div>
           {/if}
           <div>
-            <span style="color: var(--text-muted); font-size: 0.875rem;">Aangemaakt:</span>
-            <span style="margin-left: 0.5rem;">{new Date(customer.created_at).toLocaleDateString('nl-NL')}</span>
+            <span style="color: var(--text-muted); font-size: 0.875rem;">{$_('feeds.lastUpdated')}:</span>
+            <span style="margin-left: 0.5rem;">{new Date(customer.created_at).toLocaleDateString()}</span>
           </div>
         </div>
       </div>
       <div>
-        <h3 style="margin-bottom: 1rem;">XML Feed URL</h3>
+        <h3 style="margin-bottom: 1rem;">{$_('customers.feedUrl')}</h3>
         <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-          Dit is de unieke URL die deze klant kan gebruiken om hun gepersonaliseerde XML feed op te halen.
+          {$_('customers.shareUrl')}
         </p>
         <div class="link-box">
           <span style="flex: 1; overflow: hidden; text-overflow: ellipsis;">{publicUrl}</span>
-          <button class="btn btn-secondary btn-sm" on:click={copyUrl}>Kopieer</button>
-          <button class="btn btn-secondary btn-sm" on:click={() => showShareModal = true}>Delen</button>
-          <a href={publicUrl} target="_blank" class="btn btn-primary btn-sm">Open</a>
+          <button class="btn btn-secondary btn-sm" on:click={copyUrl}>{$_('common.copy')}</button>
+          <button class="btn btn-secondary btn-sm" on:click={() => showShareModal = true}>{$_('landing.features.share.title')}</button>
+          <a href={publicUrl} target="_blank" class="btn btn-primary btn-sm">{$_('common.select')}</a>
         </div>
       </div>
     </div>
@@ -300,12 +301,12 @@
   {#if feeds.length === 0}
     <div class="card">
       <div class="empty-state">
-        <p>Geen feeds beschikbaar. <a href="/feeds">Voeg eerst een feed toe.</a></p>
+        <p>{$_('feeds.noFeeds')}. <a href="/feeds">{$_('feeds.newFeed')}</a></p>
       </div>
     </div>
   {:else}
     <div class="card">
-      <h3 style="margin-bottom: 1rem;">Property Selectie</h3>
+      <h3 style="margin-bottom: 1rem;">{$_('customers.selectProperties')}</h3>
 
       <div class="tabs">
         {#each feeds as feed}
@@ -330,25 +331,25 @@
         </div>
       {:else if properties.length === 0}
         <div class="empty-state" style="padding: 2rem;">
-          <p>Geen properties in deze feed. <a href="/feeds/{selectedFeedId}">Vernieuw de feed.</a></p>
+          <p>{$_('feeds.noFeeds')}. <a href="/feeds/{selectedFeedId}">{$_('feeds.refresh')}</a></p>
         </div>
       {:else}
         <!-- Search and Filter Bar -->
         <div class="filter-bar">
           <div class="filter-group" style="flex: 1; max-width: 250px;">
-            <label>Zoeken</label>
+            <label>{$_('common.search')}</label>
             <input
               class="input"
               type="text"
-              placeholder="Referentie, locatie..."
+              placeholder={$_('properties.reference')}, {$_('properties.location')}..."
               bind:value={searchQuery}
             />
           </div>
 
           <div class="filter-group">
-            <label>Type</label>
+            <label>{$_('properties.type')}</label>
             <select bind:value={filterType}>
-              <option value="">Alle types</option>
+              <option value="">{$_('common.all')}</option>
               {#each propertyTypes as type}
                 <option value={type}>{type}</option>
               {/each}
@@ -356,9 +357,9 @@
           </div>
 
           <div class="filter-group">
-            <label>Locatie</label>
+            <label>{$_('properties.location')}</label>
             <select bind:value={filterTown}>
-              <option value="">Alle locaties</option>
+              <option value="">{$_('common.all')}</option>
               {#each propertyTowns as town}
                 <option value={town}>{town}</option>
               {/each}
@@ -366,9 +367,9 @@
           </div>
 
           <div class="filter-group">
-            <label>Slaapkamers</label>
+            <label>{$_('properties.bedrooms')}</label>
             <select bind:value={filterBeds}>
-              <option value="">Alle</option>
+              <option value="">{$_('common.all')}</option>
               {#each propertyBedOptions as beds}
                 <option value={beds}>{beds}+</option>
               {/each}
@@ -376,7 +377,7 @@
           </div>
 
           <div class="filter-group">
-            <label>Prijs (min - max)</label>
+            <label>{$_('properties.price')}</label>
             <div class="price-range">
               <input
                 class="input"
@@ -397,7 +398,7 @@
           {#if hasActiveFilters}
             <div class="filter-actions">
               <button class="btn btn-secondary btn-sm" on:click={clearFilters}>
-                Wis filters
+                {$_('common.refresh')}
               </button>
             </div>
           {/if}
@@ -406,24 +407,24 @@
         <div class="select-all-bar">
           <div>
             <span class="selection-count">
-              {selectedPropertyIds.size} geselecteerd
+              {selectedPropertyIds.size} {$_('customers.selectedProperties').toLowerCase()}
               {#if hasActiveFilters}
                 <span style="color: var(--text-muted); font-weight: normal;">
-                  • {filteredProperties.length} van {properties.length} getoond
+                  • {filteredProperties.length} / {properties.length}
                 </span>
               {:else}
                 <span style="color: var(--text-muted); font-weight: normal;">
-                  van {properties.length}
+                  / {properties.length}
                 </span>
               {/if}
             </span>
           </div>
           <div style="display: flex; gap: 0.5rem;">
             <button class="btn btn-secondary btn-sm" on:click={selectAll}>
-              {hasActiveFilters ? 'Filter toevoegen' : 'Alles selecteren'}
+              {$_('common.selectAll')}
             </button>
             <button class="btn btn-secondary btn-sm" on:click={deselectAll}>
-              {hasActiveFilters ? 'Filter deselecteren' : 'Alles deselecteren'}
+              {$_('common.none')}
             </button>
             <button
               class="btn btn-primary"
@@ -433,16 +434,16 @@
               {#if saving}
                 <span class="spinner"></span>
               {/if}
-              Opslaan
+              {$_('common.save')}
             </button>
           </div>
         </div>
 
         {#if filteredProperties.length === 0}
           <div class="empty-state" style="padding: 2rem;">
-            <p>Geen properties gevonden met deze filters.</p>
+            <p>{$_('errors.notFound')}</p>
             <button class="btn btn-secondary" style="margin-top: 1rem;" on:click={clearFilters}>
-              Wis filters
+              {$_('common.refresh')}
             </button>
           </div>
         {:else}
@@ -486,12 +487,12 @@
           {#if hasChanges}
             <div style="position: sticky; bottom: 1rem; margin-top: 1rem;">
               <div class="alert alert-success" style="display: flex; align-items: center; justify-content: space-between;">
-                <span>Je hebt onopgeslagen wijzigingen.</span>
+                <span>{$_('common.save')}</span>
                 <button class="btn btn-primary" on:click={saveSelections} disabled={saving}>
                   {#if saving}
                     <span class="spinner"></span>
                   {/if}
-                  Wijzigingen opslaan
+                  {$_('common.save')}
                 </button>
               </div>
             </div>
@@ -507,32 +508,32 @@
   <div class="modal-overlay" on:click={() => (showShareModal = false)} on:keydown={(e) => e.key === 'Escape' && (showShareModal = false)}>
     <div class="modal" on:click|stopPropagation>
       <div class="modal-header">
-        <h3 class="modal-title">Feed URL Delen</h3>
+        <h3 class="modal-title">{$_('customers.shareUrl')}</h3>
         <button class="btn btn-secondary btn-sm" on:click={() => (showShareModal = false)}>×</button>
       </div>
       <form on:submit|preventDefault={shareFeedUrl}>
         <div class="modal-body">
           <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
-            Stuur de XML feed URL naar een email adres.
+            {$_('customers.shareUrl')}
           </p>
           <div class="form-group">
-            <label class="label" for="share-email">Email adres</label>
+            <label class="label" for="share-email">{$_('customers.email')}</label>
             <input
               class="input"
               type="email"
               id="share-email"
               bind:value={shareEmail}
-              placeholder="voorbeeld@email.com"
+              placeholder="email@example.com"
               required
             />
           </div>
           <div class="form-group">
-            <label class="label" for="share-message">Bericht (optioneel)</label>
+            <label class="label" for="share-message">{$_('customers.notes')}</label>
             <textarea
               class="input"
               id="share-message"
               bind:value={shareMessage}
-              placeholder="Voeg een persoonlijk bericht toe..."
+              placeholder=""
               rows="3"
               style="resize: vertical;"
             ></textarea>
@@ -540,13 +541,13 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" on:click={() => (showShareModal = false)}>
-            Annuleren
+            {$_('common.cancel')}
           </button>
           <button type="submit" class="btn btn-primary" disabled={sharing || !shareEmail.trim()}>
             {#if sharing}
               <span class="spinner"></span>
             {/if}
-            Versturen
+            {$_('common.submit')}
           </button>
         </div>
       </form>

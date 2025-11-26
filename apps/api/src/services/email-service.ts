@@ -7,41 +7,49 @@ interface SendEmailOptions {
   text?: string;
 }
 
-interface ResendResponse {
+interface MailgunResponse {
   id?: string;
-  error?: string;
+  message?: string;
 }
 
 export class EmailService {
   constructor(private env: Env) {}
 
   private async send(options: SendEmailOptions): Promise<{ success: boolean; id?: string; error?: string }> {
-    if (!this.env.RESEND_API_KEY) {
-      console.warn('RESEND_API_KEY not configured, skipping email');
+    if (!this.env.MAILGUN_API_KEY || !this.env.MAILGUN_DOMAIN) {
+      console.warn('Mailgun not configured, skipping email');
       return { success: false, error: 'Email not configured' };
     }
 
     try {
-      const response = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.env.RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: this.env.EMAIL_FROM || 'XML Customizer <onboarding@resend.dev>',
-          to: Array.isArray(options.to) ? options.to : [options.to],
-          subject: options.subject,
-          html: options.html,
-          text: options.text,
-        }),
-      });
+      const formData = new FormData();
+      formData.append('from', this.env.EMAIL_FROM || `XML Customizer <noreply@${this.env.MAILGUN_DOMAIN}>`);
 
-      const data = await response.json() as ResendResponse;
+      const recipients = Array.isArray(options.to) ? options.to : [options.to];
+      recipients.forEach(recipient => formData.append('to', recipient));
+
+      formData.append('subject', options.subject);
+      formData.append('html', options.html);
+      if (options.text) {
+        formData.append('text', options.text);
+      }
+
+      const response = await fetch(
+        `https://api.eu.mailgun.net/v3/${this.env.MAILGUN_DOMAIN}/messages`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Basic ${btoa(`api:${this.env.MAILGUN_API_KEY}`)}`,
+          },
+          body: formData,
+        }
+      );
+
+      const data = await response.json() as MailgunResponse;
 
       if (!response.ok) {
         console.error('Email send failed:', data);
-        return { success: false, error: data.error || 'Failed to send email' };
+        return { success: false, error: data.message || 'Failed to send email' };
       }
 
       return { success: true, id: data.id };

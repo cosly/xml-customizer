@@ -8,7 +8,10 @@ import type {
   CustomerWithSelections,
 } from '@xml-customizer/shared';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8787';
+const API_URL = import.meta.env.VITE_API_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? 'https://xml-customizer-api.tesorocrm.workers.dev'
+    : 'http://localhost:8787');
 const API_KEY = import.meta.env.VITE_API_KEY || 'change-this-in-production';
 
 async function fetchApi<T>(

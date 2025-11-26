@@ -1,6 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { _ } from 'svelte-i18n';
   import { auth } from '$lib/stores/auth';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   let email = '';
   let password = '';
@@ -9,7 +11,7 @@
 
   async function handleSubmit() {
     if (!email || !password) {
-      error = 'Vul email en wachtwoord in';
+      error = $_('errors.required');
       return;
     }
 
@@ -23,20 +25,23 @@
     if (result.success) {
       goto('/');
     } else {
-      error = result.error || 'Inloggen mislukt';
+      error = result.error || $_('auth.invalidCredentials');
     }
   }
 </script>
 
 <svelte:head>
-  <title>Inloggen - XML Customizer</title>
+  <title>{$_('auth.login')} - Tesoro CRM</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
+    <div class="auth-language">
+      <LanguageSwitcher />
+    </div>
     <div class="auth-header">
-      <h1 class="auth-title">XML Customizer</h1>
-      <p class="auth-subtitle">Log in om door te gaan</p>
+      <h1 class="auth-title">Tesoro CRM</h1>
+      <p class="auth-subtitle">{$_('auth.loginSubtitle')}</p>
     </div>
 
     {#if error}
@@ -45,19 +50,19 @@
 
     <form on:submit|preventDefault={handleSubmit}>
       <div class="form-group">
-        <label class="label" for="email">Email</label>
+        <label class="label" for="email">{$_('auth.email')}</label>
         <input
           class="input"
           type="email"
           id="email"
           bind:value={email}
-          placeholder="jouw@email.nl"
+          placeholder="email@example.com"
           autocomplete="email"
         />
       </div>
 
       <div class="form-group">
-        <label class="label" for="password">Wachtwoord</label>
+        <label class="label" for="password">{$_('auth.password')}</label>
         <input
           class="input"
           type="password"
@@ -66,19 +71,20 @@
           placeholder="********"
           autocomplete="current-password"
         />
-        <a href="/forgot-password" class="forgot-link">Wachtwoord vergeten?</a>
+        <a href="/forgot-password" class="forgot-link">{$_('auth.forgotPassword')}</a>
       </div>
 
       <button type="submit" class="btn btn-primary btn-block" disabled={loading}>
         {#if loading}
           <span class="spinner"></span>
         {/if}
-        Inloggen
+        {$_('auth.login')}
       </button>
     </form>
 
     <div class="auth-footer">
-      <p>Nog geen account? <a href="/register">Registreer hier</a></p>
+      <p>{$_('auth.noAccount')} <a href="/register">{$_('auth.register')}</a></p>
+      <p style="margin-top: 0.5rem;"><a href="/welcome">{$_('landing.hero.learnMore')}</a></p>
     </div>
   </div>
 </div>
@@ -100,6 +106,13 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 2rem;
+    position: relative;
+  }
+
+  .auth-language {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
   }
 
   .auth-header {

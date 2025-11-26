@@ -10,6 +10,8 @@
   let submitting = false;
   let error = '';
   let searchQuery = '';
+  let checkingFeeds: Set<number> = new Set();
+  let refreshingFeeds: Set<number> = new Set();
 
   // Filtered feeds based on search
   $: filteredFeeds = feeds.filter((f) => {
@@ -68,13 +70,48 @@
     }
   }
 
+  async function checkForUpdates(id: number) {
+    checkingFeeds.add(id);
+    checkingFeeds = checkingFeeds;
+    try {
+      await feedsApi.checkForUpdates(id);
+      await loadFeeds();
+    } catch (e) {
+      error = e instanceof Error ? e.message : 'Failed to check for updates';
+    } finally {
+      checkingFeeds.delete(id);
+      checkingFeeds = checkingFeeds;
+    }
+  }
+
   async function refreshFeed(id: number) {
+    refreshingFeeds.add(id);
+    refreshingFeeds = refreshingFeeds;
     try {
       await feedsApi.refresh(id);
       await loadFeeds();
     } catch (e) {
       error = e instanceof Error ? e.message : 'Failed to refresh feed';
+    } finally {
+      refreshingFeeds.delete(id);
+      refreshingFeeds = refreshingFeeds;
     }
+  }
+
+  function formatRelativeTime(dateStr: string | undefined): string {
+    if (!dateStr) return 'Nooit';
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Zojuist';
+    if (diffMins < 60) return `${diffMins} min geleden`;
+    if (diffHours < 24) return `${diffHours} uur geleden`;
+    if (diffDays < 7) return `${diffDays} dag${diffDays > 1 ? 'en' : ''} geleden`;
+    return date.toLocaleDateString('nl-NL');
   }
 </script>
 
@@ -137,20 +174,23 @@
           <th>Naam</th>
           <th>URL</th>
           <th>Properties</th>
-          <th>Laatst vernieuwd</th>
-          <th style="width: 150px;">Acties</th>
+          <th>Status</th>
+          <th style="width: 220px;">Acties</th>
         </tr>
       </thead>
       <tbody>
         {#each filteredFeeds as feed}
           <tr>
             <td>
-              <a href="/feeds/{feed.id}" style="font-weight: 500; color: var(--primary); text-decoration: none;">
+              <a href="/feeds/{feed.id}" class="feed-link">
                 {feed.name}
               </a>
+              {#if feed.update_available}
+                <span class="badge badge-warning" title="Nieuwe versie beschikbaar">Update</span>
+              {/if}
             </td>
             <td>
-              <span style="font-size: 0.75rem; color: var(--text-muted); max-width: 300px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              <span class="url-cell">
                 {feed.url}
               </span>
             </td>
@@ -158,18 +198,44 @@
               <span class="badge badge-primary">{feed.property_count}</span>
             </td>
             <td>
-              {#if feed.last_fetched_at}
-                <span style="font-size: 0.875rem;">
-                  {new Date(feed.last_fetched_at).toLocaleString('nl-NL')}
-                </span>
-              {:else}
-                <span style="color: var(--text-muted);">Nooit</span>
-              {/if}
+              <div class="status-cell">
+                <div class="status-row">
+                  <span class="status-label">Opgehaald:</span>
+                  <span class="status-value">{formatRelativeTime(feed.last_fetched_at)}</span>
+                </div>
+                <div class="status-row">
+                  <span class="status-label">Gecontroleerd:</span>
+                  <span class="status-value">{formatRelativeTime(feed.source_checked_at)}</span>
+                </div>
+              </div>
             </td>
             <td>
-              <div style="display: flex; gap: 0.25rem;">
-                <button class="btn btn-secondary btn-sm" on:click={() => refreshFeed(feed.id)}>
-                  Vernieuwen
+              <div class="action-buttons">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  on:click={() => checkForUpdates(feed.id)}
+                  disabled={checkingFeeds.has(feed.id)}
+                  title="Controleer op updates (HEAD request)"
+                >
+                  {#if checkingFeeds.has(feed.id)}
+                    <span class="spinner-sm"></span>
+                  {:else}
+                    Check
+                  {/if}
+                </button>
+                <button
+                  class="btn btn-sm"
+                  class:btn-primary={feed.update_available}
+                  class:btn-secondary={!feed.update_available}
+                  on:click={() => refreshFeed(feed.id)}
+                  disabled={refreshingFeeds.has(feed.id)}
+                  title="Haal nieuwe data op"
+                >
+                  {#if refreshingFeeds.has(feed.id)}
+                    <span class="spinner-sm"></span>
+                  {:else}
+                    Ophalen
+                  {/if}
                 </button>
                 <button class="btn btn-danger btn-sm" on:click={() => deleteFeed(feed.id)}>
                   Verwijder
@@ -228,3 +294,73 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .feed-link {
+    font-weight: 500;
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .feed-link:hover {
+    text-decoration: underline;
+  }
+
+  .url-cell {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    max-width: 250px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .status-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .status-label {
+    color: var(--text-muted);
+  }
+
+  .status-value {
+    font-weight: 500;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .badge-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    margin-left: 0.5rem;
+  }
+
+  .spinner-sm {
+    width: 12px;
+    height: 12px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: inline-block;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

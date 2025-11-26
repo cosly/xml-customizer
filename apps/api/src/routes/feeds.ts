@@ -235,6 +235,36 @@ app.get('/:id/properties', async (c) => {
 });
 
 /**
+ * POST /api/feeds/:id/check-updates - Check if source has updates (HEAD request only)
+ */
+app.post('/:id/check-updates', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  const id = c.req.param('id');
+
+  const feed = await c.env.DB.prepare('SELECT id FROM source_feeds WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
+    .first();
+
+  if (!feed) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
+
+  try {
+    const feedService = new FeedService(c.env);
+    const result = await feedService.checkForUpdates(Number(id));
+
+    return c.json(result);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return c.json({ error: 'Check failed', message }, 500);
+  }
+});
+
+/**
  * POST /api/feeds/:id/purge-cache - Purge all cached customer XMLs for this feed
  */
 app.post('/:id/purge-cache', async (c) => {

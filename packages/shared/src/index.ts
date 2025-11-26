@@ -15,8 +15,20 @@ export interface SourceFeed {
   r2_key?: string; // Cached XML in R2
   property_count: number;
   last_fetched_at?: string;
+  source_last_modified?: string; // Last-Modified header from source
+  source_etag?: string; // ETag header from source
+  source_checked_at?: string; // When we last checked for updates
+  update_available?: boolean; // Whether source has newer version
   created_at: string;
   updated_at: string;
+}
+
+// Feed update check result
+export interface CheckUpdateResult {
+  hasUpdate: boolean;
+  lastModified: string | null;
+  etag: string | null;
+  checkedAt: string;
 }
 
 export interface CustomerSelection {

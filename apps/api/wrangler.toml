@@ -25,3 +25,8 @@ EMAIL_FROM = "XML Customizer <noreply@yourdomain.com>"
 
 # Note: Set RESEND_API_KEY as a secret using:
 # wrangler secret put RESEND_API_KEY
+
+# Cron triggers for scheduled tasks
+# Runs 4x per day (every 6 hours) to check feeds for updates
+[triggers]
+crons = ["0 */6 * * *"]

@@ -2,12 +2,13 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import type { Env, Variables } from './types';
-import { sessionAuth } from './middleware/auth';
+import { sessionAuth, superAdminAuth } from './middleware/auth';
 import authRoutes from './routes/auth';
 import customersRoutes from './routes/customers';
 import feedsRoutes from './routes/feeds';
 import publicRoutes from './routes/public';
-import teamRoutes from './routes/team';
+import adminRoutes from './routes/admin';
+import { FeedService } from './services/feed-service';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -61,8 +62,10 @@ app.use('/api/feeds/*', sessionAuth);
 app.route('/api/customers', customersRoutes);
 app.route('/api/feeds', feedsRoutes);
 
-// Team routes (some require auth, some don't - handled in route)
-app.route('/api/team', teamRoutes);
+// Super admin routes (session + super admin required)
+app.use('/api/admin/*', sessionAuth);
+app.use('/api/admin/*', superAdminAuth);
+app.route('/api/admin', adminRoutes);
 
 // 404 handler
 app.notFound((c) => {
@@ -81,4 +84,13 @@ app.onError((err, c) => {
   );
 });
 
-export default app;
+// Export with scheduled handler for cron triggers
+export default {
+  fetch: app.fetch,
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+    // Check all feeds for updates (runs 4x per day via cron)
+    const feedService = new FeedService(env);
+    const result = await feedService.checkAllFeedsForUpdates();
+    console.log(`Cron: Checked ${result.checked} feeds, ${result.withUpdates} have updates available`);
+  },
+};

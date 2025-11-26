@@ -9,6 +9,18 @@
   let formData = { name: '', email: '' };
   let submitting = false;
   let error = '';
+  let searchQuery = '';
+
+  // Filtered customers based on search
+  $: filteredCustomers = customers.filter((c) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      c.name.toLowerCase().includes(query) ||
+      (c.email && c.email.toLowerCase().includes(query)) ||
+      c.hash_id.toLowerCase().includes(query)
+    );
+  });
 
   onMount(async () => {
     await loadCustomers();
@@ -77,6 +89,20 @@
   <div class="alert alert-error">{error}</div>
 {/if}
 
+{#if !loading && customers.length > 0}
+  <div class="search-bar">
+    <input
+      class="input"
+      type="text"
+      placeholder="Zoek op naam, email of hash ID..."
+      bind:value={searchQuery}
+    />
+    {#if searchQuery}
+      <span class="search-results">{filteredCustomers.length} van {customers.length} klanten</span>
+    {/if}
+  </div>
+{/if}
+
 {#if loading}
   <div class="empty-state">
     <div class="spinner"></div>
@@ -87,6 +113,15 @@
       <p>Nog geen klanten toegevoegd.</p>
       <button class="btn btn-primary" style="margin-top: 1rem;" on:click={() => (showModal = true)}>
         Voeg je eerste klant toe
+      </button>
+    </div>
+  </div>
+{:else if filteredCustomers.length === 0}
+  <div class="card">
+    <div class="empty-state">
+      <p>Geen klanten gevonden voor "{searchQuery}"</p>
+      <button class="btn btn-secondary" style="margin-top: 1rem;" on:click={() => (searchQuery = '')}>
+        Wis zoekopdracht
       </button>
     </div>
   </div>
@@ -104,7 +139,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each customers as customer}
+        {#each filteredCustomers as customer}
           <tr>
             <td>
               <a href="/customers/{customer.id}" style="font-weight: 500; color: var(--primary); text-decoration: none;">

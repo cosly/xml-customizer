@@ -17,9 +17,61 @@
   let error = '';
   let success = '';
 
+  // Filter state
+  let searchQuery = '';
+  let filterType = '';
+  let filterMinPrice = '';
+  let filterMaxPrice = '';
+  let filterBeds = '';
+  let filterTown = '';
+
+  // Derive unique values for filter dropdowns
+  $: propertyTypes = [...new Set(properties.map(p => p.type).filter(Boolean))].sort();
+  $: propertyTowns = [...new Set(properties.map(p => p.town).filter(Boolean))].sort();
+  $: propertyBedOptions = [...new Set(properties.map(p => p.beds).filter(b => b > 0))].sort((a, b) => a - b);
+
+  // Filtered properties based on search and filters
+  $: filteredProperties = properties.filter((p) => {
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      const matchesSearch =
+        p.ref.toLowerCase().includes(query) ||
+        p.town.toLowerCase().includes(query) ||
+        p.type.toLowerCase().includes(query);
+      if (!matchesSearch) return false;
+    }
+
+    // Type filter
+    if (filterType && p.type !== filterType) return false;
+
+    // Town filter
+    if (filterTown && p.town !== filterTown) return false;
+
+    // Price range filter
+    if (filterMinPrice && p.price < parseInt(filterMinPrice)) return false;
+    if (filterMaxPrice && p.price > parseInt(filterMaxPrice)) return false;
+
+    // Beds filter
+    if (filterBeds && p.beds !== parseInt(filterBeds)) return false;
+
+    return true;
+  });
+
   $: customerId = parseInt($page.params.id, 10);
   $: hasChanges = !setsEqual(selectedPropertyIds, originalPropertyIds);
   $: publicUrl = customer ? getPublicFeedUrl(customer.hash_id, selectedFeedId || undefined) : '';
+
+  function clearFilters() {
+    searchQuery = '';
+    filterType = '';
+    filterMinPrice = '';
+    filterMaxPrice = '';
+    filterBeds = '';
+    filterTown = '';
+  }
+
+  $: hasActiveFilters = searchQuery || filterType || filterMinPrice || filterMaxPrice || filterBeds || filterTown;
 
   function setsEqual(a: Set<string>, b: Set<string>): boolean {
     if (a.size !== b.size) return false;
@@ -84,11 +136,20 @@
   }
 
   function selectAll() {
-    selectedPropertyIds = new Set(properties.map(p => p.id));
+    // Select all filtered properties (add to existing selection)
+    filteredProperties.forEach(p => selectedPropertyIds.add(p.id));
+    selectedPropertyIds = selectedPropertyIds;
   }
 
   function deselectAll() {
-    selectedPropertyIds = new Set();
+    // Deselect all filtered properties (remove from selection)
+    filteredProperties.forEach(p => selectedPropertyIds.delete(p.id));
+    selectedPropertyIds = selectedPropertyIds;
+  }
+
+  function selectFiltered() {
+    // Replace selection with only filtered properties
+    selectedPropertyIds = new Set(filteredProperties.map(p => p.id));
   }
 
   async function saveSelections() {
@@ -240,13 +301,98 @@
           <p>Geen properties in deze feed. <a href="/feeds/{selectedFeedId}">Vernieuw de feed.</a></p>
         </div>
       {:else}
+        <!-- Search and Filter Bar -->
+        <div class="filter-bar">
+          <div class="filter-group" style="flex: 1; max-width: 250px;">
+            <label>Zoeken</label>
+            <input
+              class="input"
+              type="text"
+              placeholder="Referentie, locatie..."
+              bind:value={searchQuery}
+            />
+          </div>
+
+          <div class="filter-group">
+            <label>Type</label>
+            <select bind:value={filterType}>
+              <option value="">Alle types</option>
+              {#each propertyTypes as type}
+                <option value={type}>{type}</option>
+              {/each}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Locatie</label>
+            <select bind:value={filterTown}>
+              <option value="">Alle locaties</option>
+              {#each propertyTowns as town}
+                <option value={town}>{town}</option>
+              {/each}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Slaapkamers</label>
+            <select bind:value={filterBeds}>
+              <option value="">Alle</option>
+              {#each propertyBedOptions as beds}
+                <option value={beds}>{beds}+</option>
+              {/each}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Prijs (min - max)</label>
+            <div class="price-range">
+              <input
+                class="input"
+                type="number"
+                placeholder="Min"
+                bind:value={filterMinPrice}
+              />
+              <span>-</span>
+              <input
+                class="input"
+                type="number"
+                placeholder="Max"
+                bind:value={filterMaxPrice}
+              />
+            </div>
+          </div>
+
+          {#if hasActiveFilters}
+            <div class="filter-actions">
+              <button class="btn btn-secondary btn-sm" on:click={clearFilters}>
+                Wis filters
+              </button>
+            </div>
+          {/if}
+        </div>
+
         <div class="select-all-bar">
           <div>
-            <span class="selection-count">{selectedPropertyIds.size} van {properties.length} geselecteerd</span>
+            <span class="selection-count">
+              {selectedPropertyIds.size} geselecteerd
+              {#if hasActiveFilters}
+                <span style="color: var(--text-muted); font-weight: normal;">
+                  • {filteredProperties.length} van {properties.length} getoond
+                </span>
+              {:else}
+                <span style="color: var(--text-muted); font-weight: normal;">
+                  van {properties.length}
+                </span>
+              {/if}
+            </span>
           </div>
           <div style="display: flex; gap: 0.5rem;">
-            <button class="btn btn-secondary btn-sm" on:click={selectAll}>Alles selecteren</button>
-            <button class="btn btn-secondary btn-sm" on:click={deselectAll}>Alles deselecteren</button>
+            <button class="btn btn-secondary btn-sm" on:click={selectAll}>
+              {hasActiveFilters ? 'Filter toevoegen' : 'Alles selecteren'}
+            </button>
+            <button class="btn btn-secondary btn-sm" on:click={deselectAll}>
+              {hasActiveFilters ? 'Filter deselecteren' : 'Alles deselecteren'}
+            </button>
             <button
               class="btn btn-primary"
               on:click={saveSelections}
@@ -260,8 +406,16 @@
           </div>
         </div>
 
-        <div class="grid grid-3">
-          {#each properties as property}
+        {#if filteredProperties.length === 0}
+          <div class="empty-state" style="padding: 2rem;">
+            <p>Geen properties gevonden met deze filters.</p>
+            <button class="btn btn-secondary" style="margin-top: 1rem;" on:click={clearFilters}>
+              Wis filters
+            </button>
+          </div>
+        {:else}
+          <div class="grid grid-3">
+            {#each filteredProperties as property}
             <div
               class="property-card"
               class:selected={selectedPropertyIds.has(property.id)}
@@ -294,21 +448,22 @@
                 <div class="property-price">{formatPrice(property.price)}</div>
               </div>
             </div>
-          {/each}
-        </div>
-
-        {#if hasChanges}
-          <div style="position: sticky; bottom: 1rem; margin-top: 1rem;">
-            <div class="alert alert-success" style="display: flex; align-items: center; justify-content: space-between;">
-              <span>Je hebt onopgeslagen wijzigingen.</span>
-              <button class="btn btn-primary" on:click={saveSelections} disabled={saving}>
-                {#if saving}
-                  <span class="spinner"></span>
-                {/if}
-                Wijzigingen opslaan
-              </button>
-            </div>
+            {/each}
           </div>
+
+          {#if hasChanges}
+            <div style="position: sticky; bottom: 1rem; margin-top: 1rem;">
+              <div class="alert alert-success" style="display: flex; align-items: center; justify-content: space-between;">
+                <span>Je hebt onopgeslagen wijzigingen.</span>
+                <button class="btn btn-primary" on:click={saveSelections} disabled={saving}>
+                  {#if saving}
+                    <span class="spinner"></span>
+                  {/if}
+                  Wijzigingen opslaan
+                </button>
+              </div>
+            </div>
+          {/if}
         {/if}
       {/if}
     </div>

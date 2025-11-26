@@ -9,6 +9,17 @@
   let formData = { name: '', url: '' };
   let submitting = false;
   let error = '';
+  let searchQuery = '';
+
+  // Filtered feeds based on search
+  $: filteredFeeds = feeds.filter((f) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      f.name.toLowerCase().includes(query) ||
+      f.url.toLowerCase().includes(query)
+    );
+  });
 
   onMount(async () => {
     await loadFeeds();
@@ -82,6 +93,20 @@
   <div class="alert alert-error">{error}</div>
 {/if}
 
+{#if !loading && feeds.length > 0}
+  <div class="search-bar">
+    <input
+      class="input"
+      type="text"
+      placeholder="Zoek op naam of URL..."
+      bind:value={searchQuery}
+    />
+    {#if searchQuery}
+      <span class="search-results">{filteredFeeds.length} van {feeds.length} feeds</span>
+    {/if}
+  </div>
+{/if}
+
 {#if loading}
   <div class="empty-state">
     <div class="spinner"></div>
@@ -92,6 +117,15 @@
       <p>Nog geen feeds toegevoegd.</p>
       <button class="btn btn-primary" style="margin-top: 1rem;" on:click={() => (showModal = true)}>
         Voeg je eerste feed toe
+      </button>
+    </div>
+  </div>
+{:else if filteredFeeds.length === 0}
+  <div class="card">
+    <div class="empty-state">
+      <p>Geen feeds gevonden voor "{searchQuery}"</p>
+      <button class="btn btn-secondary" style="margin-top: 1rem;" on:click={() => (searchQuery = '')}>
+        Wis zoekopdracht
       </button>
     </div>
   </div>
@@ -108,7 +142,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each feeds as feed}
+        {#each filteredFeeds as feed}
           <tr>
             <td>
               <a href="/feeds/{feed.id}" style="font-weight: 500; color: var(--primary); text-decoration: none;">

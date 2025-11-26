@@ -6,6 +6,8 @@ export interface Env {
   KV: KVNamespace;
   ADMIN_API_KEY: string;
   CORS_ORIGIN: string;
+  RESEND_API_KEY: string;
+  EMAIL_FROM: string;
 }
 
 export interface AuthUser {

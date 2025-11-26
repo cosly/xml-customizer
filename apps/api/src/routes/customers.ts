@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import type { Env, Variables } from '../types';
 import type { Customer, CreateCustomerRequest, UpdateSelectionsRequest } from '@xml-customizer/shared';
 import { FeedService } from '../services/feed-service';
+import { EmailService } from '../services/email-service';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -278,6 +279,63 @@ app.get('/:id/selections/:feedId', async (c) => {
     feed_id: Number(feedId),
     property_ids: (selections.results || []).map((s) => s.property_id),
   });
+});
+
+/**
+ * POST /api/customers/:id/share - Share feed URL via email
+ */
+app.post('/:id/share', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  const customerId = c.req.param('id');
+  const { email, feedId, message } = await c.req.json<{
+    email: string;
+    feedId?: number;
+    message?: string;
+  }>();
+
+  if (!email) {
+    return c.json({ error: 'Email is verplicht' }, 400);
+  }
+
+  // Verify customer belongs to user
+  const customer = await c.env.DB.prepare(
+    'SELECT * FROM customers WHERE id = ? AND user_id = ?'
+  )
+    .bind(customerId, user.id)
+    .first<Customer>();
+
+  if (!customer) {
+    return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
+  }
+
+  // Build the feed URL
+  // Get the API URL from the request
+  const url = new URL(c.req.url);
+  const baseUrl = `${url.protocol}//${url.host}`;
+  let feedUrl = `${baseUrl}/feed/${customer.hash_id}`;
+  if (feedId) {
+    feedUrl += `?feed=${feedId}`;
+  }
+
+  // Send email
+  const emailService = new EmailService(c.env);
+  const result = await emailService.sendFeedShareEmail(
+    email,
+    user.name,
+    customer.name,
+    feedUrl,
+    message
+  );
+
+  if (!result.success) {
+    return c.json({ error: 'Email verzenden mislukt' }, 500);
+  }
+
+  return c.json({ success: true, message: 'Email verzonden' });
 });
 
 export default app;

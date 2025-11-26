@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { setCookie, deleteCookie } from 'hono/cookie';
 import type { Env, Variables } from '../types';
 import { AuthService } from '../services/auth-service';
+import { EmailService } from '../services/email-service';
 import { sessionAuth } from '../middleware/auth';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -20,6 +21,10 @@ app.post('/register', async (c) => {
 
     // Auto-login after registration
     const { session } = await authService.login(email, password);
+
+    // Send welcome email (non-blocking)
+    const emailService = new EmailService(c.env);
+    c.executionCtx.waitUntil(emailService.sendWelcomeEmail(email, name));
 
     // Set session cookie
     setCookie(c, 'session', session.id, {

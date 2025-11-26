@@ -185,6 +185,37 @@
     setTimeout(() => success = '', 2000);
   }
 
+  // Share modal state
+  let showShareModal = false;
+  let shareEmail = '';
+  let shareMessage = '';
+  let sharing = false;
+
+  async function shareFeedUrl() {
+    if (!shareEmail.trim() || !customer) return;
+
+    sharing = true;
+    error = '';
+
+    try {
+      await customersApi.shareFeedUrl(customerId, {
+        email: shareEmail.trim(),
+        feedId: selectedFeedId || undefined,
+        message: shareMessage.trim() || undefined,
+      });
+
+      success = 'Email verzonden!';
+      showShareModal = false;
+      shareEmail = '';
+      shareMessage = '';
+      setTimeout(() => success = '', 3000);
+    } catch (e) {
+      error = e instanceof Error ? e.message : 'Email verzenden mislukt';
+    } finally {
+      sharing = false;
+    }
+  }
+
   function formatPrice(price: number): string {
     return new Intl.NumberFormat('nl-NL', {
       style: 'currency',
@@ -258,6 +289,7 @@
         <div class="link-box">
           <span style="flex: 1; overflow: hidden; text-overflow: ellipsis;">{publicUrl}</span>
           <button class="btn btn-secondary btn-sm" on:click={copyUrl}>Kopieer</button>
+          <button class="btn btn-secondary btn-sm" on:click={() => showShareModal = true}>Delen</button>
           <a href={publicUrl} target="_blank" class="btn btn-primary btn-sm">Open</a>
         </div>
       </div>
@@ -468,4 +500,56 @@
       {/if}
     </div>
   {/if}
+{/if}
+
+<!-- Share Modal -->
+{#if showShareModal}
+  <div class="modal-overlay" on:click={() => (showShareModal = false)} on:keydown={(e) => e.key === 'Escape' && (showShareModal = false)}>
+    <div class="modal" on:click|stopPropagation>
+      <div class="modal-header">
+        <h3 class="modal-title">Feed URL Delen</h3>
+        <button class="btn btn-secondary btn-sm" on:click={() => (showShareModal = false)}>×</button>
+      </div>
+      <form on:submit|preventDefault={shareFeedUrl}>
+        <div class="modal-body">
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Stuur de XML feed URL naar een email adres.
+          </p>
+          <div class="form-group">
+            <label class="label" for="share-email">Email adres</label>
+            <input
+              class="input"
+              type="email"
+              id="share-email"
+              bind:value={shareEmail}
+              placeholder="voorbeeld@email.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="label" for="share-message">Bericht (optioneel)</label>
+            <textarea
+              class="input"
+              id="share-message"
+              bind:value={shareMessage}
+              placeholder="Voeg een persoonlijk bericht toe..."
+              rows="3"
+              style="resize: vertical;"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" on:click={() => (showShareModal = false)}>
+            Annuleren
+          </button>
+          <button type="submit" class="btn btn-primary" disabled={sharing || !shareEmail.trim()}>
+            {#if sharing}
+              <span class="spinner"></span>
+            {/if}
+            Versturen
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 {/if}

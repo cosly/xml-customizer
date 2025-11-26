@@ -146,6 +146,12 @@ export const customersApi = {
     fetchApi<{ property_ids: string[] }>(
       `/api/customers/${customerId}/selections/${feedId}`
     ),
+
+  shareFeedUrl: (customerId: number, data: { email: string; feedId?: number; message?: string }) =>
+    fetchApi<{ success: boolean; message: string }>(`/api/customers/${customerId}/share`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 };
 
 // Feeds API

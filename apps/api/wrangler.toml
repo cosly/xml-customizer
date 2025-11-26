@@ -21,3 +21,7 @@ id = "4a9874c88031497dbfea85f916cbb8ca"
 [vars]
 ADMIN_API_KEY = "change-this-in-production"
 CORS_ORIGIN = "https://xml-customizer-web.pages.dev"
+EMAIL_FROM = "XML Customizer <noreply@yourdomain.com>"
+
+# Note: Set RESEND_API_KEY as a secret using:
+# wrangler secret put RESEND_API_KEY

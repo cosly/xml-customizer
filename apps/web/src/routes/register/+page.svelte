@@ -1,6 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { _ } from 'svelte-i18n';
   import { auth } from '$lib/stores/auth';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   let name = '';
   let email = '';
@@ -13,17 +15,17 @@
     error = '';
 
     if (!name || !email || !password) {
-      error = 'Vul alle velden in';
+      error = $_('errors.required');
       return;
     }
 
     if (password.length < 8) {
-      error = 'Wachtwoord moet minimaal 8 karakters zijn';
+      error = $_('errors.minLength', { values: { min: 8 } });
       return;
     }
 
     if (password !== confirmPassword) {
-      error = 'Wachtwoorden komen niet overeen';
+      error = $_('auth.passwordsDoNotMatch');
       return;
     }
 
@@ -36,20 +38,23 @@
     if (result.success) {
       goto('/');
     } else {
-      error = result.error || 'Registratie mislukt';
+      error = result.error || $_('errors.general');
     }
   }
 </script>
 
 <svelte:head>
-  <title>Registreren - Tesoro</title>
+  <title>{$_('auth.register')} - Tesoro</title>
 </svelte:head>
 
 <div class="auth-container">
+  <div class="language-switcher-wrapper">
+    <LanguageSwitcher />
+  </div>
   <div class="auth-card">
     <div class="auth-header">
       <img src="/logo.png" alt="Tesoro" class="auth-logo" />
-      <p class="auth-subtitle">Maak een account aan</p>
+      <p class="auth-subtitle">{$_('auth.registerSubtitle')}</p>
     </div>
 
     {#if error}
@@ -58,19 +63,19 @@
 
     <form on:submit|preventDefault={handleSubmit}>
       <div class="form-group">
-        <label class="label" for="name">Naam</label>
+        <label class="label" for="name">{$_('auth.name')}</label>
         <input
           class="input"
           type="text"
           id="name"
           bind:value={name}
-          placeholder="Je bedrijfsnaam"
+          placeholder="{$_('auth.companyName')}"
           autocomplete="name"
         />
       </div>
 
       <div class="form-group">
-        <label class="label" for="email">Email</label>
+        <label class="label" for="email">{$_('auth.email')}</label>
         <input
           class="input"
           type="email"
@@ -82,25 +87,24 @@
       </div>
 
       <div class="form-group">
-        <label class="label" for="password">Wachtwoord</label>
+        <label class="label" for="password">{$_('auth.password')}</label>
         <input
           class="input"
           type="password"
           id="password"
           bind:value={password}
-          placeholder="Minimaal 8 karakters"
+          placeholder="{$_('errors.minLength', { values: { min: 8 } })}"
           autocomplete="new-password"
         />
       </div>
 
       <div class="form-group">
-        <label class="label" for="confirmPassword">Bevestig wachtwoord</label>
+        <label class="label" for="confirmPassword">{$_('auth.confirmPassword')}</label>
         <input
           class="input"
           type="password"
           id="confirmPassword"
           bind:value={confirmPassword}
-          placeholder="Herhaal wachtwoord"
           autocomplete="new-password"
         />
       </div>
@@ -109,12 +113,12 @@
         {#if loading}
           <span class="spinner"></span>
         {/if}
-        Registreren
+        {$_('auth.register')}
       </button>
     </form>
 
     <div class="auth-footer">
-      <p>Al een account? <a href="/login">Log hier in</a></p>
+      <p>{$_('auth.haveAccount')} <a href="/login">{$_('auth.login')}</a></p>
     </div>
   </div>
 </div>
@@ -187,5 +191,11 @@
 
   .alert {
     margin-bottom: 1rem;
+  }
+
+  .language-switcher-wrapper {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
   }
 </style>

@@ -1,16 +1,16 @@
 <script lang="ts">
   import '../app.css';
+  import '$lib/i18n';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { auth, isAuthenticated } from '$lib/stores/auth';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
+  const publicRoutes = ['/login', '/register', '/forgot-password', '/reset-password', '/welcome'];
 
   $: isPublicRoute = publicRoutes.some((route) => $page.url.pathname.startsWith(route));
-  $: isAdminRoute = $page.url.pathname.startsWith('/admin');
-  $: isSuperAdmin = $auth.user?.is_super_admin === true;
 
   // Initialize auth on mount
   onMount(() => {
@@ -23,9 +23,6 @@
       if (!$isAuthenticated && !isPublicRoute) {
         goto('/login');
       } else if ($isAuthenticated && isPublicRoute) {
-        goto('/');
-      } else if (isAdminRoute && !isSuperAdmin && $isAuthenticated) {
-        // Redirect non-admins away from admin routes
         goto('/');
       }
     }
@@ -57,13 +54,9 @@
         <a href="/customers" class="nav-link" class:active={$page.url.pathname.startsWith('/customers')}>
           Relaties
         </a>
-        {#if isSuperAdmin}
-          <a href="/admin" class="nav-link admin-link" class:active={$page.url.pathname.startsWith('/admin')}>
-            Admin
-          </a>
-        {/if}
       </div>
       <div class="nav-user">
+        <LanguageSwitcher />
         <span class="user-name">{$auth.user?.name}</span>
         <button class="btn btn-secondary btn-sm" on:click={handleLogout}>
           Uitloggen
@@ -101,15 +94,5 @@
   .user-name {
     font-size: 0.875rem;
     color: var(--text-muted);
-  }
-
-  .admin-link {
-    color: var(--warning) !important;
-    font-weight: 600;
-  }
-
-  .admin-link:hover,
-  .admin-link.active {
-    color: var(--warning) !important;
   }
 </style>

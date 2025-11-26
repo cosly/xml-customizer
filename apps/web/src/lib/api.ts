@@ -6,11 +6,6 @@ import type {
   CreateFeedRequest,
   UpdateSelectionsRequest,
   CustomerWithSelections,
-  DashboardStats,
-  CompanyStats,
-  CompanyDetail,
-  ActivityLogEntry,
-  GrowthDataPoint,
 } from '@xml-customizer/shared';
 
 // Auto-detect production vs local development
@@ -24,10 +19,47 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  is_super_admin?: boolean;
-  last_login_at?: string;
+  organization_id: number | null;
   created_at: string;
   updated_at: string;
+}
+
+// Organization types
+export interface Organization {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrganizationMember {
+  id: number;
+  name: string;
+  email: string;
+  role: 'owner' | 'admin' | 'member';
+}
+
+export interface PendingInvitation {
+  id: number;
+  email: string;
+  role: 'admin' | 'member';
+  expires_at: string;
+  invited_by_name: string;
+}
+
+export interface TeamData {
+  organization: Organization;
+  role: string;
+  members: OrganizationMember[];
+  pendingInvitations: PendingInvitation[];
+}
+
+export interface InvitationDetails {
+  email: string;
+  organization_name: string;
+  invited_by_name: string;
+  role: string;
+  expires_at: string;
 }
 
 // Session storage for token (when cookies don't work cross-domain)
@@ -83,12 +115,12 @@ async function fetchApi<T>(
 
 // Auth API
 export const authApi = {
-  register: async (email: string, password: string, name: string) => {
+  register: async (email: string, password: string, name: string, invitationToken?: string) => {
     const result = await fetchApi<{ user: User; session: { id: string; expires_at: string } }>(
       '/api/auth/register',
       {
         method: 'POST',
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({ email, password, name, invitationToken }),
       }
     );
     // Store session token for cross-domain requests
@@ -216,77 +248,46 @@ export function getPublicFeedUrl(hashId: string, feedId?: number): string {
   return feedId ? `${base}?feed=${feedId}` : base;
 }
 
-// Admin API
-export const adminApi = {
-  getDashboard: () => fetchApi<DashboardStats>('/api/admin/dashboard'),
+// Team API
+export const teamApi = {
+  get: () => fetchApi<TeamData>('/api/team'),
 
-  getCompanies: (params?: {
-    search?: string;
-    status?: 'all' | 'active' | 'blocked';
-    sort_by?: 'name' | 'created_at' | 'last_login_at' | 'customer_count' | 'feed_count';
-    sort_order?: 'asc' | 'desc';
-    limit?: number;
-    offset?: number;
-  }) => {
-    const searchParams = new URLSearchParams();
-    if (params?.search) searchParams.set('search', params.search);
-    if (params?.status) searchParams.set('status', params.status);
-    if (params?.sort_by) searchParams.set('sort_by', params.sort_by);
-    if (params?.sort_order) searchParams.set('sort_order', params.sort_order);
-    if (params?.limit) searchParams.set('limit', params.limit.toString());
-    if (params?.offset) searchParams.set('offset', params.offset.toString());
-    const query = searchParams.toString();
-    return fetchApi<{ companies: CompanyStats[]; total: number }>(
-      `/api/admin/companies${query ? `?${query}` : ''}`
-    );
-  },
-
-  getCompany: (id: number) => fetchApi<CompanyDetail>(`/api/admin/companies/${id}`),
-
-  blockCompany: (id: number, reason?: string) =>
-    fetchApi<{ success: boolean; message: string }>(`/api/admin/companies/${id}/block`, {
-      method: 'POST',
-      body: JSON.stringify({ reason }),
+  updateOrganization: (name: string) =>
+    fetchApi<{ success: boolean }>('/api/team', {
+      method: 'PUT',
+      body: JSON.stringify({ name }),
     }),
 
-  unblockCompany: (id: number) =>
-    fetchApi<{ success: boolean; message: string }>(`/api/admin/companies/${id}/unblock`, {
+  sendInvitation: (email: string, role: 'admin' | 'member' = 'member') =>
+    fetchApi<{ success: boolean; invitation: { id: number; email: string; role: string; expires_at: string } }>(
+      '/api/team/invitations',
+      {
+        method: 'POST',
+        body: JSON.stringify({ email, role }),
+      }
+    ),
+
+  getInvitation: (token: string) =>
+    fetchApi<InvitationDetails>(`/api/team/invitations/${token}`),
+
+  cancelInvitation: (id: number) =>
+    fetchApi<{ success: boolean }>(`/api/team/invitations/${id}`, {
+      method: 'DELETE',
+    }),
+
+  resendInvitation: (id: number) =>
+    fetchApi<{ success: boolean }>(`/api/team/invitations/${id}/resend`, {
       method: 'POST',
     }),
 
-  getActivity: (params?: {
-    admin_id?: number;
-    action?: string;
-    target_type?: string;
-    limit?: number;
-    offset?: number;
-  }) => {
-    const searchParams = new URLSearchParams();
-    if (params?.admin_id) searchParams.set('admin_id', params.admin_id.toString());
-    if (params?.action) searchParams.set('action', params.action);
-    if (params?.target_type) searchParams.set('target_type', params.target_type);
-    if (params?.limit) searchParams.set('limit', params.limit.toString());
-    if (params?.offset) searchParams.set('offset', params.offset.toString());
-    const query = searchParams.toString();
-    return fetchApi<{ entries: ActivityLogEntry[]; total: number }>(
-      `/api/admin/activity${query ? `?${query}` : ''}`
-    );
-  },
+  updateMemberRole: (memberId: number, role: 'admin' | 'member') =>
+    fetchApi<{ success: boolean }>(`/api/team/members/${memberId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ role }),
+    }),
 
-  getTopCompanies: (metric: 'customers' | 'feeds' | 'selections' | 'properties', limit?: number) => {
-    const searchParams = new URLSearchParams();
-    searchParams.set('metric', metric);
-    if (limit) searchParams.set('limit', limit.toString());
-    return fetchApi<{ companies: CompanyStats[] }>(
-      `/api/admin/stats/top-companies?${searchParams.toString()}`
-    );
-  },
-
-  getGrowthStats: (days?: number) => {
-    const searchParams = new URLSearchParams();
-    if (days) searchParams.set('days', days.toString());
-    return fetchApi<{ growth: GrowthDataPoint[] }>(
-      `/api/admin/stats/growth?${searchParams.toString()}`
-    );
-  },
+  removeMember: (memberId: number) =>
+    fetchApi<{ success: boolean }>(`/api/team/members/${memberId}`, {
+      method: 'DELETE',
+    }),
 };

@@ -7,7 +7,7 @@ import { xmlParser } from '../services/xml-parser';
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 /**
- * GET /api/feeds - List all feeds for current user
+ * GET /api/feeds - List all feeds for current user's organization
  */
 app.get('/', async (c) => {
   const user = c.get('user');
@@ -15,10 +15,14 @@ app.get('/', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json([]);
+  }
+
   const feeds = await c.env.DB.prepare(
-    `SELECT * FROM source_feeds WHERE user_id = ? ORDER BY created_at DESC`
+    `SELECT * FROM source_feeds WHERE organization_id = ? ORDER BY created_at DESC`
   )
-    .bind(user.id)
+    .bind(user.organization_id)
     .all<SourceFeed>();
 
   return c.json(feeds.results);
@@ -33,10 +37,14 @@ app.get('/:id', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
+
   const id = c.req.param('id');
 
-  const feed = await c.env.DB.prepare('SELECT * FROM source_feeds WHERE id = ? AND user_id = ?')
-    .bind(id, user.id)
+  const feed = await c.env.DB.prepare('SELECT * FROM source_feeds WHERE id = ? AND organization_id = ?')
+    .bind(id, user.organization_id)
     .first<SourceFeed>();
 
   if (!feed) {
@@ -53,6 +61,10 @@ app.post('/', async (c) => {
   const user = c.get('user');
   if (!user) {
     return c.json({ error: 'Unauthorized' }, 401);
+  }
+
+  if (!user.organization_id) {
+    return c.json({ error: 'No organization', message: 'Je hebt geen organisatie' }, 400);
   }
 
   const body = await c.req.json<CreateFeedRequest>();
@@ -73,10 +85,10 @@ app.post('/', async (c) => {
   }
 
   const result = await c.env.DB.prepare(
-    `INSERT INTO source_feeds (name, url, user_id) VALUES (?, ?, ?)
+    `INSERT INTO source_feeds (name, url, user_id, organization_id) VALUES (?, ?, ?, ?)
      RETURNING *`
   )
-    .bind(body.name.trim(), body.url.trim(), user.id)
+    .bind(body.name.trim(), body.url.trim(), user.id, user.organization_id)
     .first<SourceFeed>();
 
   return c.json(result, 201);
@@ -91,16 +103,20 @@ app.put('/:id', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
+
   const id = c.req.param('id');
   const body = await c.req.json<Partial<CreateFeedRequest>>();
 
   const result = await c.env.DB.prepare(
     `UPDATE source_feeds
      SET name = COALESCE(?, name), url = COALESCE(?, url), updated_at = datetime('now')
-     WHERE id = ? AND user_id = ?
+     WHERE id = ? AND organization_id = ?
      RETURNING *`
   )
-    .bind(body.name || null, body.url || null, id, user.id)
+    .bind(body.name || null, body.url || null, id, user.organization_id)
     .first<SourceFeed>();
 
   if (!result) {
@@ -119,11 +135,15 @@ app.delete('/:id', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
+
   const id = c.req.param('id');
 
   // Delete from R2
-  const feed = await c.env.DB.prepare('SELECT r2_key FROM source_feeds WHERE id = ? AND user_id = ?')
-    .bind(id, user.id)
+  const feed = await c.env.DB.prepare('SELECT r2_key FROM source_feeds WHERE id = ? AND organization_id = ?')
+    .bind(id, user.organization_id)
     .first<{ r2_key: string | null }>();
 
   if (!feed) {
@@ -134,8 +154,8 @@ app.delete('/:id', async (c) => {
     await c.env.R2.delete(feed.r2_key);
   }
 
-  await c.env.DB.prepare('DELETE FROM source_feeds WHERE id = ? AND user_id = ?')
-    .bind(id, user.id)
+  await c.env.DB.prepare('DELETE FROM source_feeds WHERE id = ? AND organization_id = ?')
+    .bind(id, user.organization_id)
     .run();
 
   return c.json({ success: true });
@@ -150,10 +170,14 @@ app.post('/:id/refresh', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
+
   const id = c.req.param('id');
 
-  const feed = await c.env.DB.prepare('SELECT * FROM source_feeds WHERE id = ? AND user_id = ?')
-    .bind(id, user.id)
+  const feed = await c.env.DB.prepare('SELECT * FROM source_feeds WHERE id = ? AND organization_id = ?')
+    .bind(id, user.organization_id)
     .first<SourceFeed>();
 
   if (!feed) {
@@ -184,11 +208,15 @@ app.get('/:id/properties', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
+
   const id = c.req.param('id');
 
-  // Verify feed belongs to user
-  const feed = await c.env.DB.prepare('SELECT id FROM source_feeds WHERE id = ? AND user_id = ?')
-    .bind(id, user.id)
+  // Verify feed belongs to organization
+  const feed = await c.env.DB.prepare('SELECT id FROM source_feeds WHERE id = ? AND organization_id = ?')
+    .bind(id, user.organization_id)
     .first();
 
   if (!feed) {
@@ -215,10 +243,14 @@ app.post('/:id/purge-cache', async (c) => {
     return c.json({ error: 'Unauthorized' }, 401);
   }
 
+  if (!user.organization_id) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
+
   const id = c.req.param('id');
 
-  const feed = await c.env.DB.prepare('SELECT id FROM source_feeds WHERE id = ? AND user_id = ?')
-    .bind(id, user.id)
+  const feed = await c.env.DB.prepare('SELECT id FROM source_feeds WHERE id = ? AND organization_id = ?')
+    .bind(id, user.organization_id)
     .first();
 
   if (!feed) {

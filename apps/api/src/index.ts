@@ -2,12 +2,12 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import type { Env, Variables } from './types';
-import { sessionAuth, superAdminAuth } from './middleware/auth';
+import { sessionAuth } from './middleware/auth';
 import authRoutes from './routes/auth';
 import customersRoutes from './routes/customers';
 import feedsRoutes from './routes/feeds';
 import publicRoutes from './routes/public';
-import adminRoutes from './routes/admin';
+import teamRoutes from './routes/team';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -61,10 +61,8 @@ app.use('/api/feeds/*', sessionAuth);
 app.route('/api/customers', customersRoutes);
 app.route('/api/feeds', feedsRoutes);
 
-// Super admin routes (session + super admin required)
-app.use('/api/admin/*', sessionAuth);
-app.use('/api/admin/*', superAdminAuth);
-app.route('/api/admin', adminRoutes);
+// Team routes (some require auth, some don't - handled in route)
+app.route('/api/team', teamRoutes);
 
 // 404 handler
 app.notFound((c) => {

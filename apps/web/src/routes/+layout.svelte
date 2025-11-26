@@ -1,14 +1,12 @@
 <script lang="ts">
   import '../app.css';
-  import '$lib/i18n';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { auth, isAuthenticated } from '$lib/stores/auth';
-  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/register', '/forgot-password', '/reset-password', '/welcome'];
+  const publicRoutes = ['/login', '/register', '/invite', '/forgot-password', '/reset-password'];
 
   $: isPublicRoute = publicRoutes.some((route) => $page.url.pathname.startsWith(route));
 
@@ -44,19 +42,19 @@
 {:else if $isAuthenticated}
   <nav class="nav">
     <div class="container nav-content">
-      <a href="/" class="nav-brand">
-          <img src="/logo.png" alt="Tesoro" class="nav-logo" />
-        </a>
+      <a href="/" class="nav-brand">XML Customizer</a>
       <div class="nav-links">
         <a href="/feeds" class="nav-link" class:active={$page.url.pathname.startsWith('/feeds')}>
           Feeds
         </a>
         <a href="/customers" class="nav-link" class:active={$page.url.pathname.startsWith('/customers')}>
-          Relaties
+          Klanten
+        </a>
+        <a href="/team" class="nav-link" class:active={$page.url.pathname.startsWith('/team')}>
+          Team
         </a>
       </div>
       <div class="nav-user">
-        <LanguageSwitcher />
         <span class="user-name">{$auth.user?.name}</span>
         <button class="btn btn-secondary btn-sm" on:click={handleLogout}>
           Uitloggen

@@ -15,8 +15,7 @@ export interface AuthUser {
   id: number;
   email: string;
   name: string;
-  is_super_admin?: boolean;
-  last_login_at?: string;
+  organization_id: number | null;
   created_at: string;
   updated_at: string;
 }

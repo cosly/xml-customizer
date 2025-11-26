@@ -47,10 +47,10 @@ function createAuthStore() {
       }
     },
 
-    async register(email: string, password: string, name: string) {
+    async register(email: string, password: string, name: string, invitationToken?: string) {
       update((state) => ({ ...state, loading: true }));
       try {
-        const { user } = await authApi.register(email, password, name);
+        const { user } = await authApi.register(email, password, name, invitationToken);
         set({ user, loading: false, initialized: true });
         return { success: true };
       } catch (error) {

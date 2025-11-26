@@ -4,6 +4,9 @@ export interface User {
   id: number;
   email: string;
   name: string;
+  is_super_admin?: boolean;
+  is_blocked?: boolean;
+  last_login_at?: string;
   created_at: string;
   updated_at: string;
 }
@@ -125,18 +128,30 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<{ user: User; session: Session }> {
     const user = await this.db
-      .prepare('SELECT id, email, name, password_hash, created_at, updated_at FROM users WHERE email = ?')
+      .prepare('SELECT id, email, name, password_hash, is_super_admin, is_blocked, created_at, updated_at FROM users WHERE email = ?')
       .bind(email.toLowerCase())
-      .first<User & { password_hash: string }>();
+      .first<User & { password_hash: string; is_super_admin: number; is_blocked: number }>();
 
     if (!user) {
       throw new Error('Ongeldige inloggegevens');
+    }
+
+    // Check if user is blocked
+    if (user.is_blocked) {
+      throw new Error('Account is geblokkeerd. Neem contact op met de beheerder.');
     }
 
     const valid = await verifyPassword(password, user.password_hash);
     if (!valid) {
       throw new Error('Ongeldige inloggegevens');
     }
+
+    // Update last login timestamp
+    const now = new Date().toISOString();
+    await this.db
+      .prepare('UPDATE users SET last_login_at = ? WHERE id = ?')
+      .bind(now, user.id)
+      .run();
 
     // Create session (expires in 7 days)
     const sessionId = generateSessionId();
@@ -147,15 +162,19 @@ export class AuthService {
       .bind(sessionId, user.id, expiresAt)
       .run();
 
-    const { password_hash, ...userWithoutPassword } = user;
+    const { password_hash, is_blocked, ...userWithoutPassword } = user;
 
     return {
-      user: userWithoutPassword,
+      user: {
+        ...userWithoutPassword,
+        is_super_admin: Boolean(user.is_super_admin),
+        last_login_at: now,
+      },
       session: {
         id: sessionId,
         user_id: user.id,
         expires_at: expiresAt,
-        created_at: new Date().toISOString(),
+        created_at: now,
       },
     };
   }
@@ -163,13 +182,13 @@ export class AuthService {
   async validateSession(sessionId: string): Promise<User | null> {
     const result = await this.db
       .prepare(`
-        SELECT u.id, u.email, u.name, u.created_at, u.updated_at, s.expires_at
+        SELECT u.id, u.email, u.name, u.is_super_admin, u.is_blocked, u.last_login_at, u.created_at, u.updated_at, s.expires_at
         FROM sessions s
         JOIN users u ON s.user_id = u.id
         WHERE s.id = ?
       `)
       .bind(sessionId)
-      .first<User & { expires_at: string }>();
+      .first<User & { expires_at: string; is_super_admin: number; is_blocked: number }>();
 
     if (!result) {
       return null;
@@ -181,8 +200,17 @@ export class AuthService {
       return null;
     }
 
-    const { expires_at, ...user } = result;
-    return user;
+    // Check if user is blocked
+    if (result.is_blocked) {
+      await this.logout(sessionId);
+      return null;
+    }
+
+    const { expires_at, is_super_admin, is_blocked, ...user } = result;
+    return {
+      ...user,
+      is_super_admin: Boolean(is_super_admin),
+    };
   }
 
   async logout(sessionId: string): Promise<void> {

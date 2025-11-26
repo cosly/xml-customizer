@@ -2,6 +2,7 @@ import { createMiddleware } from 'hono/factory';
 import { getCookie } from 'hono/cookie';
 import type { Env, Variables } from '../types';
 import { AuthService } from '../services/auth-service';
+import { AdminService } from '../services/admin-service';
 
 /**
  * Middleware to check for admin API key (for backward compatibility)
@@ -82,6 +83,30 @@ export const optionalSession = createMiddleware<{ Bindings: Env; Variables: Vari
       c.set('sessionId', null);
     }
 
+    await next();
+  }
+);
+
+/**
+ * Middleware to check if user is a super admin
+ * Must be used after sessionAuth middleware
+ */
+export const superAdminAuth = createMiddleware<{ Bindings: Env; Variables: Variables }>(
+  async (c, next) => {
+    const user = c.get('user');
+
+    if (!user) {
+      return c.json({ error: 'Unauthorized', message: 'Niet ingelogd' }, 401);
+    }
+
+    const adminService = new AdminService(c.env.DB);
+    const isSuperAdmin = await adminService.isSuperAdmin(user.id);
+
+    if (!isSuperAdmin) {
+      return c.json({ error: 'Forbidden', message: 'Geen toegang - alleen voor super admins' }, 403);
+    }
+
+    c.set('isAdmin', true);
     await next();
   }
 );

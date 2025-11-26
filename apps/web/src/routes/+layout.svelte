@@ -42,7 +42,9 @@
 {:else if $isAuthenticated}
   <nav class="nav">
     <div class="container nav-content">
-      <a href="/" class="nav-brand">XML Customizer</a>
+      <a href="/" class="nav-brand">
+        <img src="/logo.svg" alt="Tesoro" class="nav-logo" />
+      </a>
       <div class="nav-links">
         <a href="/feeds" class="nav-link" class:active={$page.url.pathname.startsWith('/feeds')}>
           Feeds
@@ -89,5 +91,10 @@
   .user-name {
     font-size: 0.875rem;
     color: var(--text-muted);
+  }
+
+  .nav-logo {
+    height: 32px;
+    width: auto;
   }
 </style>

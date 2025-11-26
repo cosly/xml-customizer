@@ -42,13 +42,13 @@
 </script>
 
 <svelte:head>
-  <title>Registreren - XML Customizer</title>
+  <title>Registreren - Tesoro CRM Tools</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <h1 class="auth-title">XML Customizer</h1>
+      <img src="/logo.svg" alt="Tesoro" class="auth-logo" />
       <p class="auth-subtitle">Maak een account aan</p>
     </div>
 
@@ -143,11 +143,10 @@
     margin-bottom: 2rem;
   }
 
-  .auth-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin: 0 0 0.5rem 0;
+  .auth-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 0.5rem;
   }
 
   .auth-subtitle {

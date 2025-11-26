@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80">
+  <defs>
+    <linearGradient id="yellow-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB940"/>
+      <stop offset="100%" style="stop-color:#F7941D"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Geometric T icon -->
+  <g transform="translate(0, 0)">
+    <!-- Top left yellow square -->
+    <polygon points="8,0 24,0 24,16 8,16" fill="#F7B928"/>
+
+    <!-- Top middle orange section -->
+    <polygon points="24,0 40,0 40,16 24,16" fill="#F26522"/>
+
+    <!-- Top right red/orange -->
+    <polygon points="8,16 24,16 24,32 8,32" fill="#ED1C24"/>
+    <polygon points="24,16 40,16 32,24" fill="#C1272D"/>
+
+    <!-- Middle magenta section -->
+    <polygon points="8,32 24,32 16,40 8,40" fill="#BE1E2D"/>
+    <polygon points="24,32 40,32 40,48 24,48" fill="#9E1F63"/>
+
+    <!-- Left pink/magenta -->
+    <polygon points="8,32 8,48 16,40" fill="#ED1E79"/>
+    <polygon points="8,48 24,48 16,56" fill="#C6168D"/>
+
+    <!-- Bottom purple/blue section -->
+    <polygon points="24,48 40,48 40,64 24,64" fill="#662D91"/>
+    <polygon points="24,48 24,64 16,56" fill="#92278F"/>
+
+    <!-- Bottom blue -->
+    <polygon points="24,64 40,64 32,72" fill="#2E3192"/>
+    <polygon points="24,64 24,80 32,72" fill="#1B75BC"/>
+    <polygon points="32,72 40,64 40,80" fill="#27AAE1"/>
+    <polygon points="24,80 32,72 40,80" fill="#00AEEF"/>
+  </g>
+
+  <!-- TESORO text -->
+  <text x="56" y="54" font-family="'Helvetica Neue', Arial, sans-serif" font-size="48" font-weight="700" fill="#1B2B4B" letter-spacing="2">TESORO</text>
+</svg>

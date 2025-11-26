@@ -29,13 +29,13 @@
 </script>
 
 <svelte:head>
-  <title>Wachtwoord vergeten - XML Customizer</title>
+  <title>Wachtwoord vergeten - Tesoro CRM Tools</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <h1 class="auth-title">XML Customizer</h1>
+      <img src="/logo.svg" alt="Tesoro" class="auth-logo" />
       <p class="auth-subtitle">Wachtwoord vergeten?</p>
     </div>
 
@@ -102,11 +102,10 @@
     margin-bottom: 1.5rem;
   }
 
-  .auth-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin: 0 0 0.5rem 0;
+  .auth-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 0.5rem;
   }
 
   .auth-subtitle {

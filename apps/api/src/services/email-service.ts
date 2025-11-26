@@ -80,8 +80,8 @@ export class EmailService {
             <p>Met Tesoro kun je:</p>
             <ul>
               <li>XML feeds importeren en beheren</li>
-              <li>Per klant aangepaste property selecties maken</li>
-              <li>Unieke feed URLs genereren voor je klanten</li>
+              <li>Per relatie aangepaste property selecties maken</li>
+              <li>Unieke feed URLs genereren voor je relaties</li>
             </ul>
             <p>Heb je vragen? Neem gerust contact met ons op.</p>
           </div>
@@ -100,8 +100,8 @@ Bedankt voor je registratie. Je account is nu actief.
 
 Met Tesoro kun je:
 - XML feeds importeren en beheren
-- Per klant aangepaste property selecties maken
-- Unieke feed URLs genereren voor je klanten
+- Per relatie aangepaste property selecties maken
+- Unieke feed URLs genereren voor je relaties
 
 Heb je vragen? Neem gerust contact met ons op.
     `.trim();

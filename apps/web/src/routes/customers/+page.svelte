@@ -59,7 +59,7 @@
   }
 
   async function deleteCustomer(id: number) {
-    if (!confirm('Weet je zeker dat je deze klant wilt verwijderen?')) return;
+    if (!confirm('Weet je zeker dat je deze relatie wilt verwijderen?')) return;
 
     try {
       await customersApi.delete(id);
@@ -75,13 +75,13 @@
 </script>
 
 <svelte:head>
-  <title>Klanten - XML Customizer</title>
+  <title>Relaties - Tesoro</title>
 </svelte:head>
 
 <div class="page-header">
-  <h1 class="page-title">Klanten</h1>
+  <h1 class="page-title">Relaties</h1>
   <button class="btn btn-primary" on:click={() => (showModal = true)}>
-    + Nieuwe Klant
+    + Nieuwe Relatie
   </button>
 </div>
 
@@ -98,7 +98,7 @@
       bind:value={searchQuery}
     />
     {#if searchQuery}
-      <span class="search-results">{filteredCustomers.length} van {customers.length} klanten</span>
+      <span class="search-results">{filteredCustomers.length} van {customers.length} relaties</span>
     {/if}
   </div>
 {/if}
@@ -110,16 +110,16 @@
 {:else if customers.length === 0}
   <div class="card">
     <div class="empty-state">
-      <p>Nog geen klanten toegevoegd.</p>
+      <p>Nog geen relaties toegevoegd.</p>
       <button class="btn btn-primary" style="margin-top: 1rem;" on:click={() => (showModal = true)}>
-        Voeg je eerste klant toe
+        Voeg je eerste relatie toe
       </button>
     </div>
   </div>
 {:else if filteredCustomers.length === 0}
   <div class="card">
     <div class="empty-state">
-      <p>Geen klanten gevonden voor "{searchQuery}"</p>
+      <p>Geen relaties gevonden voor "{searchQuery}"</p>
       <button class="btn btn-secondary" style="margin-top: 1rem;" on:click={() => (searchQuery = '')}>
         Wis zoekopdracht
       </button>
@@ -190,7 +190,7 @@
   <div class="modal-overlay" on:click={() => (showModal = false)} on:keydown={(e) => e.key === 'Escape' && (showModal = false)}>
     <div class="modal" on:click|stopPropagation>
       <div class="modal-header">
-        <h3 class="modal-title">Nieuwe Klant</h3>
+        <h3 class="modal-title">Nieuwe Relatie</h3>
         <button class="btn btn-secondary btn-sm" on:click={() => (showModal = false)}>×</button>
       </div>
       <form on:submit|preventDefault={handleSubmit}>

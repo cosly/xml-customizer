@@ -50,7 +50,7 @@
           Feeds
         </a>
         <a href="/customers" class="nav-link" class:active={$page.url.pathname.startsWith('/customers')}>
-          Klanten
+          Relaties
         </a>
       </div>
       <div class="nav-user">

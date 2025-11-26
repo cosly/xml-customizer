@@ -21,16 +21,24 @@ function generateHashId(): string {
 }
 
 /**
- * GET /api/customers - List all customers
+ * GET /api/customers - List all customers for current user
  */
 app.get('/', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const customers = await c.env.DB.prepare(
     `SELECT c.*,
        (SELECT COUNT(DISTINCT feed_id) FROM customer_selections WHERE customer_id = c.id) as feed_count,
        (SELECT COUNT(*) FROM customer_selections WHERE customer_id = c.id) as selection_count
      FROM customers c
+     WHERE c.user_id = ?
      ORDER BY c.created_at DESC`
-  ).all();
+  )
+    .bind(user.id)
+    .all();
 
   return c.json(customers.results);
 });
@@ -39,27 +47,32 @@ app.get('/', async (c) => {
  * GET /api/customers/:id - Get customer by ID
  */
 app.get('/:id', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
 
   const customer = await c.env.DB.prepare(
-    'SELECT * FROM customers WHERE id = ?'
+    'SELECT * FROM customers WHERE id = ? AND user_id = ?'
   )
-    .bind(id)
+    .bind(id, user.id)
     .first<Customer>();
 
   if (!customer) {
     return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
   }
 
-  // Get selections grouped by feed
+  // Get selections grouped by feed (only from user's feeds)
   const selections = await c.env.DB.prepare(
     `SELECT cs.feed_id, sf.name as feed_name, cs.property_id
      FROM customer_selections cs
      JOIN source_feeds sf ON cs.feed_id = sf.id
-     WHERE cs.customer_id = ?
+     WHERE cs.customer_id = ? AND sf.user_id = ?
      ORDER BY sf.name, cs.property_id`
   )
-    .bind(id)
+    .bind(id, user.id)
     .all<{ feed_id: number; feed_name: string; property_id: string }>();
 
   // Group selections by feed
@@ -87,6 +100,11 @@ app.get('/:id', async (c) => {
  * POST /api/customers - Create new customer
  */
 app.post('/', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const body = await c.req.json<CreateCustomerRequest>();
 
   if (!body.name || body.name.trim() === '') {
@@ -96,10 +114,10 @@ app.post('/', async (c) => {
   const hashId = generateHashId();
 
   const result = await c.env.DB.prepare(
-    `INSERT INTO customers (name, email, hash_id) VALUES (?, ?, ?)
+    `INSERT INTO customers (name, email, hash_id, user_id) VALUES (?, ?, ?, ?)
      RETURNING *`
   )
-    .bind(body.name.trim(), body.email || null, hashId)
+    .bind(body.name.trim(), body.email || null, hashId, user.id)
     .first<Customer>();
 
   return c.json(result, 201);
@@ -109,16 +127,21 @@ app.post('/', async (c) => {
  * PUT /api/customers/:id - Update customer
  */
 app.put('/:id', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
   const body = await c.req.json<Partial<CreateCustomerRequest>>();
 
   const result = await c.env.DB.prepare(
     `UPDATE customers
      SET name = COALESCE(?, name), email = COALESCE(?, email), updated_at = datetime('now')
-     WHERE id = ?
+     WHERE id = ? AND user_id = ?
      RETURNING *`
   )
-    .bind(body.name || null, body.email || null, id)
+    .bind(body.name || null, body.email || null, id, user.id)
     .first<Customer>();
 
   if (!result) {
@@ -132,17 +155,22 @@ app.put('/:id', async (c) => {
  * DELETE /api/customers/:id - Delete customer
  */
 app.delete('/:id', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
 
   // Invalidate cache first
   const feedService = new FeedService(c.env);
   await feedService.invalidateCustomerCache(Number(id));
 
-  const result = await c.env.DB.prepare('DELETE FROM customers WHERE id = ?')
-    .bind(id)
+  const result = await c.env.DB.prepare('DELETE FROM customers WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
     .run();
 
-  if (result.changes === 0) {
+  if (result.meta.changes === 0) {
     return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
   }
 
@@ -153,6 +181,11 @@ app.delete('/:id', async (c) => {
  * PUT /api/customers/:id/selections - Update property selections for customer
  */
 app.put('/:id/selections', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
   const body = await c.req.json<UpdateSelectionsRequest>();
 
@@ -163,15 +196,26 @@ app.put('/:id/selections', async (c) => {
     );
   }
 
-  // Verify customer exists
+  // Verify customer exists and belongs to user
   const customer = await c.env.DB.prepare(
-    'SELECT id FROM customers WHERE id = ?'
+    'SELECT id FROM customers WHERE id = ? AND user_id = ?'
   )
-    .bind(id)
+    .bind(id, user.id)
     .first();
 
   if (!customer) {
     return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
+  }
+
+  // Verify feed belongs to user
+  const feed = await c.env.DB.prepare(
+    'SELECT id FROM source_feeds WHERE id = ? AND user_id = ?'
+  )
+    .bind(body.feed_id, user.id)
+    .first();
+
+  if (!feed) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
   }
 
   // Delete existing selections for this feed
@@ -204,8 +248,24 @@ app.put('/:id/selections', async (c) => {
  * GET /api/customers/:id/selections/:feedId - Get selections for a specific feed
  */
 app.get('/:id/selections/:feedId', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const customerId = c.req.param('id');
   const feedId = c.req.param('feedId');
+
+  // Verify customer belongs to user
+  const customer = await c.env.DB.prepare(
+    'SELECT id FROM customers WHERE id = ? AND user_id = ?'
+  )
+    .bind(customerId, user.id)
+    .first();
+
+  if (!customer) {
+    return c.json({ error: 'Not found', message: 'Customer not found' }, 404);
+  }
 
   const selections = await c.env.DB.prepare(
     'SELECT property_id FROM customer_selections WHERE customer_id = ? AND feed_id = ?'

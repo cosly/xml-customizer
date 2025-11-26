@@ -2,7 +2,8 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import type { Env, Variables } from './types';
-import { adminAuth } from './middleware/auth';
+import { sessionAuth } from './middleware/auth';
+import authRoutes from './routes/auth';
 import customersRoutes from './routes/customers';
 import feedsRoutes from './routes/feeds';
 import publicRoutes from './routes/public';
@@ -19,9 +20,10 @@ app.use(
       const allowed = [c.env.CORS_ORIGIN, 'http://localhost:5173', 'http://localhost:4173'];
       return allowed.includes(origin) ? origin : null;
     },
-    allowHeaders: ['Content-Type', 'X-API-Key'],
+    allowHeaders: ['Content-Type', 'Authorization'],
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     exposeHeaders: ['X-Customer'],
+    credentials: true, // Allow cookies
     maxAge: 86400,
   })
 );
@@ -49,8 +51,12 @@ app.get('/', (c) => {
 // Public routes (no auth)
 app.route('/feed', publicRoutes);
 
-// Admin API routes (auth required)
-app.use('/api/*', adminAuth);
+// Auth routes (no session required for login/register)
+app.route('/api/auth', authRoutes);
+
+// Protected API routes (session required)
+app.use('/api/customers/*', sessionAuth);
+app.use('/api/feeds/*', sessionAuth);
 app.route('/api/customers', customersRoutes);
 app.route('/api/feeds', feedsRoutes);
 

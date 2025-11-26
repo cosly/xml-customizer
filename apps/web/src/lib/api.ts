@@ -13,28 +13,105 @@ const API_URL = import.meta.env.VITE_API_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost'
     ? 'https://xml-customizer-api.tesorocrm.workers.dev'
     : 'http://localhost:8787');
-const API_KEY = import.meta.env.VITE_API_KEY || 'change-this-in-production';
+
+// User type
+export interface User {
+  id: number;
+  email: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Session storage for token (when cookies don't work cross-domain)
+let sessionToken: string | null = null;
+
+export function setSessionToken(token: string | null) {
+  sessionToken = token;
+  if (token) {
+    localStorage.setItem('session_token', token);
+  } else {
+    localStorage.removeItem('session_token');
+  }
+}
+
+export function getSessionToken(): string | null {
+  if (sessionToken) return sessionToken;
+  if (typeof window !== 'undefined') {
+    sessionToken = localStorage.getItem('session_token');
+  }
+  return sessionToken;
+}
 
 async function fetchApi<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  // Add session token to Authorization header if available
+  const token = getSessionToken();
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
+    credentials: 'include', // Include cookies for same-origin
     headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': API_KEY,
+      ...headers,
       ...options.headers,
     },
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Unknown error' }));
-    throw new Error(error.message || `HTTP ${response.status}`);
+    const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(error.error || error.message || `HTTP ${response.status}`);
   }
 
   return response.json();
 }
+
+// Auth API
+export const authApi = {
+  register: async (email: string, password: string, name: string) => {
+    const result = await fetchApi<{ user: User; session: { id: string; expires_at: string } }>(
+      '/api/auth/register',
+      {
+        method: 'POST',
+        body: JSON.stringify({ email, password, name }),
+      }
+    );
+    // Store session token for cross-domain requests
+    setSessionToken(result.session.id);
+    return result;
+  },
+
+  login: async (email: string, password: string) => {
+    const result = await fetchApi<{ user: User; session: { id: string; expires_at: string } }>(
+      '/api/auth/login',
+      {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      }
+    );
+    // Store session token for cross-domain requests
+    setSessionToken(result.session.id);
+    return result;
+  },
+
+  logout: async () => {
+    try {
+      await fetchApi<{ success: boolean }>('/api/auth/logout', { method: 'POST' });
+    } finally {
+      setSessionToken(null);
+    }
+  },
+
+  me: () => fetchApi<{ user: User }>('/api/auth/me'),
+};
 
 // Customers API
 export const customersApi = {

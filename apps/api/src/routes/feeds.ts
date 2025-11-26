@@ -7,12 +7,19 @@ import { xmlParser } from '../services/xml-parser';
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 /**
- * GET /api/feeds - List all feeds
+ * GET /api/feeds - List all feeds for current user
  */
 app.get('/', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const feeds = await c.env.DB.prepare(
-    `SELECT * FROM source_feeds ORDER BY created_at DESC`
-  ).all<SourceFeed>();
+    `SELECT * FROM source_feeds WHERE user_id = ? ORDER BY created_at DESC`
+  )
+    .bind(user.id)
+    .all<SourceFeed>();
 
   return c.json(feeds.results);
 });
@@ -21,10 +28,15 @@ app.get('/', async (c) => {
  * GET /api/feeds/:id - Get feed by ID
  */
 app.get('/:id', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
 
-  const feed = await c.env.DB.prepare('SELECT * FROM source_feeds WHERE id = ?')
-    .bind(id)
+  const feed = await c.env.DB.prepare('SELECT * FROM source_feeds WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
     .first<SourceFeed>();
 
   if (!feed) {
@@ -38,6 +50,11 @@ app.get('/:id', async (c) => {
  * POST /api/feeds - Create new feed
  */
 app.post('/', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const body = await c.req.json<CreateFeedRequest>();
 
   if (!body.name || body.name.trim() === '') {
@@ -56,10 +73,10 @@ app.post('/', async (c) => {
   }
 
   const result = await c.env.DB.prepare(
-    `INSERT INTO source_feeds (name, url) VALUES (?, ?)
+    `INSERT INTO source_feeds (name, url, user_id) VALUES (?, ?, ?)
      RETURNING *`
   )
-    .bind(body.name.trim(), body.url.trim())
+    .bind(body.name.trim(), body.url.trim(), user.id)
     .first<SourceFeed>();
 
   return c.json(result, 201);
@@ -69,16 +86,21 @@ app.post('/', async (c) => {
  * PUT /api/feeds/:id - Update feed
  */
 app.put('/:id', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
   const body = await c.req.json<Partial<CreateFeedRequest>>();
 
   const result = await c.env.DB.prepare(
     `UPDATE source_feeds
      SET name = COALESCE(?, name), url = COALESCE(?, url), updated_at = datetime('now')
-     WHERE id = ?
+     WHERE id = ? AND user_id = ?
      RETURNING *`
   )
-    .bind(body.name || null, body.url || null, id)
+    .bind(body.name || null, body.url || null, id, user.id)
     .first<SourceFeed>();
 
   if (!result) {
@@ -92,24 +114,29 @@ app.put('/:id', async (c) => {
  * DELETE /api/feeds/:id - Delete feed
  */
 app.delete('/:id', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
 
   // Delete from R2
-  const feed = await c.env.DB.prepare('SELECT r2_key FROM source_feeds WHERE id = ?')
-    .bind(id)
+  const feed = await c.env.DB.prepare('SELECT r2_key FROM source_feeds WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
     .first<{ r2_key: string | null }>();
 
-  if (feed?.r2_key) {
+  if (!feed) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
+
+  if (feed.r2_key) {
     await c.env.R2.delete(feed.r2_key);
   }
 
-  const result = await c.env.DB.prepare('DELETE FROM source_feeds WHERE id = ?')
-    .bind(id)
+  await c.env.DB.prepare('DELETE FROM source_feeds WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
     .run();
-
-  if (result.changes === 0) {
-    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
-  }
 
   return c.json({ success: true });
 });
@@ -118,10 +145,15 @@ app.delete('/:id', async (c) => {
  * POST /api/feeds/:id/refresh - Refresh feed from source URL
  */
 app.post('/:id/refresh', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
 
-  const feed = await c.env.DB.prepare('SELECT * FROM source_feeds WHERE id = ?')
-    .bind(id)
+  const feed = await c.env.DB.prepare('SELECT * FROM source_feeds WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
     .first<SourceFeed>();
 
   if (!feed) {
@@ -147,7 +179,21 @@ app.post('/:id/refresh', async (c) => {
  * GET /api/feeds/:id/properties - Get properties from feed
  */
 app.get('/:id/properties', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
+
+  // Verify feed belongs to user
+  const feed = await c.env.DB.prepare('SELECT id FROM source_feeds WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
+    .first();
+
+  if (!feed) {
+    return c.json({ error: 'Not found', message: 'Feed not found' }, 404);
+  }
 
   const feedService = new FeedService(c.env);
   const xmlContent = await feedService.getFeedXml(Number(id));
@@ -164,10 +210,15 @@ app.get('/:id/properties', async (c) => {
  * POST /api/feeds/:id/purge-cache - Purge all cached customer XMLs for this feed
  */
 app.post('/:id/purge-cache', async (c) => {
+  const user = c.get('user');
+  if (!user) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+
   const id = c.req.param('id');
 
-  const feed = await c.env.DB.prepare('SELECT id FROM source_feeds WHERE id = ?')
-    .bind(id)
+  const feed = await c.env.DB.prepare('SELECT id FROM source_feeds WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
     .first();
 
   if (!feed) {

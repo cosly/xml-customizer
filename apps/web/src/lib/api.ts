@@ -8,8 +8,11 @@ import type {
   CustomerWithSelections,
 } from '@xml-customizer/shared';
 
-// Production API URL - change for local dev
-const API_URL = import.meta.env.VITE_API_URL || 'https://xml-customizer-api.tesorocrm.workers.dev';
+// Auto-detect production vs local development
+const API_URL = import.meta.env.VITE_API_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? 'https://xml-customizer-api.tesorocrm.workers.dev'
+    : 'http://localhost:8787');
 const API_KEY = import.meta.env.VITE_API_KEY || 'change-this-in-production';
 
 async function fetchApi<T>(

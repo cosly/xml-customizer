@@ -42,13 +42,12 @@
 </script>
 
 <svelte:head>
-  <title>Registreren - XML Customizer</title>
+  <title>Registreren</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <h1 class="auth-title">XML Customizer</h1>
       <p class="auth-subtitle">Maak een account aan</p>
     </div>
 

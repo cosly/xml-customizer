@@ -29,13 +29,12 @@
 </script>
 
 <svelte:head>
-  <title>Wachtwoord vergeten - XML Customizer</title>
+  <title>Wachtwoord vergeten</title>
 </svelte:head>
 
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <h1 class="auth-title">XML Customizer</h1>
       <p class="auth-subtitle">Wachtwoord vergeten?</p>
     </div>
 

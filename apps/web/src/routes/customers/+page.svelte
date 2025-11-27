@@ -213,7 +213,7 @@
               type="email"
               id="email"
               bind:value={formData.email}
-              placeholder="contact@example.com"
+              placeholder={$_('auth.emailPlaceholder')}
             />
           </div>
         </div>

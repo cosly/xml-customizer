@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import { customersApi, feedsApi, getPublicFeedUrl } from '$lib/api';
   import type { CustomerWithSelections, SourceFeed, PropertySummary } from '@xml-customizer/shared';
+  import { _ } from 'svelte-i18n';
 
   let customer: CustomerWithSelections | null = null;
   let feeds: SourceFeed[] = [];
@@ -358,7 +359,7 @@
             <input
               class="input"
               type="text"
-              placeholder="Referentie, locatie..."
+              placeholder={$_('customers.searchPlaceholder')}
               bind:value={searchQuery}
             />
           </div>
@@ -399,14 +400,14 @@
               <input
                 class="input"
                 type="number"
-                placeholder="Min"
+                placeholder={$_('customers.minPrice')}
                 bind:value={filterMinPrice}
               />
               <span>-</span>
               <input
                 class="input"
                 type="number"
-                placeholder="Max"
+                placeholder={$_('customers.maxPrice')}
                 bind:value={filterMaxPrice}
               />
             </div>
@@ -631,7 +632,7 @@
               type="email"
               id="share-email"
               bind:value={shareEmail}
-              placeholder="voorbeeld@email.com"
+              placeholder={$_('customers.shareEmailPlaceholder')}
               required
             />
           </div>
@@ -641,7 +642,7 @@
               class="input"
               id="share-message"
               bind:value={shareMessage}
-              placeholder="Voeg een persoonlijk bericht toe..."
+              placeholder={$_('customers.shareMessagePlaceholder')}
               rows="3"
               style="resize: vertical;"
             ></textarea>

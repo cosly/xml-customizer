@@ -156,7 +156,18 @@
 		"searchCustomers": "Search customers...",
 		"selectProperties": "Select Properties",
 		"selectedProperties": "Selected Properties",
-		"noSelections": "No properties selected"
+		"noSelections": "No properties selected",
+		"searchPlaceholder": "Reference, location...",
+		"minPrice": "Min",
+		"maxPrice": "Max",
+		"shareEmailPlaceholder": "example@email.com",
+		"shareMessagePlaceholder": "Add a personal message...",
+		"allTypes": "All types",
+		"allLocations": "All locations",
+		"search": "Search",
+		"type": "Type",
+		"location": "Location",
+		"priceRange": "Price range"
 	},
 	"properties": {
 		"title": "Properties",

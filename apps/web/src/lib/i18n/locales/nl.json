@@ -156,7 +156,18 @@
 		"searchCustomers": "Klanten zoeken...",
 		"selectProperties": "Woningen Selecteren",
 		"selectedProperties": "Geselecteerde Woningen",
-		"noSelections": "Geen woningen geselecteerd"
+		"noSelections": "Geen woningen geselecteerd",
+		"searchPlaceholder": "Referentie, locatie...",
+		"minPrice": "Min",
+		"maxPrice": "Max",
+		"shareEmailPlaceholder": "voorbeeld@email.nl",
+		"shareMessagePlaceholder": "Voeg een persoonlijk bericht toe...",
+		"allTypes": "Alle types",
+		"allLocations": "Alle locaties",
+		"search": "Zoeken",
+		"type": "Type",
+		"location": "Locatie",
+		"priceRange": "Prijsklasse"
 	},
 	"properties": {
 		"title": "Woningen",

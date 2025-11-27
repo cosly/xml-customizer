@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Resetuj hasło",
 		"forgotPasswordSubtitle": "Podaj e-mail, aby otrzymać link do resetowania",
 		"forgotPasswordDescription": "Podaj swój adres e-mail, a wyślemy Ci link do zresetowania hasła.",
+		"forgotPasswordSuccess": "Jeśli ten adres e-mail jest zarejestrowany w naszym systemie, otrzymasz wiadomość z instrukcjami w ciągu kilku minut.",
 		"emailRequired": "Podaj swój adres e-mail",
 		"emailPlaceholder": "twoj@email.pl",
 		"resetPassword": "Resetuj hasło",

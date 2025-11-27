@@ -134,11 +134,10 @@ app.post('/forgot-password', async (c) => {
 
     return c.json({
       success: true,
-      message: 'Als dit email adres bij ons bekend is, ontvang je binnen enkele minuten een email met instructies.',
     });
   } catch (error) {
     console.error('Forgot password error:', error);
-    return c.json({ error: 'Er is iets misgegaan' }, 500);
+    return c.json({ error: 'server_error' }, 500);
   }
 });
 

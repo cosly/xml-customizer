@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Återställ lösenord",
 		"forgotPasswordSubtitle": "Ange din e-post för att få en återställningslänk",
 		"forgotPasswordDescription": "Ange din e-postadress så skickar vi en länk för att återställa ditt lösenord.",
+		"forgotPasswordSuccess": "Om denna e-postadress är registrerad hos oss kommer du att få ett e-postmeddelande med instruktioner inom några minuter.",
 		"emailRequired": "Vänligen ange din e-postadress",
 		"emailPlaceholder": "din@email.se",
 		"resetPassword": "Återställ lösenord",

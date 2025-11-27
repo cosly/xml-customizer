@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Pasahitza berrezarri",
 		"forgotPasswordSubtitle": "Idatzi zure emaila berrezartze-esteka jasotzeko",
 		"forgotPasswordDescription": "Idatzi zure helbide elektronikoa eta pasahitza berrezartzeko esteka bidaliko dizugu.",
+		"forgotPasswordSuccess": "Helbide elektroniko hau gurekin erregistratuta badago, minutu gutxiren buruan argibideak dituen mezu elektroniko bat jasoko duzu.",
 		"emailRequired": "Mesedez, idatzi zure helbide elektronikoa",
 		"emailPlaceholder": "zure@emaila.eus",
 		"resetPassword": "Pasahitza berrezarri",

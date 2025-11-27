@@ -19,8 +19,8 @@
     success = '';
 
     try {
-      const result = await authApi.forgotPassword(email);
-      success = result.message;
+      await authApi.forgotPassword(email);
+      success = $_('auth.forgotPasswordSuccess');
       email = '';
     } catch (e) {
       error = e instanceof Error ? e.message : $_('errors.generic');

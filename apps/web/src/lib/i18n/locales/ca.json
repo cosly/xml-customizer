@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Restablir contrasenya",
 		"forgotPasswordSubtitle": "Introdueix el teu email per rebre un enllaç de restabliment",
 		"forgotPasswordDescription": "Introdueix la teva adreça de correu electrònic i t'enviarem un enllaç per restablir la teva contrasenya.",
+		"forgotPasswordSuccess": "Si aquesta adreça de correu electrònic està registrada, rebràs un correu amb instruccions en uns minuts.",
 		"emailRequired": "Introdueix la teva adreça de correu electrònic",
 		"emailPlaceholder": "el.teu@email.cat",
 		"resetPassword": "Restablir contrasenya",

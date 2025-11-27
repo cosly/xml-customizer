@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Wachtwoord resetten",
 		"forgotPasswordSubtitle": "Voer uw e-mail in om een resetlink te ontvangen",
 		"forgotPasswordDescription": "Vul je e-mailadres in en we sturen je een link om je wachtwoord te resetten.",
+		"forgotPasswordSuccess": "Als dit e-mailadres bij ons bekend is, ontvang je binnen enkele minuten een e-mail met instructies.",
 		"emailRequired": "Vul je e-mailadres in",
 		"emailPlaceholder": "jouw@email.nl",
 		"resetPassword": "Wachtwoord resetten",

@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Restablecer contraseña",
 		"forgotPasswordSubtitle": "Introduce tu email para recibir un enlace de restablecimiento",
 		"forgotPasswordDescription": "Introduce tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+		"forgotPasswordSuccess": "Si esta dirección de correo electrónico está registrada, recibirás un email con instrucciones en unos minutos.",
 		"emailRequired": "Introduce tu dirección de correo electrónico",
 		"emailPlaceholder": "tu@email.com",
 		"resetPassword": "Restablecer contraseña",

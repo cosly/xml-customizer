@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Réinitialiser le mot de passe",
 		"forgotPasswordSubtitle": "Entrez votre e-mail pour recevoir un lien de réinitialisation",
 		"forgotPasswordDescription": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+		"forgotPasswordSuccess": "Si cette adresse e-mail est enregistrée chez nous, vous recevrez un e-mail avec des instructions dans quelques minutes.",
 		"emailRequired": "Veuillez entrer votre adresse e-mail",
 		"emailPlaceholder": "votre@email.fr",
 		"resetPassword": "Réinitialiser le mot de passe",

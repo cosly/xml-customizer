@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Repor palavra-passe",
 		"forgotPasswordSubtitle": "Introduza o e-mail para receber um link de reposição",
 		"forgotPasswordDescription": "Introduza o seu endereço de e-mail e enviaremos um link para repor a sua palavra-passe.",
+		"forgotPasswordSuccess": "Se este endereço de e-mail estiver registado connosco, receberá um e-mail com instruções dentro de alguns minutos.",
 		"emailRequired": "Por favor, introduza o seu endereço de e-mail",
 		"emailPlaceholder": "seu@email.pt",
 		"resetPassword": "Repor palavra-passe",

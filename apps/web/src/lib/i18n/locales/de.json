@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Passwort zurücksetzen",
 		"forgotPasswordSubtitle": "Geben Sie Ihre E-Mail ein, um einen Reset-Link zu erhalten",
 		"forgotPasswordDescription": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+		"forgotPasswordSuccess": "Wenn diese E-Mail-Adresse bei uns registriert ist, erhalten Sie innerhalb weniger Minuten eine E-Mail mit Anweisungen.",
 		"emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein",
 		"emailPlaceholder": "ihre@email.de",
 		"resetPassword": "Passwort zurücksetzen",

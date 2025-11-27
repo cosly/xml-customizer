@@ -63,6 +63,7 @@
 		"forgotPasswordTitle": "Reset password",
 		"forgotPasswordSubtitle": "Enter your email to receive a reset link",
 		"forgotPasswordDescription": "Enter your email address and we'll send you a link to reset your password.",
+		"forgotPasswordSuccess": "If this email address is registered with us, you will receive an email with instructions within a few minutes.",
 		"emailRequired": "Please enter your email address",
 		"emailPlaceholder": "your@email.com",
 		"resetPassword": "Reset password",

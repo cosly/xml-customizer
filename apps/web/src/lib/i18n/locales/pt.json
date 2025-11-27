@@ -74,9 +74,19 @@
 		"backToLogin": "Voltar ao início de sessão",
 		"passwordsDoNotMatch": "As palavras-passe não coincidem",
 		"emailSent": "Foi enviado um e-mail com instruções de reposição",
-		"passwordReset": "A sua palavra-passe foi reposta com sucesso",
+		"passwordReset": "A sua palavra-passe foi alterada com sucesso",
 		"invalidCredentials": "Credenciais inválidas",
-		"accountCreated": "Conta criada com sucesso"
+		"accountCreated": "Conta criada com sucesso",
+		"passwordPlaceholder": "Mínimo 8 caracteres",
+		"confirmPasswordPlaceholder": "Repita a sua palavra-passe",
+		"newPassword": "Nova palavra-passe",
+		"invalidResetLink": "Link de reposição inválido",
+		"invalidResetLinkDescription": "Link de reposição inválido. Solicite um novo link na página 'Esqueceu a palavra-passe'.",
+		"requestNewLink": "Solicitar novo link",
+		"redirectingToLogin": "Será redirecionado para a página de início de sessão...",
+		"changePassword": "Alterar palavra-passe",
+		"passwordRequired": "Por favor, introduza uma nova palavra-passe",
+		"passwordMinLength": "A palavra-passe deve ter pelo menos 8 caracteres"
 	},
 	"dashboard": {
 		"title": "Painel",

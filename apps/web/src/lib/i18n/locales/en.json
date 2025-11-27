@@ -76,7 +76,17 @@
 		"emailSent": "An email with reset instructions has been sent",
 		"passwordReset": "Your password has been reset successfully",
 		"invalidCredentials": "Invalid credentials",
-		"accountCreated": "Account created successfully"
+		"accountCreated": "Account created successfully",
+		"passwordPlaceholder": "Minimum 8 characters",
+		"confirmPasswordPlaceholder": "Repeat your password",
+		"newPassword": "New password",
+		"invalidResetLink": "Invalid reset link",
+		"invalidResetLinkDescription": "Invalid reset link. Request a new link via the 'Forgot password' page.",
+		"requestNewLink": "Request new link",
+		"redirectingToLogin": "You will be redirected to the login page...",
+		"changePassword": "Change password",
+		"passwordRequired": "Please enter a new password",
+		"passwordMinLength": "Password must be at least 8 characters"
 	},
 	"dashboard": {
 		"title": "Dashboard",

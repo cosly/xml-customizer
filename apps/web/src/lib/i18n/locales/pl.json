@@ -74,9 +74,19 @@
 		"backToLogin": "Powrót do logowania",
 		"passwordsDoNotMatch": "Hasła nie są zgodne",
 		"emailSent": "Wysłano e-mail z instrukcjami resetowania",
-		"passwordReset": "Twoje hasło zostało zresetowane",
+		"passwordReset": "Twoje hasło zostało pomyślnie zmienione",
 		"invalidCredentials": "Nieprawidłowe dane logowania",
-		"accountCreated": "Konto utworzone pomyślnie"
+		"accountCreated": "Konto utworzone pomyślnie",
+		"passwordPlaceholder": "Minimum 8 znaków",
+		"confirmPasswordPlaceholder": "Powtórz hasło",
+		"newPassword": "Nowe hasło",
+		"invalidResetLink": "Nieprawidłowy link resetowania",
+		"invalidResetLinkDescription": "Nieprawidłowy link resetowania. Poproś o nowy link na stronie 'Zapomniałeś hasła'.",
+		"requestNewLink": "Poproś o nowy link",
+		"redirectingToLogin": "Zostaniesz przekierowany na stronę logowania...",
+		"changePassword": "Zmień hasło",
+		"passwordRequired": "Wprowadź nowe hasło",
+		"passwordMinLength": "Hasło musi mieć co najmniej 8 znaków"
 	},
 	"dashboard": {
 		"title": "Panel",

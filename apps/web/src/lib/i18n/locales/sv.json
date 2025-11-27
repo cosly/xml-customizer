@@ -74,9 +74,19 @@
 		"backToLogin": "Tillbaka till inloggning",
 		"passwordsDoNotMatch": "Lösenorden matchar inte",
 		"emailSent": "Ett e-postmeddelande med återställningsinstruktioner har skickats",
-		"passwordReset": "Ditt lösenord har återställts",
+		"passwordReset": "Ditt lösenord har ändrats",
 		"invalidCredentials": "Ogiltiga inloggningsuppgifter",
-		"accountCreated": "Kontot har skapats"
+		"accountCreated": "Konto skapat",
+		"passwordPlaceholder": "Minst 8 tecken",
+		"confirmPasswordPlaceholder": "Upprepa ditt lösenord",
+		"newPassword": "Nytt lösenord",
+		"invalidResetLink": "Ogiltig återställningslänk",
+		"invalidResetLinkDescription": "Ogiltig återställningslänk. Begär en ny länk via sidan 'Glömt lösenordet?'.",
+		"requestNewLink": "Begär ny länk",
+		"redirectingToLogin": "Du kommer att omdirigeras till inloggningssidan...",
+		"changePassword": "Ändra lösenord",
+		"passwordRequired": "Vänligen ange ett nytt lösenord",
+		"passwordMinLength": "Lösenordet måste vara minst 8 tecken"
 	},
 	"dashboard": {
 		"title": "Instrumentpanel",

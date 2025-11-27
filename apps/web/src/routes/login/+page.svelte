@@ -63,7 +63,7 @@
           type="email"
           id="email"
           bind:value={email}
-          placeholder="jouw@email.nl"
+          placeholder={$_('auth.emailPlaceholder')}
           autocomplete="email"
         />
       </div>
@@ -75,7 +75,7 @@
           type="password"
           id="password"
           bind:value={password}
-          placeholder="********"
+          placeholder={$_('auth.passwordPlaceholder')}
           autocomplete="current-password"
         />
         <a href="/forgot-password" class="forgot-link">{$_('auth.forgotPassword')}</a>

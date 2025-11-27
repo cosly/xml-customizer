@@ -74,9 +74,19 @@
 		"backToLogin": "Saioa hastera itzuli",
 		"passwordsDoNotMatch": "Pasahitzak ez datoz bat",
 		"emailSent": "Berrezartze-argibideak dituen email bat bidali da",
-		"passwordReset": "Zure pasahitza ongi berrezarri da",
+		"passwordReset": "Zure pasahitza ongi aldatu da",
 		"invalidCredentials": "Kredentzial baliogabeak",
-		"accountCreated": "Kontua ongi sortu da"
+		"accountCreated": "Kontua ongi sortu da",
+		"passwordPlaceholder": "Gutxienez 8 karaktere",
+		"confirmPasswordPlaceholder": "Errepikatu zure pasahitza",
+		"newPassword": "Pasahitz berria",
+		"invalidResetLink": "Berrezartze-esteka baliogabea",
+		"invalidResetLinkDescription": "Berrezartze-esteka baliogabea. Eskatu esteka berri bat 'Pasahitza ahaztu duzu?' orrian.",
+		"requestNewLink": "Esteka berria eskatu",
+		"redirectingToLogin": "Saioa hasteko orrira birbideratuko zara...",
+		"changePassword": "Pasahitza aldatu",
+		"passwordRequired": "Mesedez, sartu pasahitz berri bat",
+		"passwordMinLength": "Pasahitzak gutxienez 8 karaktere izan behar ditu"
 	},
 	"dashboard": {
 		"title": "Kontrol-panela",

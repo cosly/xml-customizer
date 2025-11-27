@@ -74,9 +74,19 @@
 		"backToLogin": "Tornar a l'inici de sessió",
 		"passwordsDoNotMatch": "Les contrasenyes no coincideixen",
 		"emailSent": "S'ha enviat un email amb instruccions per restablir la teva contrasenya",
-		"passwordReset": "La teva contrasenya ha estat restablerta correctament",
+		"passwordReset": "La teva contrasenya ha estat canviada correctament",
 		"invalidCredentials": "Credencials invàlides",
-		"accountCreated": "Compte creat correctament"
+		"accountCreated": "Compte creat correctament",
+		"passwordPlaceholder": "Mínim 8 caràcters",
+		"confirmPasswordPlaceholder": "Repeteix la teva contrasenya",
+		"newPassword": "Nova contrasenya",
+		"invalidResetLink": "Enllaç de restabliment invàlid",
+		"invalidResetLinkDescription": "Enllaç de restabliment invàlid. Sol·licita un nou enllaç a la pàgina 'Has oblidat la contrasenya?'.",
+		"requestNewLink": "Sol·licitar nou enllaç",
+		"redirectingToLogin": "Seràs redirigit a la pàgina d'inici de sessió...",
+		"changePassword": "Canviar contrasenya",
+		"passwordRequired": "Introdueix una nova contrasenya",
+		"passwordMinLength": "La contrasenya ha de tenir almenys 8 caràcters"
 	},
 	"dashboard": {
 		"title": "Tauler de Control",

@@ -74,9 +74,19 @@
 		"backToLogin": "Volver ao inicio de sesión",
 		"passwordsDoNotMatch": "Os contrasinais non coinciden",
 		"emailSent": "Enviouse un email con instrucións para restablecer o teu contrasinal",
-		"passwordReset": "O teu contrasinal foi restablecido correctamente",
+		"passwordReset": "O teu contrasinal foi cambiado correctamente",
 		"invalidCredentials": "Credenciais inválidas",
-		"accountCreated": "Conta creada correctamente"
+		"accountCreated": "Conta creada correctamente",
+		"passwordPlaceholder": "Mínimo 8 caracteres",
+		"confirmPasswordPlaceholder": "Repite o teu contrasinal",
+		"newPassword": "Novo contrasinal",
+		"invalidResetLink": "Ligazón de restablecemento inválida",
+		"invalidResetLinkDescription": "Ligazón de restablecemento inválida. Solicita unha nova ligazón na páxina 'Esqueceu o contrasinal?'.",
+		"requestNewLink": "Solicitar nova ligazón",
+		"redirectingToLogin": "Serás redirixido á páxina de inicio de sesión...",
+		"changePassword": "Cambiar contrasinal",
+		"passwordRequired": "Introduce un novo contrasinal",
+		"passwordMinLength": "O contrasinal debe ter polo menos 8 caracteres"
 	},
 	"dashboard": {
 		"title": "Panel de Control",

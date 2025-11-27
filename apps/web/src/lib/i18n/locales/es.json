@@ -74,9 +74,19 @@
 		"backToLogin": "Volver al inicio de sesión",
 		"passwordsDoNotMatch": "Las contraseñas no coinciden",
 		"emailSent": "Se ha enviado un email con instrucciones para restablecer tu contraseña",
-		"passwordReset": "Tu contraseña ha sido restablecida correctamente",
+		"passwordReset": "Tu contraseña ha sido cambiada correctamente",
 		"invalidCredentials": "Credenciales inválidas",
-		"accountCreated": "Cuenta creada correctamente"
+		"accountCreated": "Cuenta creada correctamente",
+		"passwordPlaceholder": "Mínimo 8 caracteres",
+		"confirmPasswordPlaceholder": "Repite tu contraseña",
+		"newPassword": "Nueva contraseña",
+		"invalidResetLink": "Enlace de restablecimiento inválido",
+		"invalidResetLinkDescription": "Enlace de restablecimiento inválido. Solicita un nuevo enlace en la página '¿Olvidaste tu contraseña?'.",
+		"requestNewLink": "Solicitar nuevo enlace",
+		"redirectingToLogin": "Serás redirigido a la página de inicio de sesión...",
+		"changePassword": "Cambiar contraseña",
+		"passwordRequired": "Introduce una nueva contraseña",
+		"passwordMinLength": "La contraseña debe tener al menos 8 caracteres"
 	},
 	"dashboard": {
 		"title": "Panel de Control",

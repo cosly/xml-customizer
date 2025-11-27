@@ -74,9 +74,19 @@
 		"backToLogin": "Вернуться к входу",
 		"passwordsDoNotMatch": "Пароли не совпадают",
 		"emailSent": "Письмо с инструкциями по сбросу отправлено",
-		"passwordReset": "Ваш пароль успешно сброшен",
+		"passwordReset": "Ваш пароль успешно изменен",
 		"invalidCredentials": "Неверные учетные данные",
-		"accountCreated": "Аккаунт успешно создан"
+		"accountCreated": "Аккаунт успешно создан",
+		"passwordPlaceholder": "Минимум 8 символов",
+		"confirmPasswordPlaceholder": "Повторите пароль",
+		"newPassword": "Новый пароль",
+		"invalidResetLink": "Недействительная ссылка сброса",
+		"invalidResetLinkDescription": "Недействительная ссылка сброса. Запросите новую ссылку на странице 'Забыли пароль?'.",
+		"requestNewLink": "Запросить новую ссылку",
+		"redirectingToLogin": "Вы будете перенаправлены на страницу входа...",
+		"changePassword": "Изменить пароль",
+		"passwordRequired": "Пожалуйста, введите новый пароль",
+		"passwordMinLength": "Пароль должен содержать не менее 8 символов"
 	},
 	"dashboard": {
 		"title": "Панель управления",

@@ -74,9 +74,19 @@
 		"backToLogin": "Terug naar inloggen",
 		"passwordsDoNotMatch": "Wachtwoorden komen niet overeen",
 		"emailSent": "Er is een e-mail met resetinstructies verzonden",
-		"passwordReset": "Uw wachtwoord is succesvol gereset",
+		"passwordReset": "Je wachtwoord is succesvol gewijzigd",
 		"invalidCredentials": "Ongeldige inloggegevens",
-		"accountCreated": "Account succesvol aangemaakt"
+		"accountCreated": "Account succesvol aangemaakt",
+		"passwordPlaceholder": "Minimaal 8 karakters",
+		"confirmPasswordPlaceholder": "Herhaal je wachtwoord",
+		"newPassword": "Nieuw wachtwoord",
+		"invalidResetLink": "Ongeldige reset link",
+		"invalidResetLinkDescription": "Ongeldige reset link. Vraag een nieuwe link aan via de 'Wachtwoord vergeten' pagina.",
+		"requestNewLink": "Nieuwe link aanvragen",
+		"redirectingToLogin": "Je wordt doorgestuurd naar de login pagina...",
+		"changePassword": "Wachtwoord wijzigen",
+		"passwordRequired": "Vul een nieuw wachtwoord in",
+		"passwordMinLength": "Wachtwoord moet minimaal 8 karakters zijn"
 	},
 	"dashboard": {
 		"title": "Dashboard",

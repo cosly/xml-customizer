@@ -2,50 +2,51 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { authApi } from '$lib/api';
+  import { _, isLoading } from 'svelte-i18n';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   let password = '';
   let confirmPassword = '';
   let error = '';
-  let success = '';
+  let success = false;
   let loading = false;
 
   $: token = $page.url.searchParams.get('token') || '';
 
   async function handleSubmit() {
     if (!token) {
-      error = 'Ongeldige reset link';
+      error = $_('auth.invalidResetLink');
       return;
     }
 
     if (!password) {
-      error = 'Vul een nieuw wachtwoord in';
+      error = $_('auth.passwordRequired');
       return;
     }
 
     if (password.length < 8) {
-      error = 'Wachtwoord moet minimaal 8 karakters zijn';
+      error = $_('auth.passwordMinLength');
       return;
     }
 
     if (password !== confirmPassword) {
-      error = 'Wachtwoorden komen niet overeen';
+      error = $_('auth.passwordsDoNotMatch');
       return;
     }
 
     loading = true;
     error = '';
-    success = '';
 
     try {
-      const result = await authApi.resetPassword(token, password);
-      success = result.message;
+      await authApi.resetPassword(token, password);
+      success = true;
 
       // Redirect to login after 3 seconds
       setTimeout(() => {
         goto('/login');
       }, 3000);
     } catch (e) {
-      error = e instanceof Error ? e.message : 'Er is iets misgegaan';
+      error = e instanceof Error ? e.message : $_('errors.generic');
     } finally {
       loading = false;
     }
@@ -53,27 +54,37 @@
 </script>
 
 <svelte:head>
-  <title>Wachtwoord resetten - Tesoro</title>
+  <title>{$isLoading ? 'Loading...' : $_('auth.resetPasswordTitle')} - Tesoro</title>
 </svelte:head>
 
+{#if $isLoading}
+  <div class="auth-container">
+    <div class="auth-card">
+      <p>Loading...</p>
+    </div>
+  </div>
+{:else}
 <div class="auth-container">
+  <div class="language-switcher-wrapper">
+    <LanguageSwitcher />
+  </div>
   <div class="auth-card">
     <div class="auth-header">
       <img src="/logo.png" alt="Tesoro" class="auth-logo" />
-      <p class="auth-subtitle">Nieuw wachtwoord instellen</p>
+      <p class="auth-subtitle">{$_('auth.resetPasswordTitle')}</p>
     </div>
 
     {#if !token}
       <div class="alert alert-error">
-        Ongeldige reset link. Vraag een nieuwe link aan via de "Wachtwoord vergeten" pagina.
+        {$_('auth.invalidResetLinkDescription')}
       </div>
       <div class="auth-footer">
-        <p><a href="/forgot-password">Nieuwe link aanvragen</a></p>
+        <p><a href="/forgot-password">{$_('auth.requestNewLink')}</a></p>
       </div>
     {:else if success}
       <div class="alert alert-success">
-        {success}
-        <p style="margin-top: 0.5rem; font-size: 0.875rem;">Je wordt doorgestuurd naar de login pagina...</p>
+        {$_('auth.passwordReset')}
+        <p style="margin-top: 0.5rem; font-size: 0.875rem;">{$_('auth.redirectingToLogin')}</p>
       </div>
     {:else}
       {#if error}
@@ -82,25 +93,25 @@
 
       <form on:submit|preventDefault={handleSubmit}>
         <div class="form-group">
-          <label class="label" for="password">Nieuw wachtwoord</label>
+          <label class="label" for="password">{$_('auth.newPassword')}</label>
           <input
             class="input"
             type="password"
             id="password"
             bind:value={password}
-            placeholder="Minimaal 8 karakters"
+            placeholder={$_('auth.passwordPlaceholder')}
             autocomplete="new-password"
           />
         </div>
 
         <div class="form-group">
-          <label class="label" for="confirm-password">Bevestig wachtwoord</label>
+          <label class="label" for="confirm-password">{$_('auth.confirmPassword')}</label>
           <input
             class="input"
             type="password"
             id="confirm-password"
             bind:value={confirmPassword}
-            placeholder="Herhaal je wachtwoord"
+            placeholder={$_('auth.confirmPasswordPlaceholder')}
             autocomplete="new-password"
           />
         </div>
@@ -109,16 +120,17 @@
           {#if loading}
             <span class="spinner"></span>
           {/if}
-          Wachtwoord wijzigen
+          {$_('auth.changePassword')}
         </button>
       </form>
 
       <div class="auth-footer">
-        <p><a href="/login">Terug naar inloggen</a></p>
+        <p><a href="/login">{$_('auth.backToLogin')}</a></p>
       </div>
     {/if}
   </div>
 </div>
+{/if}
 
 <style>
   .auth-container {
@@ -128,6 +140,13 @@
     justify-content: center;
     padding: 1rem;
     background: var(--background);
+    position: relative;
+  }
+
+  .language-switcher-wrapper {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
   }
 
   .auth-card {

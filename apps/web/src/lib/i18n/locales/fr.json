@@ -74,9 +74,19 @@
 		"backToLogin": "Retour à la connexion",
 		"passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
 		"emailSent": "Un e-mail avec les instructions de réinitialisation a été envoyé",
-		"passwordReset": "Votre mot de passe a été réinitialisé avec succès",
+		"passwordReset": "Votre mot de passe a été modifié avec succès",
 		"invalidCredentials": "Identifiants invalides",
-		"accountCreated": "Compte créé avec succès"
+		"accountCreated": "Compte créé avec succès",
+		"passwordPlaceholder": "Minimum 8 caractères",
+		"confirmPasswordPlaceholder": "Répétez votre mot de passe",
+		"newPassword": "Nouveau mot de passe",
+		"invalidResetLink": "Lien de réinitialisation invalide",
+		"invalidResetLinkDescription": "Lien de réinitialisation invalide. Demandez un nouveau lien via la page 'Mot de passe oublié'.",
+		"requestNewLink": "Demander un nouveau lien",
+		"redirectingToLogin": "Vous allez être redirigé vers la page de connexion...",
+		"changePassword": "Modifier le mot de passe",
+		"passwordRequired": "Veuillez entrer un nouveau mot de passe",
+		"passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères"
 	},
 	"dashboard": {
 		"title": "Tableau de bord",

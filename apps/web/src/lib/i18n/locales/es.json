@@ -29,7 +29,13 @@
 		"or": "o",
 		"and": "y",
 		"welcome": "Bienvenido",
-		"language": "Idioma"
+		"language": "Idioma",
+		"name": "Nombre",
+		"add": "Añadir",
+		"manage": "Gestionar",
+		"optional": "opcional",
+		"clear": "Limpiar",
+		"noResults": "No se encontraron resultados"
 	},
 	"nav": {
 		"dashboard": "Panel de Control",

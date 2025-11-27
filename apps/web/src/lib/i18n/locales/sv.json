@@ -29,7 +29,13 @@
 		"or": "eller",
 		"and": "och",
 		"welcome": "Välkommen",
-		"language": "Språk"
+		"language": "Språk",
+		"name": "Namn",
+		"add": "Lägg till",
+		"manage": "Hantera",
+		"optional": "valfritt",
+		"clear": "Rensa",
+		"noResults": "Inga resultat hittades"
 	},
 	"nav": {
 		"dashboard": "Instrumentpanel",

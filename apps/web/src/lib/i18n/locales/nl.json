@@ -29,7 +29,13 @@
 		"or": "of",
 		"and": "en",
 		"welcome": "Welkom",
-		"language": "Taal"
+		"language": "Taal",
+		"name": "Naam",
+		"add": "Toevoegen",
+		"manage": "Beheren",
+		"optional": "optioneel",
+		"clear": "Wissen",
+		"noResults": "Geen resultaten gevonden"
 	},
 	"nav": {
 		"dashboard": "Dashboard",

@@ -29,7 +29,13 @@
 		"or": "lub",
 		"and": "i",
 		"welcome": "Witamy",
-		"language": "Język"
+		"language": "Język",
+		"name": "Nazwa",
+		"add": "Dodaj",
+		"manage": "Zarządzaj",
+		"optional": "opcjonalne",
+		"clear": "Wyczyść",
+		"noResults": "Nie znaleziono wyników"
 	},
 	"nav": {
 		"dashboard": "Panel",

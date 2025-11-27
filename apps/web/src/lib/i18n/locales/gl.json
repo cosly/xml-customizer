@@ -29,7 +29,13 @@
 		"or": "ou",
 		"and": "e",
 		"welcome": "Benvido",
-		"language": "Idioma"
+		"language": "Idioma",
+		"name": "Nome",
+		"add": "Engadir",
+		"manage": "Xestionar",
+		"optional": "opcional",
+		"clear": "Limpar",
+		"noResults": "Non se atoparon resultados"
 	},
 	"nav": {
 		"dashboard": "Panel de Control",

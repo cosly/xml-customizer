@@ -29,7 +29,13 @@
 		"or": "edo",
 		"and": "eta",
 		"welcome": "Ongi etorri",
-		"language": "Hizkuntza"
+		"language": "Hizkuntza",
+		"name": "Izena",
+		"add": "Gehitu",
+		"manage": "Kudeatu",
+		"optional": "aukerakoa",
+		"clear": "Garbitu",
+		"noResults": "Ez da emaitzarik aurkitu"
 	},
 	"nav": {
 		"dashboard": "Kontrol-panela",

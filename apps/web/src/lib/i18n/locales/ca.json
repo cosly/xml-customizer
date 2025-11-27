@@ -29,7 +29,13 @@
 		"or": "o",
 		"and": "i",
 		"welcome": "Benvingut",
-		"language": "Idioma"
+		"language": "Idioma",
+		"name": "Nom",
+		"add": "Afegir",
+		"manage": "Gestionar",
+		"optional": "opcional",
+		"clear": "Esborrar",
+		"noResults": "No s'han trobat resultats"
 	},
 	"nav": {
 		"dashboard": "Tauler de Control",

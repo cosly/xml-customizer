@@ -110,16 +110,26 @@ app.post('/forgot-password', async (c) => {
 
     // Always return success to prevent email enumeration
     if (result) {
+      console.log('=== FORGOT PASSWORD: Sending email ===');
+      console.log('User email:', result.user.email);
+      console.log('MAILGUN_API_KEY exists:', !!c.env.MAILGUN_API_KEY);
+      console.log('MAILGUN_DOMAIN exists:', !!c.env.MAILGUN_DOMAIN);
+      
       const emailService = new EmailService(c.env);
 
       // Build reset URL - use the request origin or fall back to config
       const origin = c.req.header('origin') || c.env.APP_URL || 'http://localhost:5173';
       const resetUrl = `${origin}/reset-password?token=${result.token}`;
+      console.log('Reset URL:', resetUrl);
 
       // Send email (non-blocking)
       c.executionCtx.waitUntil(
         emailService.sendPasswordResetEmail(result.user.email, result.user.name, resetUrl)
+          .then(res => console.log('Password reset email result:', res))
+          .catch(err => console.error('Password reset email error:', err))
       );
+    } else {
+      console.log('=== FORGOT PASSWORD: No user found for email ===');
     }
 
     return c.json({

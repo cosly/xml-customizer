@@ -16,6 +16,14 @@ export class EmailService {
   constructor(private env: Env) {}
 
   private async send(options: SendEmailOptions): Promise<{ success: boolean; id?: string; error?: string }> {
+    console.log('=== EMAIL SEND ATTEMPT ===');
+    console.log('MAILGUN_API_KEY exists:', !!this.env.MAILGUN_API_KEY);
+    console.log('MAILGUN_API_KEY length:', this.env.MAILGUN_API_KEY?.length || 0);
+    console.log('MAILGUN_DOMAIN:', this.env.MAILGUN_DOMAIN);
+    console.log('EMAIL_FROM:', this.env.EMAIL_FROM);
+    console.log('To:', options.to);
+    console.log('Subject:', options.subject);
+
     if (!this.env.MAILGUN_API_KEY || !this.env.MAILGUN_DOMAIN) {
       console.warn('Mailgun not configured, skipping email');
       return { success: false, error: 'Email not configured' };
@@ -34,18 +42,20 @@ export class EmailService {
         formData.append('text', options.text);
       }
 
-      const response = await fetch(
-        `https://api.eu.mailgun.net/v3/${this.env.MAILGUN_DOMAIN}/messages`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Basic ${btoa(`api:${this.env.MAILGUN_API_KEY}`)}`,
-          },
-          body: formData,
-        }
-      );
+      const mailgunUrl = `https://api.eu.mailgun.net/v3/${this.env.MAILGUN_DOMAIN}/messages`;
+      console.log('Mailgun URL:', mailgunUrl);
 
+      const response = await fetch(mailgunUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${btoa(`api:${this.env.MAILGUN_API_KEY}`)}`,
+        },
+        body: formData,
+      });
+
+      console.log('Mailgun response status:', response.status);
       const data = await response.json() as MailgunResponse;
+      console.log('Mailgun response data:', JSON.stringify(data));
 
       if (!response.ok) {
         console.error('Email send failed:', data);

@@ -125,6 +125,11 @@ app.post('/invitations', sessionAuth, async (c) => {
     const origin = c.req.header('origin') || c.env.APP_URL || 'http://localhost:5173';
     const inviteUrl = `${origin}/invite?token=${invitation.token}`;
 
+    console.log('Sending invitation email to:', email);
+    console.log('Invite URL:', inviteUrl);
+    console.log('MAILGUN_DOMAIN configured:', !!c.env.MAILGUN_DOMAIN);
+    console.log('MAILGUN_API_KEY configured:', !!c.env.MAILGUN_API_KEY);
+
     c.executionCtx.waitUntil(
       emailService.sendInvitationEmail(
         email,
@@ -132,7 +137,11 @@ app.post('/invitations', sessionAuth, async (c) => {
         org?.name || 'Organisatie',
         inviteUrl,
         role
-      )
+      ).then(result => {
+        console.log('Email send result:', result);
+      }).catch(err => {
+        console.error('Email send error:', err);
+      })
     );
 
     return c.json({

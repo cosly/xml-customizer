@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@xml-customizer/shared": "*",
-    "svelte-i18n": "^4.0.1"
+    "apexcharts": "^5.3.6"
   },
   "type": "module"
 }

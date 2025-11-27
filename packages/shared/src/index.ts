@@ -15,20 +15,8 @@ export interface SourceFeed {
   r2_key?: string; // Cached XML in R2
   property_count: number;
   last_fetched_at?: string;
-  source_last_modified?: string; // Last-Modified header from source
-  source_etag?: string; // ETag header from source
-  source_checked_at?: string; // When we last checked for updates
-  update_available?: boolean; // Whether source has newer version
   created_at: string;
   updated_at: string;
-}
-
-// Feed update check result
-export interface CheckUpdateResult {
-  hasUpdate: boolean;
-  lastModified: string | null;
-  etag: string | null;
-  checkedAt: string;
 }
 
 export interface CustomerSelection {
@@ -117,91 +105,70 @@ export interface ApiError {
   message: string;
 }
 
-// Admin types
-export interface AdminUser {
-  id: number;
-  email: string;
+// Feed Analyzer types
+export interface PriceRange {
+  label: string;
+  min: number;
+  max: number;
+  count: number;
+  properties: PropertySummary[];
+}
+
+export interface CategoryCount {
   name: string;
-  is_super_admin: boolean;
-  is_blocked: boolean;
-  blocked_at: string | null;
-  blocked_reason: string | null;
-  last_login_at: string | null;
-  created_at: string;
-  updated_at: string;
+  count: number;
+  percentage: number;
+  properties: PropertySummary[];
 }
 
-export interface CompanyStats {
-  id: number;
-  email: string;
-  name: string;
-  is_blocked: boolean;
-  blocked_at: string | null;
-  blocked_reason: string | null;
-  last_login_at: string | null;
-  created_at: string;
-  feed_count: number;
-  customer_count: number;
-  selection_count: number;
-  property_count: number;
+export interface LocationStats {
+  town: string;
+  province: string;
+  count: number;
+  avgPrice: number;
+  properties: PropertySummary[];
 }
 
-export interface CompanyDetail extends CompanyStats {
-  customers: Array<{
-    id: number;
-    name: string;
-    email: string | null;
-    hash_id: string;
-    selection_count: number;
-    created_at: string;
-  }>;
-  feeds: Array<{
-    id: number;
-    name: string;
-    url: string;
-    property_count: number;
-    last_fetched_at: string | null;
-    created_at: string;
-  }>;
-  recent_activity: Array<{
-    type: string;
-    description: string;
-    created_at: string;
-  }>;
+export interface SurfaceStats {
+  range: string;
+  min: number;
+  max: number;
+  count: number;
+  avgPrice: number;
+  pricePerSqm: number;
+  properties: PropertySummary[];
 }
 
-export interface DashboardStats {
-  total_companies: number;
-  active_companies: number;
-  blocked_companies: number;
-  total_feeds: number;
-  total_customers: number;
-  total_selections: number;
-  total_properties: number;
-  new_companies_today: number;
-  new_companies_week: number;
-  new_companies_month: number;
-  active_today: number;
-  active_week: number;
-}
+export interface FeedAnalytics {
+  feedId: number;
+  feedName: string;
+  totalProperties: number;
+  analyzedAt: string;
 
-export interface ActivityLogEntry {
-  id: number;
-  admin_id: number;
-  admin_name: string;
-  admin_email: string;
-  action: string;
-  target_type: string | null;
-  target_id: number | null;
-  target_name: string | null;
-  details: string | null;
-  ip_address: string | null;
-  created_at: string;
-}
+  // Key metrics
+  metrics: {
+    totalValue: number;
+    avgPrice: number;
+    medianPrice: number;
+    minPrice: number;
+    maxPrice: number;
+    avgPricePerSqm: number;
+    avgBeds: number;
+    avgBaths: number;
+  };
 
-export interface GrowthDataPoint {
-  date: string;
-  new_companies: number;
-  new_customers: number;
-  new_feeds: number;
+  // Distribution data
+  priceDistribution: PriceRange[];
+  typeDistribution: CategoryCount[];
+  bedroomDistribution: CategoryCount[];
+  bathroomDistribution: CategoryCount[];
+  locationByTown: LocationStats[];
+  locationByProvince: CategoryCount[];
+  poolDistribution: CategoryCount[];
+  newBuildDistribution: CategoryCount[];
+  energyRatingDistribution: CategoryCount[];
+  surfaceDistribution: SurfaceStats[];
+
+  // Features analysis
+  topFeatures: CategoryCount[];
 }

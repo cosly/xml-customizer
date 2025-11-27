@@ -6,7 +6,8 @@ export interface Env {
   KV: KVNamespace;
   ADMIN_API_KEY: string;
   CORS_ORIGIN: string;
-  RESEND_API_KEY: string;
+  MAILGUN_API_KEY: string;
+  MAILGUN_DOMAIN: string;
   EMAIL_FROM: string;
   APP_URL?: string;
 }

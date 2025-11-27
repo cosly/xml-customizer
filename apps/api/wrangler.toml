@@ -22,6 +22,7 @@ id = "4a9874c88031497dbfea85f916cbb8ca"
 ADMIN_API_KEY = "change-this-in-production"
 CORS_ORIGIN = "https://tools.tesorohq.io"
 EMAIL_FROM = "Tesoro <noreply@tesorohq.io>"
+APP_URL = "https://tools.tesorohq.io"
 
 # Note: Set these secrets using:
 # wrangler secret put MAILGUN_API_KEY

@@ -211,3 +211,136 @@ export function getPublicFeedUrl(hashId: string, feedId?: number): string {
   const base = `${API_URL}/feed/${hashId}`;
   return feedId ? `${base}?feed=${feedId}` : base;
 }
+
+// Organization types
+export interface Organization {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrganizationMember {
+  id: number;
+  name: string;
+  email: string;
+  role: 'owner' | 'admin' | 'member';
+}
+
+export interface PendingInvitation {
+  id: number;
+  email: string;
+  role: 'admin' | 'member';
+  expires_at: string;
+  invited_by_name: string;
+}
+
+export interface TeamData {
+  organization: Organization;
+  role: string;
+  members: OrganizationMember[];
+  pendingInvitations: PendingInvitation[];
+}
+
+export interface InvitationDetails {
+  email: string;
+  organization_name: string;
+  invited_by_name: string;
+  role: string;
+  expires_at: string;
+}
+
+// Team API
+export const teamApi = {
+  get: () => fetchApi<TeamData>('/api/team'),
+
+  updateOrganization: (name: string) =>
+    fetchApi<{ success: boolean }>('/api/team', {
+      method: 'PUT',
+      body: JSON.stringify({ name }),
+    }),
+
+  sendInvitation: (email: string, role: 'admin' | 'member' = 'member') =>
+    fetchApi<{ success: boolean; invitation: { id: number; email: string; role: string; expires_at: string } }>(
+      '/api/team/invitations',
+      {
+        method: 'POST',
+        body: JSON.stringify({ email, role }),
+      }
+    ),
+
+  getInvitation: (token: string) =>
+    fetchApi<InvitationDetails>(`/api/team/invitations/${token}`),
+
+  cancelInvitation: (id: number) =>
+    fetchApi<{ success: boolean }>(`/api/team/invitations/${id}`, {
+      method: 'DELETE',
+    }),
+
+  resendInvitation: (id: number) =>
+    fetchApi<{ success: boolean }>(`/api/team/invitations/${id}/resend`, {
+      method: 'POST',
+    }),
+
+  updateMemberRole: (memberId: number, role: 'admin' | 'member') =>
+    fetchApi<{ success: boolean }>(`/api/team/members/${memberId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ role }),
+    }),
+
+  removeMember: (memberId: number) =>
+    fetchApi<{ success: boolean }>(`/api/team/members/${memberId}`, {
+      method: 'DELETE',
+    }),
+};
+
+// Admin API
+export const adminApi = {
+  getDashboard: () => fetchApi<{
+    totalCompanies: number;
+    totalFeeds: number;
+    totalCustomers: number;
+    totalSelections: number;
+    newRegistrations: { today: number; week: number; month: number };
+    activeUsers: number;
+  }>('/api/admin/dashboard'),
+
+  getCompanies: (params?: { search?: string; status?: string; sort?: string; order?: string; page?: number; limit?: number }) => {
+    const searchParams = new URLSearchParams();
+    if (params?.search) searchParams.set('search', params.search);
+    if (params?.status) searchParams.set('status', params.status);
+    if (params?.sort) searchParams.set('sort', params.sort);
+    if (params?.order) searchParams.set('order', params.order);
+    if (params?.page) searchParams.set('page', params.page.toString());
+    if (params?.limit) searchParams.set('limit', params.limit.toString());
+    const query = searchParams.toString();
+    return fetchApi<{ companies: unknown[]; total: number; page: number; limit: number }>(`/api/admin/companies${query ? `?${query}` : ''}`);
+  },
+
+  getCompany: (id: number) => fetchApi<unknown>(`/api/admin/companies/${id}`),
+
+  blockCompany: (id: number, reason: string) =>
+    fetchApi<{ success: boolean }>(`/api/admin/companies/${id}/block`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    }),
+
+  unblockCompany: (id: number) =>
+    fetchApi<{ success: boolean }>(`/api/admin/companies/${id}/unblock`, {
+      method: 'POST',
+    }),
+
+  getActivity: (params?: { page?: number; limit?: number }) => {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set('page', params.page.toString());
+    if (params?.limit) searchParams.set('limit', params.limit.toString());
+    const query = searchParams.toString();
+    return fetchApi<{ activities: unknown[]; total: number }>(`/api/admin/activity${query ? `?${query}` : ''}`);
+  },
+
+  getTopCompanies: (metric: string = 'feeds', limit: number = 5) =>
+    fetchApi<unknown[]>(`/api/admin/stats/top-companies?metric=${metric}&limit=${limit}`),
+
+  getGrowthStats: (days: number = 14) =>
+    fetchApi<unknown[]>(`/api/admin/stats/growth?days=${days}`),
+};

@@ -281,6 +281,152 @@
 		"priceDistribution": "Prijsverdeling",
 		"noData": "Geen data beschikbaar"
 	},
+	"help": {
+		"title": "Help",
+		"close": "Sluiten",
+		"dashboard": {
+			"title": "Dashboard",
+			"description": "Je centrale overzicht van Tesoro CRM.",
+			"sections": [
+				{
+					"title": "Statistieken",
+					"content": "Zie in één oogopslag hoeveel feeds, klanten, woningen en selecties je in het systeem hebt."
+				},
+				{
+					"title": "Snelle acties",
+					"content": "Maak direct nieuwe feeds of klanten aan vanuit het dashboard."
+				},
+				{
+					"title": "Recente activiteit",
+					"content": "Je meest recent toegevoegde feeds en klanten worden hier getoond."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Feeds",
+			"description": "Beheer je XML woningfeeds van vastgoedportalen.",
+			"sections": [
+				{
+					"title": "Wat is een feed?",
+					"content": "Een feed is een koppeling naar een XML-bron met woningaanbod. Dit kan van Kyero, Resales Online, of andere portalen zijn."
+				},
+				{
+					"title": "Feed toevoegen",
+					"content": "Klik op 'Nieuwe Feed' en voer een naam en de XML-URL in. Het systeem haalt automatisch de woningen op en verwerkt deze."
+				},
+				{
+					"title": "Controleren op updates",
+					"content": "Gebruik 'Check' om te zien of de bron nieuwe data heeft zonder te downloaden. Gebruik 'Ophalen' om de woningen te downloaden en bij te werken."
+				},
+				{
+					"title": "Feed status",
+					"content": "'Opgehaald' toont wanneer data voor het laatst is gedownload. 'Gecontroleerd' toont wanneer de bron voor het laatst is gecontroleerd op updates."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Feed Details",
+			"description": "Bekijk en beheer woningen uit deze feed.",
+			"sections": [
+				{
+					"title": "Woningenlijst",
+					"content": "Hier zie je alle woningen uit deze feed met basisinformatie zoals referentie, type, locatie en prijs."
+				},
+				{
+					"title": "Feed vernieuwen",
+					"content": "Klik op 'Vernieuwen' om de nieuwste data van de XML-bron op te halen."
+				},
+				{
+					"title": "Woningen selecteren",
+					"content": "Selecteer hier woningen om ze later aan klanten toe te wijzen."
+				}
+			]
+		},
+		"customers": {
+			"title": "Klanten",
+			"description": "Beheer je klanten en hun woningselecties.",
+			"sections": [
+				{
+					"title": "Klantoverzicht",
+					"content": "Zie al je klanten met hun naam, e-mail en aantal geselecteerde woningen."
+				},
+				{
+					"title": "Klant toevoegen",
+					"content": "Klik op 'Nieuwe Klant' en voer een naam en optioneel een e-mailadres in."
+				},
+				{
+					"title": "Klant feed URL",
+					"content": "Elke klant krijgt een unieke URL om zijn geselecteerde woningen te bekijken. Deel deze link via e-mail of bericht."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Klant Details",
+			"description": "Beheer woningselecties voor deze klant.",
+			"sections": [
+				{
+					"title": "Woningen selecteren",
+					"content": "Kies een feed en selecteer de woningen die je aan deze klant wilt tonen. Gebruik de checkboxes om te selecteren."
+				},
+				{
+					"title": "Filteren",
+					"content": "Gebruik de filters om snel woningen te vinden op type, locatie, slaapkamers of prijsklasse."
+				},
+				{
+					"title": "Delen",
+					"content": "Kopieer de unieke klant-URL of verstuur deze direct via e-mail met de 'Delen' knop."
+				},
+				{
+					"title": "Tabel/Kaart weergave",
+					"content": "Wissel tussen tabelweergave voor een snel overzicht of kaartweergave met afbeeldingen."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Feed Analyzer",
+			"description": "Krijg inzicht in je woningportfolio met visuele statistieken.",
+			"sections": [
+				{
+					"title": "Feed selecteren",
+					"content": "Kies een feed uit het dropdown menu om de woningen te analyseren."
+				},
+				{
+					"title": "Kerncijfers",
+					"content": "Zie in één oogopslag totale waarde, gemiddelde prijs, mediaan prijs en prijs per m²."
+				},
+				{
+					"title": "Grafieken",
+					"content": "Interactieve grafieken tonen verdeling per prijs, type, slaapkamers, locatie en meer."
+				},
+				{
+					"title": "Drill-down",
+					"content": "Klik op een grafiek-segment om de onderliggende woningen te zien. Perfect voor gedetailleerde analyse."
+				}
+			]
+		},
+		"team": {
+			"title": "Team",
+			"description": "Beheer je organisatie en teamleden.",
+			"sections": [
+				{
+					"title": "Organisatie",
+					"content": "Je organisatienaam is zichtbaar voor teamleden. Beheerders en eigenaren kunnen deze wijzigen."
+				},
+				{
+					"title": "Teamleden",
+					"content": "Zie alle leden met hun rol: Eigenaar (volledige toegang), Beheerder (kan team beheren), of Lid (alleen feeds & klanten)."
+				},
+				{
+					"title": "Leden uitnodigen",
+					"content": "Verstuur uitnodigingen via e-mail. Kies welke rol het nieuwe lid moet krijgen."
+				},
+				{
+					"title": "Rollen beheren",
+					"content": "Als eigenaar kun je rollen van leden wijzigen of ze uit het team verwijderen."
+				}
+			]
+		}
+	},
 	"errors": {
 		"general": "Er is een fout opgetreden",
 		"notFound": "Niet gevonden",

@@ -281,6 +281,152 @@
 		"priceDistribution": "Price distribution",
 		"noData": "No data available"
 	},
+	"help": {
+		"title": "Help",
+		"close": "Close",
+		"dashboard": {
+			"title": "Dashboard",
+			"description": "Your central overview of Tesoro CRM.",
+			"sections": [
+				{
+					"title": "Statistics",
+					"content": "See at a glance how many feeds, customers, properties and selections you have in the system."
+				},
+				{
+					"title": "Quick Actions",
+					"content": "Create new feeds or customers directly from the dashboard."
+				},
+				{
+					"title": "Recent Activity",
+					"content": "Your most recently added feeds and customers are displayed here."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Feeds",
+			"description": "Manage your XML property feeds from real estate portals.",
+			"sections": [
+				{
+					"title": "What is a feed?",
+					"content": "A feed is a connection to an XML source that contains property listings. This can be from Kyero, Resales Online, or other portals."
+				},
+				{
+					"title": "Adding a feed",
+					"content": "Click 'New Feed' and enter a name and the XML URL. The system will automatically fetch and parse the properties."
+				},
+				{
+					"title": "Check for updates",
+					"content": "Use 'Check' to see if the source has new data without downloading. Use 'Fetch' to download and update the properties."
+				},
+				{
+					"title": "Feed status",
+					"content": "'Fetched' shows when data was last downloaded. 'Checked' shows when the source was last checked for updates."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Feed Details",
+			"description": "View and manage properties from this feed.",
+			"sections": [
+				{
+					"title": "Property list",
+					"content": "Here you see all properties from this feed with basic information like reference, type, location, and price."
+				},
+				{
+					"title": "Refresh feed",
+					"content": "Click 'Refresh' to download the latest data from the XML source."
+				},
+				{
+					"title": "Property selection",
+					"content": "Select properties here to later assign them to customers."
+				}
+			]
+		},
+		"customers": {
+			"title": "Customers",
+			"description": "Manage your customers and their property selections.",
+			"sections": [
+				{
+					"title": "Customer overview",
+					"content": "See all your customers with their name, email, and number of selected properties."
+				},
+				{
+					"title": "Adding a customer",
+					"content": "Click 'New Customer' and enter a name and optionally an email address."
+				},
+				{
+					"title": "Customer feed URL",
+					"content": "Each customer gets a unique URL to view their selected properties. Share this link via email or message."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Customer Details",
+			"description": "Manage property selections for this customer.",
+			"sections": [
+				{
+					"title": "Selecting properties",
+					"content": "Choose a feed and select the properties you want to show to this customer. Use the checkboxes to select."
+				},
+				{
+					"title": "Filtering",
+					"content": "Use the filters to quickly find properties by type, location, bedrooms, or price range."
+				},
+				{
+					"title": "Sharing",
+					"content": "Copy the unique customer URL or send it directly via email with the 'Share' button."
+				},
+				{
+					"title": "Table/Card view",
+					"content": "Switch between table view for a quick overview or card view with images."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Feed Analyzer",
+			"description": "Gain insights into your property portfolio with visual statistics.",
+			"sections": [
+				{
+					"title": "Selecting a feed",
+					"content": "Choose a feed from the dropdown to analyze its properties."
+				},
+				{
+					"title": "Key figures",
+					"content": "See total value, average price, median price, and price per m² at a glance."
+				},
+				{
+					"title": "Charts",
+					"content": "Interactive charts show distribution by price, type, bedrooms, location, and more."
+				},
+				{
+					"title": "Drill-down",
+					"content": "Click on a chart segment to see the underlying properties. Perfect for detailed analysis."
+				}
+			]
+		},
+		"team": {
+			"title": "Team",
+			"description": "Manage your organization and team members.",
+			"sections": [
+				{
+					"title": "Organization",
+					"content": "Your organization name is visible to team members. Admins and owners can change this."
+				},
+				{
+					"title": "Team members",
+					"content": "See all members with their role: Owner (full access), Admin (can manage team), or Member (feeds & customers only)."
+				},
+				{
+					"title": "Inviting members",
+					"content": "Send invitations via email. Choose the role the new member should have."
+				},
+				{
+					"title": "Managing roles",
+					"content": "As owner you can change member roles or remove them from the team."
+				}
+			]
+		}
+	},
 	"errors": {
 		"general": "An error occurred",
 		"notFound": "Not found",

@@ -2,7 +2,6 @@
   import { onMount, onDestroy } from 'svelte';
   import { feedsApi } from '$lib/api';
   import type { SourceFeed, FeedAnalytics, PropertySummary, CategoryCount, PriceRange, LocationStats, SurfaceStats } from '@xml-customizer/shared';
-  import ApexCharts from 'apexcharts';
 
   let feeds: SourceFeed[] = [];
   let selectedFeedId: number | null = null;
@@ -16,10 +15,14 @@
   let drillDownTitle = '';
   let drillDownProperties: PropertySummary[] = [];
 
-  // Chart instances
-  let charts: ApexCharts[] = [];
+  // Chart instances and ApexCharts module
+  let ApexCharts: any = null;
+  let charts: any[] = [];
 
   onMount(async () => {
+    // Dynamically import ApexCharts (only works in browser)
+    const module = await import('apexcharts');
+    ApexCharts = module.default;
     await loadFeeds();
   });
 
@@ -94,7 +97,7 @@
   }
 
   function renderCharts() {
-    if (!analytics) return;
+    if (!analytics || !ApexCharts) return;
 
     // Price Distribution Bar Chart
     const priceChartEl = document.getElementById('price-chart');

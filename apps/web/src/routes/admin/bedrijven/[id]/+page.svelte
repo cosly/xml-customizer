@@ -4,6 +4,7 @@
   import { goto } from '$app/navigation';
   import { adminApi } from '$lib/api';
   import type { CompanyDetail } from '@xml-customizer/shared';
+  import { _ } from 'svelte-i18n';
 
   let company: CompanyDetail | null = null;
   let loading = true;
@@ -339,7 +340,7 @@
             id="blockReason"
             class="input"
             rows="3"
-            placeholder="Voer een reden in voor het blokkeren..."
+            placeholder={$_('admin.blockReasonPlaceholder')}
             bind:value={blockReason}
           ></textarea>
         </div>

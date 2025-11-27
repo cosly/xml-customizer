@@ -543,5 +543,9 @@
 		"invalidUrl": "URL inválido",
 		"minLength": "Mínimo {min} caracteres",
 		"maxLength": "Máximo {max} caracteres"
+	},
+	"admin": {
+		"searchPlaceholder": "Nome ou e-mail...",
+		"blockReasonPlaceholder": "Introduza um motivo para o bloqueio..."
 	}
 }

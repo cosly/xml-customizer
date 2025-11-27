@@ -543,5 +543,9 @@
 		"invalidUrl": "Неверный URL",
 		"minLength": "Минимум {min} символов",
 		"maxLength": "Максимум {max} символов"
+	},
+	"admin": {
+		"searchPlaceholder": "Имя или email...",
+		"blockReasonPlaceholder": "Введите причину блокировки..."
 	}
 }

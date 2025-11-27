@@ -543,5 +543,9 @@
 		"invalidUrl": "Ungültige URL",
 		"minLength": "Mindestens {min} Zeichen",
 		"maxLength": "Maximal {max} Zeichen"
+	},
+	"admin": {
+		"searchPlaceholder": "Name oder E-Mail...",
+		"blockReasonPlaceholder": "Geben Sie einen Grund für die Sperrung ein..."
 	}
 }

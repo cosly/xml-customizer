@@ -4,6 +4,7 @@
   import { goto } from '$app/navigation';
   import { adminApi } from '$lib/api';
   import type { CompanyStats } from '@xml-customizer/shared';
+  import { _ } from 'svelte-i18n';
 
   let companies: CompanyStats[] = [];
   let total = 0;
@@ -132,7 +133,7 @@
       type="text"
       id="search"
       class="input"
-      placeholder="Naam of email..."
+      placeholder={$_('admin.searchPlaceholder')}
       bind:value={search}
       on:keydown={(e) => e.key === 'Enter' && handleSearch()}
     />

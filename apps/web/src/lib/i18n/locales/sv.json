@@ -543,5 +543,9 @@
 		"invalidUrl": "Ogiltig URL",
 		"minLength": "Minst {min} tecken",
 		"maxLength": "Högst {max} tecken"
+	},
+	"admin": {
+		"searchPlaceholder": "Namn eller e-post...",
+		"blockReasonPlaceholder": "Ange en anledning för blockeringen..."
 	}
 }

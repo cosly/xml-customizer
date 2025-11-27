@@ -545,5 +545,9 @@
 		"invalidUrl": "Ongeldige URL",
 		"minLength": "Minimaal {min} tekens",
 		"maxLength": "Maximaal {max} tekens"
+	},
+	"admin": {
+		"searchPlaceholder": "Naam of email...",
+		"blockReasonPlaceholder": "Voer een reden in voor het blokkeren..."
 	}
 }

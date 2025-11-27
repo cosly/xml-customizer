@@ -543,5 +543,9 @@
 		"invalidUrl": "URL baliogabea",
 		"minLength": "Gutxienez {min} karaktere",
 		"maxLength": "Gehienez {max} karaktere"
+	},
+	"admin": {
+		"searchPlaceholder": "Izena edo emaila...",
+		"blockReasonPlaceholder": "Sartu blokeatzeko arrazoia..."
 	}
 }

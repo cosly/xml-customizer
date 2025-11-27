@@ -8,6 +8,7 @@ import customersRoutes from './routes/customers';
 import feedsRoutes from './routes/feeds';
 import publicRoutes from './routes/public';
 import adminRoutes from './routes/admin';
+import teamRoutes from './routes/team';
 import { FeedService } from './services/feed-service';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -61,6 +62,7 @@ app.use('/api/customers/*', sessionAuth);
 app.use('/api/feeds/*', sessionAuth);
 app.route('/api/customers', customersRoutes);
 app.route('/api/feeds', feedsRoutes);
+app.route('/api/team', teamRoutes);
 
 // Super admin routes (session + super admin required)
 app.use('/api/admin/*', sessionAuth);

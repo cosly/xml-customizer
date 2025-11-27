@@ -220,20 +220,30 @@
 	"team": {
 		"title": "Équipe",
 		"organization": "Organisation",
+		"organizationName": "Nom de l'organisation",
+		"yourRole": "Votre rôle",
 		"members": "Membres de l'équipe",
 		"invitations": "Invitations",
 		"inviteMember": "Inviter un membre",
+		"pendingInvitations": "Invitations en attente",
 		"email": "Adresse e-mail",
 		"role": "Rôle",
 		"owner": "Propriétaire",
 		"admin": "Administrateur",
 		"member": "Membre",
-		"invite": "Inviter",
+		"memberRole": "Membre - peut gérer les flux et les clients",
+		"adminRole": "Admin - peut aussi gérer les membres de l'équipe",
+		"invite": "Envoyer l'invitation",
+		"sending": "Envoi en cours...",
+		"invitationSent": "Invitation envoyée à {email}",
 		"cancel": "Annuler",
 		"resend": "Renvoyer",
+		"cancelInvitation": "Annuler",
 		"pending": "En attente",
 		"expires": "Expire",
+		"expiresOn": "Expire",
 		"remove": "Supprimer",
+		"invitedBy": "Invité par",
 		"changeRole": "Changer le rôle",
 		"leaveTeam": "Quitter l'équipe",
 		"editName": "Modifier le nom",
@@ -245,7 +255,16 @@
 		"roleUpdated": "Rôle mis à jour",
 		"nameUpdated": "Nom de l'organisation mis à jour",
 		"noMembers": "Aucun membre",
-		"noInvitations": "Aucune invitation en attente"
+		"noInvitations": "Aucune invitation en attente",
+		"confirmCancel": "Êtes-vous sûr de vouloir annuler l'invitation à {email} ?",
+		"confirmRemove": "Êtes-vous sûr de vouloir supprimer {name} de l'équipe ?",
+		"loadError": "Impossible de charger les données de l'équipe",
+		"inviteError": "Échec de l'envoi de l'invitation",
+		"cancelError": "Échec de l'annulation",
+		"resendError": "Échec du renvoi",
+		"removeError": "Échec de la suppression",
+		"roleChangeError": "Échec du changement de rôle",
+		"nameChangeError": "Échec du changement de nom"
 	},
 	"analyzer": {
 		"title": "Analyseur de Flux",
@@ -261,6 +280,152 @@
 		"byBedrooms": "Par chambres",
 		"priceDistribution": "Distribution des prix",
 		"noData": "Aucune donnée disponible"
+	},
+	"help": {
+		"title": "Aide",
+		"close": "Fermer",
+		"dashboard": {
+			"title": "Tableau de bord",
+			"description": "Votre vue centrale de Tesoro CRM.",
+			"sections": [
+				{
+					"title": "Statistiques",
+					"content": "Voyez en un coup d'œil combien de flux, clients, propriétés et sélections vous avez dans le système."
+				},
+				{
+					"title": "Actions rapides",
+					"content": "Créez de nouveaux flux ou clients directement depuis le tableau de bord."
+				},
+				{
+					"title": "Activité récente",
+					"content": "Vos flux et clients ajoutés le plus récemment sont affichés ici."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Flux",
+			"description": "Gérez vos flux XML de propriétés des portails immobiliers.",
+			"sections": [
+				{
+					"title": "Qu'est-ce qu'un flux ?",
+					"content": "Un flux est une connexion à une source XML contenant des annonces immobilières. Il peut provenir de Kyero, Resales Online ou d'autres portails."
+				},
+				{
+					"title": "Ajouter un flux",
+					"content": "Cliquez sur 'Nouveau flux' et entrez un nom et l'URL XML. Le système récupérera et traitera automatiquement les propriétés."
+				},
+				{
+					"title": "Vérifier les mises à jour",
+					"content": "Utilisez 'Vérifier' pour voir si la source a de nouvelles données sans télécharger. Utilisez 'Récupérer' pour télécharger et mettre à jour les propriétés."
+				},
+				{
+					"title": "État du flux",
+					"content": "'Récupéré' indique quand les données ont été téléchargées pour la dernière fois. 'Vérifié' indique quand la source a été vérifiée pour la dernière fois."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Détails du flux",
+			"description": "Voir et gérer les propriétés de ce flux.",
+			"sections": [
+				{
+					"title": "Liste des propriétés",
+					"content": "Vous voyez ici toutes les propriétés de ce flux avec les informations de base comme référence, type, emplacement et prix."
+				},
+				{
+					"title": "Actualiser le flux",
+					"content": "Cliquez sur 'Actualiser' pour télécharger les dernières données de la source XML."
+				},
+				{
+					"title": "Sélection de propriétés",
+					"content": "Sélectionnez des propriétés ici pour les attribuer ultérieurement à des clients."
+				}
+			]
+		},
+		"customers": {
+			"title": "Clients",
+			"description": "Gérez vos clients et leurs sélections de propriétés.",
+			"sections": [
+				{
+					"title": "Vue d'ensemble des clients",
+					"content": "Voyez tous vos clients avec leur nom, e-mail et nombre de propriétés sélectionnées."
+				},
+				{
+					"title": "Ajouter un client",
+					"content": "Cliquez sur 'Nouveau client' et entrez un nom et optionnellement une adresse e-mail."
+				},
+				{
+					"title": "URL du flux client",
+					"content": "Chaque client reçoit une URL unique pour voir ses propriétés sélectionnées. Partagez ce lien par e-mail ou message."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Détails du client",
+			"description": "Gérer les sélections de propriétés pour ce client.",
+			"sections": [
+				{
+					"title": "Sélectionner des propriétés",
+					"content": "Choisissez un flux et sélectionnez les propriétés que vous voulez montrer à ce client. Utilisez les cases à cocher pour sélectionner."
+				},
+				{
+					"title": "Filtrage",
+					"content": "Utilisez les filtres pour trouver rapidement des propriétés par type, emplacement, chambres ou fourchette de prix."
+				},
+				{
+					"title": "Partage",
+					"content": "Copiez l'URL unique du client ou envoyez-la directement par e-mail avec le bouton 'Partager'."
+				},
+				{
+					"title": "Vue tableau/carte",
+					"content": "Basculez entre la vue tableau pour un aperçu rapide ou la vue carte avec images."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Analyseur de flux",
+			"description": "Obtenez des informations sur votre portefeuille immobilier avec des statistiques visuelles.",
+			"sections": [
+				{
+					"title": "Sélectionner un flux",
+					"content": "Choisissez un flux dans la liste déroulante pour analyser ses propriétés."
+				},
+				{
+					"title": "Chiffres clés",
+					"content": "Voyez la valeur totale, le prix moyen, le prix médian et le prix au m² en un coup d'œil."
+				},
+				{
+					"title": "Graphiques",
+					"content": "Les graphiques interactifs montrent la distribution par prix, type, chambres, emplacement et plus."
+				},
+				{
+					"title": "Drill-down",
+					"content": "Cliquez sur un segment de graphique pour voir les propriétés sous-jacentes. Parfait pour une analyse détaillée."
+				}
+			]
+		},
+		"team": {
+			"title": "Équipe",
+			"description": "Gérez votre organisation et les membres de l'équipe.",
+			"sections": [
+				{
+					"title": "Organisation",
+					"content": "Le nom de votre organisation est visible par les membres de l'équipe. Les administrateurs et propriétaires peuvent le modifier."
+				},
+				{
+					"title": "Membres de l'équipe",
+					"content": "Voyez tous les membres avec leur rôle : Propriétaire (accès complet), Admin (peut gérer l'équipe) ou Membre (flux et clients uniquement)."
+				},
+				{
+					"title": "Inviter des membres",
+					"content": "Envoyez des invitations par e-mail. Choisissez le rôle que le nouveau membre doit avoir."
+				},
+				{
+					"title": "Gérer les rôles",
+					"content": "En tant que propriétaire, vous pouvez changer les rôles des membres ou les supprimer de l'équipe."
+				}
+			]
+		}
 	},
 	"errors": {
 		"general": "Une erreur s'est produite",

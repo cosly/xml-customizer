@@ -220,20 +220,30 @@
 	"team": {
 		"title": "Equipa",
 		"organization": "Organização",
+		"organizationName": "Nome da organização",
+		"yourRole": "O seu cargo",
 		"members": "Membros da equipa",
 		"invitations": "Convites",
 		"inviteMember": "Convidar membro",
+		"pendingInvitations": "Convites pendentes",
 		"email": "Endereço de e-mail",
 		"role": "Função",
 		"owner": "Proprietário",
 		"admin": "Administrador",
 		"member": "Membro",
-		"invite": "Convidar",
+		"memberRole": "Membro - pode gerir feeds e clientes",
+		"adminRole": "Admin - também pode gerir membros da equipa",
+		"invite": "Enviar convite",
+		"sending": "A enviar...",
+		"invitationSent": "Convite enviado para {email}",
 		"cancel": "Cancelar",
 		"resend": "Reenviar",
+		"cancelInvitation": "Cancelar",
 		"pending": "Pendente",
 		"expires": "Expira",
+		"expiresOn": "Expira",
 		"remove": "Remover",
+		"invitedBy": "Convidado por",
 		"changeRole": "Alterar função",
 		"leaveTeam": "Sair da equipa",
 		"editName": "Editar nome",
@@ -245,7 +255,16 @@
 		"roleUpdated": "Função atualizada",
 		"nameUpdated": "Nome da organização atualizado",
 		"noMembers": "Sem membros",
-		"noInvitations": "Sem convites pendentes"
+		"noInvitations": "Sem convites pendentes",
+		"confirmCancel": "Tem a certeza que deseja cancelar o convite para {email}?",
+		"confirmRemove": "Tem a certeza que deseja remover {name} da equipa?",
+		"loadError": "Não foi possível carregar os dados da equipa",
+		"inviteError": "Falha ao enviar o convite",
+		"cancelError": "Falha ao cancelar",
+		"resendError": "Falha ao reenviar",
+		"removeError": "Falha ao remover",
+		"roleChangeError": "Falha ao alterar a função",
+		"nameChangeError": "Falha ao alterar o nome"
 	},
 	"analyzer": {
 		"title": "Analisador de Feeds",
@@ -261,6 +280,152 @@
 		"byBedrooms": "Por quartos",
 		"priceDistribution": "Distribuição de preços",
 		"noData": "Sem dados disponíveis"
+	},
+	"help": {
+		"title": "Ajuda",
+		"close": "Fechar",
+		"dashboard": {
+			"title": "Painel",
+			"description": "A sua visão central do Tesoro CRM.",
+			"sections": [
+				{
+					"title": "Estatísticas",
+					"content": "Veja de relance quantos feeds, clientes, imóveis e seleções tem no sistema."
+				},
+				{
+					"title": "Ações Rápidas",
+					"content": "Crie novos feeds ou clientes diretamente do painel."
+				},
+				{
+					"title": "Atividade Recente",
+					"content": "Os seus feeds e clientes adicionados mais recentemente são apresentados aqui."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Feeds",
+			"description": "Gira os seus feeds XML de imóveis de portais imobiliários.",
+			"sections": [
+				{
+					"title": "O que é um feed?",
+					"content": "Um feed é uma ligação a uma fonte XML que contém anúncios de imóveis. Pode ser do Kyero, Resales Online ou outros portais."
+				},
+				{
+					"title": "Adicionar um feed",
+					"content": "Clique em 'Novo Feed' e introduza um nome e o URL XML. O sistema irá automaticamente obter e processar os imóveis."
+				},
+				{
+					"title": "Verificar atualizações",
+					"content": "Use 'Verificar' para ver se a fonte tem novos dados sem descarregar. Use 'Obter' para descarregar e atualizar os imóveis."
+				},
+				{
+					"title": "Estado do feed",
+					"content": "'Obtido' mostra quando os dados foram descarregados pela última vez. 'Verificado' mostra quando a fonte foi verificada pela última vez."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Detalhes do Feed",
+			"description": "Ver e gerir imóveis deste feed.",
+			"sections": [
+				{
+					"title": "Lista de imóveis",
+					"content": "Aqui vê todos os imóveis deste feed com informações básicas como referência, tipo, localização e preço."
+				},
+				{
+					"title": "Atualizar feed",
+					"content": "Clique em 'Atualizar' para descarregar os dados mais recentes da fonte XML."
+				},
+				{
+					"title": "Seleção de imóveis",
+					"content": "Selecione imóveis aqui para os atribuir posteriormente a clientes."
+				}
+			]
+		},
+		"customers": {
+			"title": "Clientes",
+			"description": "Gira os seus clientes e as suas seleções de imóveis.",
+			"sections": [
+				{
+					"title": "Vista geral de clientes",
+					"content": "Veja todos os seus clientes com nome, e-mail e número de imóveis selecionados."
+				},
+				{
+					"title": "Adicionar um cliente",
+					"content": "Clique em 'Novo Cliente' e introduza um nome e opcionalmente um endereço de e-mail."
+				},
+				{
+					"title": "URL do feed do cliente",
+					"content": "Cada cliente recebe um URL único para ver os seus imóveis selecionados. Partilhe este link por e-mail ou mensagem."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Detalhes do Cliente",
+			"description": "Gerir seleções de imóveis para este cliente.",
+			"sections": [
+				{
+					"title": "Selecionar imóveis",
+					"content": "Escolha um feed e selecione os imóveis que quer mostrar a este cliente. Use as caixas de verificação para selecionar."
+				},
+				{
+					"title": "Filtragem",
+					"content": "Use os filtros para encontrar rapidamente imóveis por tipo, localização, quartos ou faixa de preços."
+				},
+				{
+					"title": "Partilha",
+					"content": "Copie o URL único do cliente ou envie-o diretamente por e-mail com o botão 'Partilhar'."
+				},
+				{
+					"title": "Vista tabela/cartão",
+					"content": "Alterne entre vista de tabela para uma visão rápida ou vista de cartões com imagens."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Analisador de Feeds",
+			"description": "Obtenha informações sobre o seu portfólio de imóveis com estatísticas visuais.",
+			"sections": [
+				{
+					"title": "Selecionar um feed",
+					"content": "Escolha um feed da lista suspensa para analisar os seus imóveis."
+				},
+				{
+					"title": "Números chave",
+					"content": "Veja o valor total, preço médio, preço mediano e preço por m² de relance."
+				},
+				{
+					"title": "Gráficos",
+					"content": "Os gráficos interativos mostram a distribuição por preço, tipo, quartos, localização e mais."
+				},
+				{
+					"title": "Drill-down",
+					"content": "Clique num segmento do gráfico para ver os imóveis subjacentes. Perfeito para análises detalhadas."
+				}
+			]
+		},
+		"team": {
+			"title": "Equipa",
+			"description": "Gira a sua organização e membros da equipa.",
+			"sections": [
+				{
+					"title": "Organização",
+					"content": "O nome da sua organização é visível para os membros da equipa. Administradores e proprietários podem alterá-lo."
+				},
+				{
+					"title": "Membros da equipa",
+					"content": "Veja todos os membros com a sua função: Proprietário (acesso total), Admin (pode gerir equipa) ou Membro (apenas feeds e clientes)."
+				},
+				{
+					"title": "Convidar membros",
+					"content": "Envie convites por e-mail. Escolha a função que o novo membro deve ter."
+				},
+				{
+					"title": "Gerir funções",
+					"content": "Como proprietário pode alterar as funções dos membros ou removê-los da equipa."
+				}
+			]
+		}
 	},
 	"errors": {
 		"general": "Ocorreu um erro",

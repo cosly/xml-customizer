@@ -220,20 +220,30 @@
 	"team": {
 		"title": "Team",
 		"organization": "Organisation",
+		"organizationName": "Organisationsnamn",
+		"yourRole": "Din roll",
 		"members": "Teammedlemmar",
 		"invitations": "Inbjudningar",
 		"inviteMember": "Bjud in medlem",
+		"pendingInvitations": "Väntande inbjudningar",
 		"email": "E-postadress",
 		"role": "Roll",
 		"owner": "Ägare",
 		"admin": "Administratör",
 		"member": "Medlem",
-		"invite": "Bjud in",
+		"memberRole": "Medlem - kan hantera flöden och kunder",
+		"adminRole": "Admin - kan också hantera teammedlemmar",
+		"invite": "Skicka inbjudan",
+		"sending": "Skickar...",
+		"invitationSent": "Inbjudan skickad till {email}",
 		"cancel": "Avbryt",
 		"resend": "Skicka igen",
+		"cancelInvitation": "Avbryt",
 		"pending": "Väntande",
 		"expires": "Upphör",
+		"expiresOn": "Upphör",
 		"remove": "Ta bort",
+		"invitedBy": "Inbjuden av",
 		"changeRole": "Ändra roll",
 		"leaveTeam": "Lämna team",
 		"editName": "Redigera namn",
@@ -245,7 +255,16 @@
 		"roleUpdated": "Roll uppdaterad",
 		"nameUpdated": "Organisationsnamn uppdaterat",
 		"noMembers": "Inga medlemmar",
-		"noInvitations": "Inga väntande inbjudningar"
+		"noInvitations": "Inga väntande inbjudningar",
+		"confirmCancel": "Är du säker på att du vill avbryta inbjudan till {email}?",
+		"confirmRemove": "Är du säker på att du vill ta bort {name} från teamet?",
+		"loadError": "Kunde inte ladda teamdata",
+		"inviteError": "Kunde inte skicka inbjudan",
+		"cancelError": "Kunde inte avbryta",
+		"resendError": "Kunde inte skicka igen",
+		"removeError": "Kunde inte ta bort",
+		"roleChangeError": "Kunde inte ändra roll",
+		"nameChangeError": "Kunde inte ändra namn"
 	},
 	"analyzer": {
 		"title": "Flödesanalysator",
@@ -261,6 +280,152 @@
 		"byBedrooms": "Per sovrum",
 		"priceDistribution": "Prisfördelning",
 		"noData": "Ingen data tillgänglig"
+	},
+	"help": {
+		"title": "Hjälp",
+		"close": "Stäng",
+		"dashboard": {
+			"title": "Instrumentpanel",
+			"description": "Din centrala översikt av Tesoro CRM.",
+			"sections": [
+				{
+					"title": "Statistik",
+					"content": "Se på ett ögonblick hur många flöden, kunder, fastigheter och urval du har i systemet."
+				},
+				{
+					"title": "Snabbåtgärder",
+					"content": "Skapa nya flöden eller kunder direkt från instrumentpanelen."
+				},
+				{
+					"title": "Senaste aktivitet",
+					"content": "Dina senast tillagda flöden och kunder visas här."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Flöden",
+			"description": "Hantera dina XML-fastighetsflöden från fastighetsportaler.",
+			"sections": [
+				{
+					"title": "Vad är ett flöde?",
+					"content": "Ett flöde är en anslutning till en XML-källa som innehåller fastighetsobjekt. Det kan vara från Kyero, Resales Online eller andra portaler."
+				},
+				{
+					"title": "Lägga till ett flöde",
+					"content": "Klicka på 'Nytt flöde' och ange ett namn och XML-URL. Systemet hämtar och bearbetar automatiskt fastigheterna."
+				},
+				{
+					"title": "Kontrollera uppdateringar",
+					"content": "Använd 'Kontrollera' för att se om källan har nya data utan att ladda ner. Använd 'Hämta' för att ladda ner och uppdatera fastigheterna."
+				},
+				{
+					"title": "Flödesstatus",
+					"content": "'Hämtad' visar när data senast laddades ner. 'Kontrollerad' visar när källan senast kontrollerades för uppdateringar."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Flödesdetaljer",
+			"description": "Visa och hantera fastigheter från detta flöde.",
+			"sections": [
+				{
+					"title": "Fastighetslista",
+					"content": "Här ser du alla fastigheter från detta flöde med grundläggande information som referens, typ, plats och pris."
+				},
+				{
+					"title": "Uppdatera flöde",
+					"content": "Klicka på 'Uppdatera' för att ladda ner den senaste datan från XML-källan."
+				},
+				{
+					"title": "Fastighetsurval",
+					"content": "Välj fastigheter här för att senare tilldela dem till kunder."
+				}
+			]
+		},
+		"customers": {
+			"title": "Kunder",
+			"description": "Hantera dina kunder och deras fastighetsurval.",
+			"sections": [
+				{
+					"title": "Kundöversikt",
+					"content": "Se alla dina kunder med namn, e-post och antal valda fastigheter."
+				},
+				{
+					"title": "Lägga till en kund",
+					"content": "Klicka på 'Ny kund' och ange ett namn och valfritt en e-postadress."
+				},
+				{
+					"title": "Kundens flödes-URL",
+					"content": "Varje kund får en unik URL för att visa sina valda fastigheter. Dela denna länk via e-post eller meddelande."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Kunddetaljer",
+			"description": "Hantera fastighetsurval för denna kund.",
+			"sections": [
+				{
+					"title": "Välja fastigheter",
+					"content": "Välj ett flöde och välj de fastigheter du vill visa för denna kund. Använd kryssrutorna för att välja."
+				},
+				{
+					"title": "Filtrering",
+					"content": "Använd filtren för att snabbt hitta fastigheter efter typ, plats, sovrum eller prisintervall."
+				},
+				{
+					"title": "Delning",
+					"content": "Kopiera kundens unika URL eller skicka den direkt via e-post med 'Dela'-knappen."
+				},
+				{
+					"title": "Tabell-/kortvy",
+					"content": "Växla mellan tabellvy för snabb översikt eller kortvy med bilder."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Flödesanalysator",
+			"description": "Få insikter i din fastighetsportfölj med visuell statistik.",
+			"sections": [
+				{
+					"title": "Välja ett flöde",
+					"content": "Välj ett flöde från rullgardinsmenyn för att analysera dess fastigheter."
+				},
+				{
+					"title": "Nyckeltal",
+					"content": "Se totalt värde, genomsnittspris, medianpris och pris per m² på ett ögonblick."
+				},
+				{
+					"title": "Diagram",
+					"content": "Interaktiva diagram visar fördelning efter pris, typ, sovrum, plats och mer."
+				},
+				{
+					"title": "Drill-down",
+					"content": "Klicka på ett diagramsegment för att se de underliggande fastigheterna. Perfekt för detaljerad analys."
+				}
+			]
+		},
+		"team": {
+			"title": "Team",
+			"description": "Hantera din organisation och teammedlemmar.",
+			"sections": [
+				{
+					"title": "Organisation",
+					"content": "Ditt organisationsnamn är synligt för teammedlemmar. Administratörer och ägare kan ändra det."
+				},
+				{
+					"title": "Teammedlemmar",
+					"content": "Se alla medlemmar med deras roll: Ägare (full åtkomst), Admin (kan hantera team) eller Medlem (endast flöden och kunder)."
+				},
+				{
+					"title": "Bjuda in medlemmar",
+					"content": "Skicka inbjudningar via e-post. Välj vilken roll den nya medlemmen ska ha."
+				},
+				{
+					"title": "Hantera roller",
+					"content": "Som ägare kan du ändra medlemmars roller eller ta bort dem från teamet."
+				}
+			]
+		}
 	},
 	"errors": {
 		"general": "Ett fel uppstod",

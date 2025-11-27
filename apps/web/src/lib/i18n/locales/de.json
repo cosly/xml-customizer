@@ -220,20 +220,30 @@
 	"team": {
 		"title": "Team",
 		"organization": "Organisation",
+		"organizationName": "Organisationsname",
+		"yourRole": "Ihre Rolle",
 		"members": "Teammitglieder",
 		"invitations": "Einladungen",
 		"inviteMember": "Mitglied einladen",
+		"pendingInvitations": "Ausstehende Einladungen",
 		"email": "E-Mail-Adresse",
 		"role": "Rolle",
 		"owner": "Eigentümer",
 		"admin": "Administrator",
 		"member": "Mitglied",
-		"invite": "Einladen",
+		"memberRole": "Mitglied - kann Feeds und Kunden verwalten",
+		"adminRole": "Admin - kann auch Teammitglieder verwalten",
+		"invite": "Einladung senden",
+		"sending": "Wird gesendet...",
+		"invitationSent": "Einladung an {email} gesendet",
 		"cancel": "Abbrechen",
 		"resend": "Erneut senden",
+		"cancelInvitation": "Abbrechen",
 		"pending": "Ausstehend",
 		"expires": "Läuft ab",
+		"expiresOn": "Läuft ab",
 		"remove": "Entfernen",
+		"invitedBy": "Eingeladen von",
 		"changeRole": "Rolle ändern",
 		"leaveTeam": "Team verlassen",
 		"editName": "Name bearbeiten",
@@ -245,7 +255,16 @@
 		"roleUpdated": "Rolle aktualisiert",
 		"nameUpdated": "Organisationsname aktualisiert",
 		"noMembers": "Keine Teammitglieder",
-		"noInvitations": "Keine ausstehenden Einladungen"
+		"noInvitations": "Keine ausstehenden Einladungen",
+		"confirmCancel": "Sind Sie sicher, dass Sie die Einladung an {email} abbrechen möchten?",
+		"confirmRemove": "Sind Sie sicher, dass Sie {name} aus dem Team entfernen möchten?",
+		"loadError": "Teamdaten konnten nicht geladen werden",
+		"inviteError": "Einladung konnte nicht gesendet werden",
+		"cancelError": "Abbrechen fehlgeschlagen",
+		"resendError": "Erneutes Senden fehlgeschlagen",
+		"removeError": "Entfernen fehlgeschlagen",
+		"roleChangeError": "Rollenänderung fehlgeschlagen",
+		"nameChangeError": "Namensänderung fehlgeschlagen"
 	},
 	"analyzer": {
 		"title": "Feed-Analysator",
@@ -261,6 +280,152 @@
 		"byBedrooms": "Nach Schlafzimmern",
 		"priceDistribution": "Preisverteilung",
 		"noData": "Keine Daten verfügbar"
+	},
+	"help": {
+		"title": "Hilfe",
+		"close": "Schließen",
+		"dashboard": {
+			"title": "Dashboard",
+			"description": "Ihre zentrale Übersicht von Tesoro CRM.",
+			"sections": [
+				{
+					"title": "Statistiken",
+					"content": "Sehen Sie auf einen Blick, wie viele Feeds, Kunden, Immobilien und Auswahlen Sie im System haben."
+				},
+				{
+					"title": "Schnellaktionen",
+					"content": "Erstellen Sie neue Feeds oder Kunden direkt vom Dashboard aus."
+				},
+				{
+					"title": "Letzte Aktivität",
+					"content": "Ihre zuletzt hinzugefügten Feeds und Kunden werden hier angezeigt."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Feeds",
+			"description": "Verwalten Sie Ihre XML-Immobilien-Feeds von Immobilienportalen.",
+			"sections": [
+				{
+					"title": "Was ist ein Feed?",
+					"content": "Ein Feed ist eine Verbindung zu einer XML-Quelle, die Immobilienangebote enthält. Dies kann von Kyero, Resales Online oder anderen Portalen sein."
+				},
+				{
+					"title": "Feed hinzufügen",
+					"content": "Klicken Sie auf 'Neuer Feed' und geben Sie einen Namen und die XML-URL ein. Das System wird automatisch die Immobilien abrufen und verarbeiten."
+				},
+				{
+					"title": "Updates prüfen",
+					"content": "Verwenden Sie 'Prüfen', um zu sehen, ob die Quelle neue Daten hat, ohne herunterzuladen. Verwenden Sie 'Abrufen', um die Immobilien herunterzuladen und zu aktualisieren."
+				},
+				{
+					"title": "Feed-Status",
+					"content": "'Abgerufen' zeigt, wann die Daten zuletzt heruntergeladen wurden. 'Geprüft' zeigt, wann die Quelle zuletzt auf Updates überprüft wurde."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Feed-Details",
+			"description": "Immobilien aus diesem Feed anzeigen und verwalten.",
+			"sections": [
+				{
+					"title": "Immobilienliste",
+					"content": "Hier sehen Sie alle Immobilien aus diesem Feed mit grundlegenden Informationen wie Referenz, Typ, Standort und Preis."
+				},
+				{
+					"title": "Feed aktualisieren",
+					"content": "Klicken Sie auf 'Aktualisieren', um die neuesten Daten von der XML-Quelle herunterzuladen."
+				},
+				{
+					"title": "Immobilienauswahl",
+					"content": "Wählen Sie hier Immobilien aus, um sie später Kunden zuzuweisen."
+				}
+			]
+		},
+		"customers": {
+			"title": "Kunden",
+			"description": "Verwalten Sie Ihre Kunden und deren Immobilienauswahlen.",
+			"sections": [
+				{
+					"title": "Kundenübersicht",
+					"content": "Sehen Sie alle Ihre Kunden mit Namen, E-Mail und Anzahl der ausgewählten Immobilien."
+				},
+				{
+					"title": "Kunde hinzufügen",
+					"content": "Klicken Sie auf 'Neuer Kunde' und geben Sie einen Namen und optional eine E-Mail-Adresse ein."
+				},
+				{
+					"title": "Kunden-Feed-URL",
+					"content": "Jeder Kunde erhält eine eindeutige URL, um seine ausgewählten Immobilien anzuzeigen. Teilen Sie diesen Link per E-Mail oder Nachricht."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Kundendetails",
+			"description": "Immobilienauswahlen für diesen Kunden verwalten.",
+			"sections": [
+				{
+					"title": "Immobilien auswählen",
+					"content": "Wählen Sie einen Feed und die Immobilien, die Sie diesem Kunden zeigen möchten. Verwenden Sie die Kontrollkästchen zur Auswahl."
+				},
+				{
+					"title": "Filtern",
+					"content": "Verwenden Sie die Filter, um schnell Immobilien nach Typ, Standort, Schlafzimmern oder Preisbereich zu finden."
+				},
+				{
+					"title": "Teilen",
+					"content": "Kopieren Sie die eindeutige Kunden-URL oder senden Sie sie direkt per E-Mail mit dem 'Teilen'-Button."
+				},
+				{
+					"title": "Tabellen-/Kartenansicht",
+					"content": "Wechseln Sie zwischen Tabellenansicht für einen schnellen Überblick oder Kartenansicht mit Bildern."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Feed-Analysator",
+			"description": "Gewinnen Sie Einblicke in Ihr Immobilienportfolio mit visuellen Statistiken.",
+			"sections": [
+				{
+					"title": "Feed auswählen",
+					"content": "Wählen Sie einen Feed aus dem Dropdown, um dessen Immobilien zu analysieren."
+				},
+				{
+					"title": "Kennzahlen",
+					"content": "Sehen Sie Gesamtwert, Durchschnittspreis, Medianpreis und Preis pro m² auf einen Blick."
+				},
+				{
+					"title": "Diagramme",
+					"content": "Interaktive Diagramme zeigen die Verteilung nach Preis, Typ, Schlafzimmern, Standort und mehr."
+				},
+				{
+					"title": "Drill-down",
+					"content": "Klicken Sie auf ein Diagrammsegment, um die zugrunde liegenden Immobilien zu sehen. Perfekt für detaillierte Analysen."
+				}
+			]
+		},
+		"team": {
+			"title": "Team",
+			"description": "Verwalten Sie Ihre Organisation und Teammitglieder.",
+			"sections": [
+				{
+					"title": "Organisation",
+					"content": "Ihr Organisationsname ist für Teammitglieder sichtbar. Administratoren und Eigentümer können ihn ändern."
+				},
+				{
+					"title": "Teammitglieder",
+					"content": "Sehen Sie alle Mitglieder mit ihrer Rolle: Eigentümer (voller Zugriff), Admin (kann Team verwalten) oder Mitglied (nur Feeds & Kunden)."
+				},
+				{
+					"title": "Mitglieder einladen",
+					"content": "Senden Sie Einladungen per E-Mail. Wählen Sie die Rolle, die das neue Mitglied haben soll."
+				},
+				{
+					"title": "Rollen verwalten",
+					"content": "Als Eigentümer können Sie Mitgliederrollen ändern oder sie aus dem Team entfernen."
+				}
+			]
+		}
 	},
 	"errors": {
 		"general": "Ein Fehler ist aufgetreten",

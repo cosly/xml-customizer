@@ -285,7 +285,25 @@
 		"resendError": "Opnieuw verzenden mislukt",
 		"removeError": "Verwijderen mislukt",
 		"roleChangeError": "Rol wijzigen mislukt",
-		"nameChangeError": "Naam wijzigen mislukt"
+		"nameChangeError": "Naam wijzigen mislukt",
+		"roles": {
+			"admin": "beheerder",
+			"member": "teamlid",
+			"owner": "eigenaar"
+		}
+	},
+	"invite": {
+		"title": "Uitnodiging accepteren",
+		"loading": "Uitnodiging laden...",
+		"noToken": "Geen uitnodigingstoken gevonden",
+		"invalidOrExpired": "Ongeldige of verlopen uitnodiging",
+		"youAreInvited": "Je bent uitgenodigd!",
+		"invitedBy": "{name} heeft je uitgenodigd om als {role} deel te nemen aan {organization}.",
+		"yourName": "Je naam",
+		"namePlaceholder": "Je volledige naam",
+		"nameRequired": "Naam is verplicht",
+		"createAccount": "Account aanmaken",
+		"registrationFailed": "Registratie mislukt"
 	},
 	"analyzer": {
 		"title": "Feed Analyzer",

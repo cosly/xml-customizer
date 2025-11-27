@@ -285,7 +285,25 @@
 		"resendError": "Errorea birbidaltzean",
 		"removeError": "Errorea kentzean",
 		"roleChangeError": "Errorea rola aldatzean",
-		"nameChangeError": "Errorea izena aldatzean"
+		"nameChangeError": "Errorea izena aldatzean",
+		"roles": {
+			"admin": "administratzailea",
+			"member": "taldekidea",
+			"owner": "jabea"
+		}
+	},
+	"invite": {
+		"title": "Gonbidapena onartu",
+		"loading": "Gonbidapena kargatzen...",
+		"noToken": "Ez da gonbidapen tokenik aurkitu",
+		"invalidOrExpired": "Gonbidapen baliogabea edo iraungitua",
+		"youAreInvited": "Gonbidatua zaude!",
+		"invitedBy": "{name}-(e)k {organization}-(e)ra {role} gisa batzera gonbidatu zaitu.",
+		"yourName": "Zure izena",
+		"namePlaceholder": "Zure izen osoa",
+		"nameRequired": "Izena beharrezkoa da",
+		"createAccount": "Kontua sortu",
+		"registrationFailed": "Erregistroak huts egin du"
 	},
 	"analyzer": {
 		"title": "Feed Aztertzailea",

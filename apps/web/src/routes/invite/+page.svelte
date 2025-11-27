@@ -4,6 +4,8 @@
   import { goto } from '$app/navigation';
   import { auth } from '$lib/stores/auth';
   import { teamApi, type InvitationDetails } from '$lib/api';
+  import { _, isLoading as i18nLoading } from 'svelte-i18n';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   let invitation: InvitationDetails | null = null;
   let loading = true;
@@ -20,7 +22,7 @@
 
   onMount(async () => {
     if (!token) {
-      error = 'Geen uitnodigingstoken gevonden';
+      error = $_('invite.noToken');
       loading = false;
       return;
     }
@@ -28,7 +30,7 @@
     try {
       invitation = await teamApi.getInvitation(token);
     } catch (e) {
-      error = e instanceof Error ? e.message : 'Ongeldige of verlopen uitnodiging';
+      error = e instanceof Error ? e.message : $_('invite.invalidOrExpired');
     } finally {
       loading = false;
     }
@@ -38,17 +40,17 @@
     formError = '';
 
     if (!name.trim()) {
-      formError = 'Naam is verplicht';
+      formError = $_('invite.nameRequired');
       return;
     }
 
     if (password.length < 8) {
-      formError = 'Wachtwoord moet minimaal 8 karakters zijn';
+      formError = $_('auth.passwordMinLength');
       return;
     }
 
     if (password !== confirmPassword) {
-      formError = 'Wachtwoorden komen niet overeen';
+      formError = $_('auth.passwordsDoNotMatch');
       return;
     }
 
@@ -61,57 +63,61 @@
       if (result.success) {
         goto('/');
       } else {
-        formError = result.error || 'Registratie mislukt';
+        formError = result.error || $_('invite.registrationFailed');
       }
     } catch (e) {
-      formError = e instanceof Error ? e.message : 'Registratie mislukt';
+      formError = e instanceof Error ? e.message : $_('invite.registrationFailed');
     } finally {
       formLoading = false;
     }
   }
 
   function getRoleLabel(role: string): string {
-    switch (role) {
-      case 'admin': return 'beheerder';
-      case 'member': return 'teamlid';
-      default: return role;
-    }
+    return $_(`team.roles.${role}`);
   }
 </script>
 
 <svelte:head>
-  <title>Uitnodiging accepteren - XML Customizer</title>
+  <title>{$i18nLoading ? 'Loading...' : $_('invite.title')} - Tesoro</title>
 </svelte:head>
 
+{#if $i18nLoading}
+  <div class="auth-container">
+    <div class="auth-card">
+      <p>Loading...</p>
+    </div>
+  </div>
+{:else}
 <div class="auth-container">
+  <div class="language-switcher-wrapper">
+    <LanguageSwitcher />
+  </div>
   <div class="auth-card">
     <div class="auth-header">
-      <h1 class="logo">XML Customizer</h1>
+      <img src="/logo.png" alt="Tesoro" class="auth-logo" />
     </div>
 
     {#if loading}
-      <div class="loading">Uitnodiging laden...</div>
+      <div class="loading">{$_('invite.loading')}</div>
     {:else if error}
       <div class="auth-body">
         <div class="alert alert-error">{error}</div>
         <p class="text-center">
-          <a href="/login">Terug naar inloggen</a>
+          <a href="/login">{$_('auth.backToLogin')}</a>
         </p>
       </div>
     {:else if invitation}
       <div class="auth-body">
         <div class="invitation-info">
-          <h2>Je bent uitgenodigd!</h2>
+          <h2>{$_('invite.youAreInvited')}</h2>
           <p>
-            <strong>{invitation.invited_by_name}</strong> heeft je uitgenodigd om als
-            <strong>{getRoleLabel(invitation.role)}</strong> deel te nemen aan
-            <strong>{invitation.organization_name}</strong>.
+            {$_('invite.invitedBy', { values: { name: invitation.invited_by_name, role: getRoleLabel(invitation.role), organization: invitation.organization_name } })}
           </p>
         </div>
 
         <form on:submit|preventDefault={handleSubmit}>
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email">{$_('auth.email')}</label>
             <input
               type="email"
               id="email"
@@ -121,36 +127,36 @@
           </div>
 
           <div class="form-group">
-            <label for="name">Je naam</label>
+            <label for="name">{$_('invite.yourName')}</label>
             <input
               type="text"
               id="name"
               bind:value={name}
-              placeholder="Je volledige naam"
+              placeholder={$_('invite.namePlaceholder')}
               disabled={formLoading}
               required
             />
           </div>
 
           <div class="form-group">
-            <label for="password">Wachtwoord</label>
+            <label for="password">{$_('auth.password')}</label>
             <input
               type="password"
               id="password"
               bind:value={password}
-              placeholder="Minimaal 8 karakters"
+              placeholder={$_('auth.passwordPlaceholder')}
               disabled={formLoading}
               required
             />
           </div>
 
           <div class="form-group">
-            <label for="confirmPassword">Bevestig wachtwoord</label>
+            <label for="confirmPassword">{$_('auth.confirmPassword')}</label>
             <input
               type="password"
               id="confirmPassword"
               bind:value={confirmPassword}
-              placeholder="Herhaal je wachtwoord"
+              placeholder={$_('auth.confirmPasswordPlaceholder')}
               disabled={formLoading}
               required
             />
@@ -161,17 +167,18 @@
           {/if}
 
           <button type="submit" class="btn btn-primary btn-block" disabled={formLoading}>
-            {formLoading ? 'Bezig...' : 'Account aanmaken'}
+            {formLoading ? $_('common.loading') : $_('invite.createAccount')}
           </button>
         </form>
 
         <p class="auth-footer">
-          Heb je al een account? <a href="/login">Log in</a>
+          {$_('auth.haveAccount')} <a href="/login">{$_('auth.login')}</a>
         </p>
       </div>
     {/if}
   </div>
 </div>
+{/if}
 
 <style>
   .auth-container {
@@ -181,6 +188,18 @@
     justify-content: center;
     padding: 2rem;
     background: var(--bg-secondary);
+    position: relative;
+  }
+
+  .language-switcher-wrapper {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .auth-logo {
+    height: 60px;
+    width: auto;
   }
 
   .auth-card {

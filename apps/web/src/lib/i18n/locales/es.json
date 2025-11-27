@@ -285,7 +285,25 @@
 		"resendError": "Error al reenviar",
 		"removeError": "Error al eliminar",
 		"roleChangeError": "Error al cambiar el rol",
-		"nameChangeError": "Error al cambiar el nombre"
+		"nameChangeError": "Error al cambiar el nombre",
+		"roles": {
+			"admin": "administrador",
+			"member": "miembro del equipo",
+			"owner": "propietario"
+		}
+	},
+	"invite": {
+		"title": "Aceptar invitación",
+		"loading": "Cargando invitación...",
+		"noToken": "No se encontró token de invitación",
+		"invalidOrExpired": "Invitación inválida o expirada",
+		"youAreInvited": "¡Estás invitado!",
+		"invitedBy": "{name} te ha invitado a unirte a {organization} como {role}.",
+		"yourName": "Tu nombre",
+		"namePlaceholder": "Tu nombre completo",
+		"nameRequired": "El nombre es obligatorio",
+		"createAccount": "Crear cuenta",
+		"registrationFailed": "Error en el registro"
 	},
 	"analyzer": {
 		"title": "Analizador de Feeds",

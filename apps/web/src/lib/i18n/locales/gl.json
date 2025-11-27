@@ -285,7 +285,25 @@
 		"resendError": "Erro ao reenviar",
 		"removeError": "Erro ao eliminar",
 		"roleChangeError": "Erro ao cambiar o rol",
-		"nameChangeError": "Erro ao cambiar o nome"
+		"nameChangeError": "Erro ao cambiar o nome",
+		"roles": {
+			"admin": "administrador",
+			"member": "membro do equipo",
+			"owner": "propietario"
+		}
+	},
+	"invite": {
+		"title": "Aceptar invitación",
+		"loading": "Cargando invitación...",
+		"noToken": "Non se atopou o token de invitación",
+		"invalidOrExpired": "Invitación inválida ou caducada",
+		"youAreInvited": "Estás invitado!",
+		"invitedBy": "{name} convidoute a unirte a {organization} como {role}.",
+		"yourName": "O teu nome",
+		"namePlaceholder": "O teu nome completo",
+		"nameRequired": "O nome é obrigatorio",
+		"createAccount": "Crear conta",
+		"registrationFailed": "Erro no rexistro"
 	},
 	"analyzer": {
 		"title": "Analizador de Feeds",

@@ -285,7 +285,25 @@
 		"resendError": "Falha ao reenviar",
 		"removeError": "Falha ao remover",
 		"roleChangeError": "Falha ao alterar a função",
-		"nameChangeError": "Falha ao alterar o nome"
+		"nameChangeError": "Falha ao alterar o nome",
+		"roles": {
+			"admin": "administrador",
+			"member": "membro da equipa",
+			"owner": "proprietário"
+		}
+	},
+	"invite": {
+		"title": "Aceitar convite",
+		"loading": "A carregar convite...",
+		"noToken": "Token de convite não encontrado",
+		"invalidOrExpired": "Convite inválido ou expirado",
+		"youAreInvited": "Foi convidado!",
+		"invitedBy": "{name} convidou-o para se juntar a {organization} como {role}.",
+		"yourName": "O seu nome",
+		"namePlaceholder": "O seu nome completo",
+		"nameRequired": "O nome é obrigatório",
+		"createAccount": "Criar conta",
+		"registrationFailed": "Falha no registo"
 	},
 	"analyzer": {
 		"title": "Analisador de Feeds",

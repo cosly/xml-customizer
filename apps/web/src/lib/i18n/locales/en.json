@@ -285,7 +285,25 @@
 		"resendError": "Failed to resend",
 		"removeError": "Failed to remove",
 		"roleChangeError": "Failed to change role",
-		"nameChangeError": "Failed to change name"
+		"nameChangeError": "Failed to change name",
+		"roles": {
+			"admin": "admin",
+			"member": "team member",
+			"owner": "owner"
+		}
+	},
+	"invite": {
+		"title": "Accept invitation",
+		"loading": "Loading invitation...",
+		"noToken": "No invitation token found",
+		"invalidOrExpired": "Invalid or expired invitation",
+		"youAreInvited": "You're invited!",
+		"invitedBy": "{name} has invited you to join {organization} as {role}.",
+		"yourName": "Your name",
+		"namePlaceholder": "Your full name",
+		"nameRequired": "Name is required",
+		"createAccount": "Create account",
+		"registrationFailed": "Registration failed"
 	},
 	"analyzer": {
 		"title": "Feed Analyzer",

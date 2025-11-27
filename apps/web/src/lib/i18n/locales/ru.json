@@ -285,7 +285,25 @@
 		"resendError": "Не удалось отправить повторно",
 		"removeError": "Не удалось удалить",
 		"roleChangeError": "Не удалось изменить роль",
-		"nameChangeError": "Не удалось изменить название"
+		"nameChangeError": "Не удалось изменить название",
+		"roles": {
+			"admin": "администратор",
+			"member": "участник команды",
+			"owner": "владелец"
+		}
+	},
+	"invite": {
+		"title": "Принять приглашение",
+		"loading": "Загрузка приглашения...",
+		"noToken": "Токен приглашения не найден",
+		"invalidOrExpired": "Недействительное или просроченное приглашение",
+		"youAreInvited": "Вы приглашены!",
+		"invitedBy": "{name} пригласил вас присоединиться к {organization} в качестве {role}.",
+		"yourName": "Ваше имя",
+		"namePlaceholder": "Ваше полное имя",
+		"nameRequired": "Имя обязательно",
+		"createAccount": "Создать аккаунт",
+		"registrationFailed": "Ошибка регистрации"
 	},
 	"analyzer": {
 		"title": "Анализатор фидов",

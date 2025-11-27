@@ -285,7 +285,25 @@
 		"resendError": "Kunde inte skicka igen",
 		"removeError": "Kunde inte ta bort",
 		"roleChangeError": "Kunde inte ändra roll",
-		"nameChangeError": "Kunde inte ändra namn"
+		"nameChangeError": "Kunde inte ändra namn",
+		"roles": {
+			"admin": "administratör",
+			"member": "teammedlem",
+			"owner": "ägare"
+		}
+	},
+	"invite": {
+		"title": "Acceptera inbjudan",
+		"loading": "Laddar inbjudan...",
+		"noToken": "Ingen inbjudningstoken hittades",
+		"invalidOrExpired": "Ogiltig eller utgången inbjudan",
+		"youAreInvited": "Du är inbjuden!",
+		"invitedBy": "{name} har bjudit in dig att gå med i {organization} som {role}.",
+		"yourName": "Ditt namn",
+		"namePlaceholder": "Ditt fullständiga namn",
+		"nameRequired": "Namn krävs",
+		"createAccount": "Skapa konto",
+		"registrationFailed": "Registreringen misslyckades"
 	},
 	"analyzer": {
 		"title": "Flödesanalysator",

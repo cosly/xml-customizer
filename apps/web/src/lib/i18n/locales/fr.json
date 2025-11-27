@@ -285,7 +285,25 @@
 		"resendError": "Échec du renvoi",
 		"removeError": "Échec de la suppression",
 		"roleChangeError": "Échec du changement de rôle",
-		"nameChangeError": "Échec du changement de nom"
+		"nameChangeError": "Échec du changement de nom",
+		"roles": {
+			"admin": "administrateur",
+			"member": "membre de l'équipe",
+			"owner": "propriétaire"
+		}
+	},
+	"invite": {
+		"title": "Accepter l'invitation",
+		"loading": "Chargement de l'invitation...",
+		"noToken": "Aucun jeton d'invitation trouvé",
+		"invalidOrExpired": "Invitation invalide ou expirée",
+		"youAreInvited": "Vous êtes invité !",
+		"invitedBy": "{name} vous a invité à rejoindre {organization} en tant que {role}.",
+		"yourName": "Votre nom",
+		"namePlaceholder": "Votre nom complet",
+		"nameRequired": "Le nom est obligatoire",
+		"createAccount": "Créer un compte",
+		"registrationFailed": "Échec de l'inscription"
 	},
 	"analyzer": {
 		"title": "Analyseur de Flux",

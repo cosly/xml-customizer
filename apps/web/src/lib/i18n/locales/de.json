@@ -285,7 +285,25 @@
 		"resendError": "Erneutes Senden fehlgeschlagen",
 		"removeError": "Entfernen fehlgeschlagen",
 		"roleChangeError": "Rollenänderung fehlgeschlagen",
-		"nameChangeError": "Namensänderung fehlgeschlagen"
+		"nameChangeError": "Namensänderung fehlgeschlagen",
+		"roles": {
+			"admin": "Administrator",
+			"member": "Teammitglied",
+			"owner": "Eigentümer"
+		}
+	},
+	"invite": {
+		"title": "Einladung annehmen",
+		"loading": "Einladung wird geladen...",
+		"noToken": "Kein Einladungstoken gefunden",
+		"invalidOrExpired": "Ungültige oder abgelaufene Einladung",
+		"youAreInvited": "Sie sind eingeladen!",
+		"invitedBy": "{name} hat Sie eingeladen, {organization} als {role} beizutreten.",
+		"yourName": "Ihr Name",
+		"namePlaceholder": "Ihr vollständiger Name",
+		"nameRequired": "Name ist erforderlich",
+		"createAccount": "Konto erstellen",
+		"registrationFailed": "Registrierung fehlgeschlagen"
 	},
 	"analyzer": {
 		"title": "Feed-Analysator",

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, tick } from 'svelte';
   import { feedsApi } from '$lib/api';
   import type { SourceFeed, FeedAnalytics, PropertySummary, CategoryCount, PriceRange, LocationStats, SurfaceStats } from '@xml-customizer/shared';
 
@@ -39,7 +39,6 @@
     loading = true;
     try {
       feeds = await feedsApi.list();
-      // Auto-select first feed with properties
       const feedWithProps = feeds.find((f) => f.property_count > 0);
       if (feedWithProps) {
         selectedFeedId = feedWithProps.id;
@@ -61,15 +60,27 @@
 
     try {
       analytics = await feedsApi.analyze(selectedFeedId);
-      // Wait for DOM to update
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      renderCharts();
     } catch (e) {
       error = e instanceof Error ? e.message : 'Analyse mislukt';
       analytics = null;
     } finally {
       analyzing = false;
     }
+  }
+
+  // Watch for analytics changes and render charts when DOM is ready
+  $: if (analytics && !analyzing && typeof window !== 'undefined') {
+    tick().then(() => {
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          if (document.getElementById('price-chart')) {
+            renderCharts();
+          } else {
+            setTimeout(() => renderCharts(), 200);
+          }
+        }, 50);
+      });
+    });
   }
 
   function handleFeedChange() {

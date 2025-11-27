@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { _ } from 'svelte-i18n';
   import { teamApi, type TeamData, type OrganizationMember, type PendingInvitation } from '$lib/api';
   import { auth } from '$lib/stores/auth';
 
@@ -30,7 +31,7 @@
       teamData = await teamApi.get();
       newOrgName = teamData.organization.name;
     } catch (e) {
-      error = e instanceof Error ? e.message : 'Kon team data niet laden';
+      error = e instanceof Error ? e.message : $_('team.loadError');
     } finally {
       loading = false;
     }
@@ -45,19 +46,19 @@
 
     try {
       await teamApi.sendInvitation(inviteEmail.trim(), inviteRole);
-      inviteSuccess = `Uitnodiging verzonden naar ${inviteEmail}`;
+      inviteSuccess = $_('team.invitationSent', { values: { email: inviteEmail } });
       inviteEmail = '';
       inviteRole = 'member';
       await loadTeamData();
     } catch (e) {
-      inviteError = e instanceof Error ? e.message : 'Uitnodiging verzenden mislukt';
+      inviteError = e instanceof Error ? e.message : $_('team.inviteError');
     } finally {
       inviteLoading = false;
     }
   }
 
   async function cancelInvitation(invitation: PendingInvitation) {
-    if (!confirm(`Weet je zeker dat je de uitnodiging naar ${invitation.email} wilt annuleren?`)) {
+    if (!confirm($_('team.confirmCancel', { values: { email: invitation.email } }))) {
       return;
     }
 
@@ -65,30 +66,30 @@
       await teamApi.cancelInvitation(invitation.id);
       await loadTeamData();
     } catch (e) {
-      alert(e instanceof Error ? e.message : 'Annuleren mislukt');
+      alert(e instanceof Error ? e.message : $_('team.cancelError'));
     }
   }
 
   async function resendInvitation(invitation: PendingInvitation) {
     try {
       await teamApi.resendInvitation(invitation.id);
-      alert(`Uitnodiging opnieuw verzonden naar ${invitation.email}`);
+      alert($_('team.invitationSent', { values: { email: invitation.email } }));
     } catch (e) {
-      alert(e instanceof Error ? e.message : 'Opnieuw verzenden mislukt');
+      alert(e instanceof Error ? e.message : $_('team.resendError'));
     }
   }
 
-  async function updateMemberRole(member: OrganizationMember, newRole: 'admin' | 'member') {
+  async function updateMemberRole(member: OrganizationMember, newRole: string) {
     try {
-      await teamApi.updateMemberRole(member.id, newRole);
+      await teamApi.updateMemberRole(member.id, newRole as 'admin' | 'member');
       await loadTeamData();
     } catch (e) {
-      alert(e instanceof Error ? e.message : 'Rol wijzigen mislukt');
+      alert(e instanceof Error ? e.message : $_('team.roleChangeError'));
     }
   }
 
   async function removeMember(member: OrganizationMember) {
-    if (!confirm(`Weet je zeker dat je ${member.name} uit het team wilt verwijderen?`)) {
+    if (!confirm($_('team.confirmRemove', { values: { name: member.name } }))) {
       return;
     }
 
@@ -96,7 +97,7 @@
       await teamApi.removeMember(member.id);
       await loadTeamData();
     } catch (e) {
-      alert(e instanceof Error ? e.message : 'Verwijderen mislukt');
+      alert(e instanceof Error ? e.message : $_('team.removeError'));
     }
   }
 
@@ -109,7 +110,7 @@
       await loadTeamData();
       editingName = false;
     } catch (e) {
-      alert(e instanceof Error ? e.message : 'Naam wijzigen mislukt');
+      alert(e instanceof Error ? e.message : $_('team.nameChangeError'));
     } finally {
       nameLoading = false;
     }
@@ -117,9 +118,9 @@
 
   function getRoleLabel(role: string): string {
     switch (role) {
-      case 'owner': return 'Eigenaar';
-      case 'admin': return 'Beheerder';
-      case 'member': return 'Lid';
+      case 'owner': return $_('team.owner');
+      case 'admin': return $_('team.admin');
+      case 'member': return $_('team.member');
       default: return role;
     }
   }
@@ -134,207 +135,270 @@
 </script>
 
 <svelte:head>
-  <title>Team - XML Customizer</title>
+  <title>{$_('team.title')} - Tesoro CRM</title>
 </svelte:head>
 
 <div class="page-header">
-  <h1>Team</h1>
+  <h1 class="page-title">{$_('team.title')}</h1>
 </div>
 
 {#if loading}
-  <div class="loading">Laden...</div>
+  <div class="empty-state">
+    <div class="spinner"></div>
+    <p>{$_('common.loading')}</p>
+  </div>
 {:else if error}
   <div class="alert alert-error">{error}</div>
 {:else if teamData}
   <!-- Organization Info -->
-  <div class="card">
-    <div class="card-header">
-      <h2>Organisatie</h2>
-    </div>
-    <div class="card-body">
-      {#if editingName}
-        <div class="form-group">
-          <label for="orgName">Organisatienaam</label>
-          <div class="input-group">
-            <input
-              type="text"
-              id="orgName"
-              bind:value={newOrgName}
-              disabled={nameLoading}
-            />
-            <button
-              class="btn btn-primary"
-              on:click={updateOrganizationName}
-              disabled={nameLoading || !newOrgName.trim()}
-            >
-              Opslaan
-            </button>
-            <button
-              class="btn btn-secondary"
-              on:click={() => { editingName = false; newOrgName = teamData?.organization.name || ''; }}
-              disabled={nameLoading}
-            >
-              Annuleren
-            </button>
-          </div>
-        </div>
-      {:else}
-        <div class="org-info">
-          <span class="org-name">{teamData.organization.name}</span>
-          {#if canManageTeam()}
-            <button class="btn btn-secondary btn-sm" on:click={() => editingName = true}>
-              Wijzigen
-            </button>
-          {/if}
-        </div>
-        <p class="text-muted">Je rol: {getRoleLabel(teamData.role)}</p>
-      {/if}
-    </div>
-  </div>
-
-  <!-- Team Members -->
-  <div class="card">
-    <div class="card-header">
-      <h2>Teamleden ({teamData.members.length})</h2>
-    </div>
-    <div class="card-body">
-      <div class="members-list">
-        {#each teamData.members as member}
-          <div class="member-item">
-            <div class="member-info">
-              <span class="member-name">{member.name}</span>
-              <span class="member-email">{member.email}</span>
-            </div>
-            <div class="member-actions">
-              <span class="role-badge role-{member.role}">{getRoleLabel(member.role)}</span>
-              {#if isOwner() && member.id !== $auth.user?.id && member.role !== 'owner'}
-                <select
-                  class="role-select"
-                  value={member.role}
-                  on:change={(e) => updateMemberRole(member, e.currentTarget.value)}
-                >
-                  <option value="admin">Beheerder</option>
-                  <option value="member">Lid</option>
-                </select>
-                <button class="btn btn-danger btn-sm" on:click={() => removeMember(member)}>
-                  Verwijderen
-                </button>
-              {/if}
+  <section class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>{$_('team.organization')}</h2>
+      </div>
+      <div class="card-content">
+        {#if editingName}
+          <div class="form-group">
+            <label class="label" for="orgName">{$_('team.organizationName')}</label>
+            <div class="input-row">
+              <input
+                class="input"
+                type="text"
+                id="orgName"
+                bind:value={newOrgName}
+                disabled={nameLoading}
+              />
+              <button
+                class="btn btn-primary"
+                on:click={updateOrganizationName}
+                disabled={nameLoading || !newOrgName.trim()}
+              >
+                {$_('common.save')}
+              </button>
+              <button
+                class="btn btn-secondary"
+                on:click={() => { editingName = false; newOrgName = teamData?.organization.name || ''; }}
+                disabled={nameLoading}
+              >
+                {$_('common.cancel')}
+              </button>
             </div>
           </div>
-        {/each}
+        {:else}
+          <div class="org-display">
+            <div class="org-info">
+              <span class="org-name">{teamData.organization.name}</span>
+              <span class="org-role">
+                {$_('team.yourRole')}: <strong>{getRoleLabel(teamData.role)}</strong>
+              </span>
+            </div>
+            {#if canManageTeam()}
+              <button class="btn btn-secondary btn-sm" on:click={() => editingName = true}>
+                {$_('common.edit')}
+              </button>
+            {/if}
+          </div>
+        {/if}
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Team Members -->
+  <section class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>{$_('team.members')} ({teamData.members.length})</h2>
+      </div>
+      <div class="card-content">
+        <div class="members-list">
+          {#each teamData.members as member}
+            <div class="member-row">
+              <div class="member-info">
+                <span class="member-name">{member.name}</span>
+                <span class="member-email">{member.email}</span>
+              </div>
+              <div class="member-actions">
+                <span class="role-badge role-{member.role}">{getRoleLabel(member.role)}</span>
+                {#if isOwner() && member.id !== $auth.user?.id && member.role !== 'owner'}
+                  <select
+                    class="role-select"
+                    value={member.role}
+                    on:change={(e) => updateMemberRole(member, e.currentTarget.value)}
+                  >
+                    <option value="admin">{$_('team.admin')}</option>
+                    <option value="member">{$_('team.member')}</option>
+                  </select>
+                  <button class="btn btn-danger btn-sm" on:click={() => removeMember(member)}>
+                    {$_('team.remove')}
+                  </button>
+                {/if}
+              </div>
+            </div>
+          {/each}
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Invite New Member -->
   {#if canManageTeam()}
-    <div class="card">
-      <div class="card-header">
-        <h2>Teamlid uitnodigen</h2>
+    <section class="section">
+      <div class="card">
+        <div class="card-header">
+          <h2>{$_('team.inviteMember')}</h2>
+        </div>
+        <div class="card-content">
+          {#if inviteSuccess}
+            <div class="alert alert-success">{inviteSuccess}</div>
+          {/if}
+          {#if inviteError}
+            <div class="alert alert-error">{inviteError}</div>
+          {/if}
+          <form on:submit|preventDefault={sendInvitation} class="invite-form">
+            <div class="form-group">
+              <label class="label" for="inviteEmail">{$_('team.email')}</label>
+              <input
+                class="input"
+                type="email"
+                id="inviteEmail"
+                bind:value={inviteEmail}
+                placeholder="email@example.com"
+                disabled={inviteLoading}
+              />
+            </div>
+            <div class="form-group">
+              <label class="label" for="inviteRole">{$_('team.role')}</label>
+              <select class="input" id="inviteRole" bind:value={inviteRole} disabled={inviteLoading}>
+                <option value="member">{$_('team.memberRole')}</option>
+                <option value="admin">{$_('team.adminRole')}</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" disabled={inviteLoading || !inviteEmail.trim()}>
+                {#if inviteLoading}
+                  <span class="spinner"></span>
+                  {$_('team.sending')}
+                {:else}
+                  {$_('team.invite')}
+                {/if}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      <div class="card-body">
-        {#if inviteSuccess}
-          <div class="alert alert-success">{inviteSuccess}</div>
-        {/if}
-        {#if inviteError}
-          <div class="alert alert-error">{inviteError}</div>
-        {/if}
-        <form on:submit|preventDefault={sendInvitation} class="invite-form">
-          <div class="form-group">
-            <label for="inviteEmail">Email adres</label>
-            <input
-              type="email"
-              id="inviteEmail"
-              bind:value={inviteEmail}
-              placeholder="email@voorbeeld.nl"
-              disabled={inviteLoading}
-            />
-          </div>
-          <div class="form-group">
-            <label for="inviteRole">Rol</label>
-            <select id="inviteRole" bind:value={inviteRole} disabled={inviteLoading}>
-              <option value="member">Lid - kan feeds en klanten beheren</option>
-              <option value="admin">Beheerder - kan ook teamleden uitnodigen</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-primary" disabled={inviteLoading || !inviteEmail.trim()}>
-            {inviteLoading ? 'Verzenden...' : 'Uitnodiging versturen'}
-          </button>
-        </form>
-      </div>
-    </div>
+    </section>
 
     <!-- Pending Invitations -->
     {#if teamData.pendingInvitations.length > 0}
-      <div class="card">
-        <div class="card-header">
-          <h2>Openstaande uitnodigingen ({teamData.pendingInvitations.length})</h2>
-        </div>
-        <div class="card-body">
-          <div class="invitations-list">
-            {#each teamData.pendingInvitations as invitation}
-              <div class="invitation-item">
-                <div class="invitation-info">
-                  <span class="invitation-email">{invitation.email}</span>
-                  <span class="invitation-details">
-                    Rol: {getRoleLabel(invitation.role)} |
-                    Uitgenodigd door: {invitation.invited_by_name} |
-                    Verloopt: {new Date(invitation.expires_at).toLocaleDateString('nl-NL')}
-                  </span>
+      <section class="section">
+        <div class="card">
+          <div class="card-header">
+            <h2>{$_('team.pendingInvitations')} ({teamData.pendingInvitations.length})</h2>
+          </div>
+          <div class="card-content">
+            <div class="invitations-list">
+              {#each teamData.pendingInvitations as invitation}
+                <div class="invitation-row">
+                  <div class="invitation-info">
+                    <span class="invitation-email">{invitation.email}</span>
+                    <span class="invitation-meta">
+                      <span class="role-badge role-{invitation.role}">{getRoleLabel(invitation.role)}</span>
+                      <span class="meta-separator">|</span>
+                      <span>{$_('team.invitedBy')}: {invitation.invited_by_name}</span>
+                      <span class="meta-separator">|</span>
+                      <span>{$_('team.expiresOn')}: {new Date(invitation.expires_at).toLocaleDateString()}</span>
+                    </span>
+                  </div>
+                  <div class="invitation-actions">
+                    <button class="btn btn-secondary btn-sm" on:click={() => resendInvitation(invitation)}>
+                      {$_('team.resend')}
+                    </button>
+                    <button class="btn btn-danger btn-sm" on:click={() => cancelInvitation(invitation)}>
+                      {$_('team.cancelInvitation')}
+                    </button>
+                  </div>
                 </div>
-                <div class="invitation-actions">
-                  <button class="btn btn-secondary btn-sm" on:click={() => resendInvitation(invitation)}>
-                    Opnieuw versturen
-                  </button>
-                  <button class="btn btn-danger btn-sm" on:click={() => cancelInvitation(invitation)}>
-                    Annuleren
-                  </button>
-                </div>
-              </div>
-            {/each}
+              {/each}
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     {/if}
   {/if}
 {/if}
 
 <style>
+  .section {
+    margin-bottom: 1.5rem;
+  }
+
+  .card-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-header h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .org-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .org-info {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .org-name {
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-
-  .input-group {
-    display: flex;
+    flex-direction: column;
     gap: 0.5rem;
   }
 
-  .input-group input {
+  .org-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .org-role {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .input-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .input-row .input {
     flex: 1;
+    max-width: 400px;
   }
 
   .members-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
-  .member-item {
+  .member-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem;
-    background: var(--bg-tertiary);
-    border-radius: 6px;
+    padding: 1rem;
+    background: var(--bg);
+    border-radius: var(--radius);
+    transition: background 0.15s ease;
+  }
+
+  .member-row:hover {
+    background: var(--border);
   }
 
   .member-info {
@@ -345,6 +409,7 @@
 
   .member-name {
     font-weight: 500;
+    color: var(--text);
   }
 
   .member-email {
@@ -355,73 +420,104 @@
   .member-actions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
   .role-badge {
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 500;
   }
 
   .role-owner {
-    background: #fef3c7;
-    color: #92400e;
+    background: rgba(245, 158, 11, 0.15);
+    color: #b45309;
   }
 
   .role-admin {
-    background: #dbeafe;
-    color: #1e40af;
+    background: rgba(37, 99, 235, 0.15);
+    color: #1d4ed8;
   }
 
   .role-member {
-    background: #e0e7ff;
-    color: #3730a3;
+    background: rgba(100, 116, 139, 0.15);
+    color: #475569;
   }
 
   .role-select {
-    padding: 0.25rem 0.5rem;
+    padding: 0.375rem 0.75rem;
     font-size: 0.875rem;
-    border-radius: 4px;
-    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    cursor: pointer;
+    min-width: 140px;
+  }
+
+  .role-select:focus {
+    outline: none;
+    border-color: var(--primary);
   }
 
   .invite-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 400px;
+    max-width: 500px;
+  }
+
+  .invite-form .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .invite-form .input {
+    width: 100%;
+  }
+
+  .invite-form select.input {
+    cursor: pointer;
+  }
+
+  .form-actions {
+    margin-top: 1.5rem;
   }
 
   .invitations-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
-  .invitation-item {
+  .invitation-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem;
-    background: var(--bg-tertiary);
-    border-radius: 6px;
+    padding: 1rem;
+    background: var(--bg);
+    border-radius: var(--radius);
   }
 
   .invitation-info {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.5rem;
   }
 
   .invitation-email {
     font-weight: 500;
+    color: var(--text);
   }
 
-  .invitation-details {
+  .invitation-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.75rem;
     color: var(--text-muted);
+  }
+
+  .meta-separator {
+    color: var(--border);
   }
 
   .invitation-actions {
@@ -429,11 +525,28 @@
     gap: 0.5rem;
   }
 
-  .alert-success {
-    background: #d1fae5;
-    color: #065f46;
-    padding: 0.75rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
+  @media (max-width: 768px) {
+    .member-row,
+    .invitation-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .member-actions,
+    .invitation-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .org-display {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .invitation-meta {
+      flex-wrap: wrap;
+    }
   }
 </style>

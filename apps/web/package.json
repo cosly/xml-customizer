@@ -20,6 +20,7 @@
   "dependencies": {
     "@xml-customizer/shared": "*",
     "apexcharts": "^5.3.6",
+    "svelte-i18n": "^4.0.1",
     "tslib": "^2.8.1"
   },
   "type": "module"

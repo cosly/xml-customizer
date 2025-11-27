@@ -35,7 +35,8 @@
 		"manage": "Gerenciar",
 		"optional": "opcional",
 		"clear": "Limpar",
-		"noResults": "Nenhum resultado encontrado"
+		"noResults": "Nenhum resultado encontrado",
+		"retry": "Tentar novamente"
 	},
 	"nav": {
 		"dashboard": "Painel",
@@ -431,6 +432,59 @@
 					"content": "Como proprietário pode alterar as funções dos membros ou removê-los da equipa."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Perfil",
+		"personalInfo": "Informações pessoais",
+		"emailSettings": "Configurações de e-mail",
+		"accountInfo": "Informações da conta",
+		"loadError": "Não foi possível carregar o perfil",
+		"saveSuccess": "Perfil atualizado com sucesso",
+		"saveError": "Erro ao guardar o perfil",
+		"salutation": {
+			"label": "Tratamento",
+			"none": "Sem tratamento",
+			"mr": "Sr.",
+			"ms": "Sra.",
+			"mrs": "Sra.",
+			"mx": "Mx.",
+			"dr": "Dr.",
+			"prof": "Prof.",
+			"other": "Outro"
+		},
+		"firstName": "Nome",
+		"firstNamePlaceholder": "Introduza o seu nome",
+		"lastName": "Apelido",
+		"lastNamePlaceholder": "Introduza o seu apelido",
+		"displayName": "Nome de exibição",
+		"displayNamePlaceholder": "Nome visível para outros",
+		"displayNameHint": "Este nome é visível para os seus colegas de equipa",
+		"language": "Idioma do sistema",
+		"languageHint": "O idioma da interface para a sua conta",
+		"currentEmail": "E-mail atual",
+		"newEmail": "Novo e-mail",
+		"newEmailPlaceholder": "Introduza o novo e-mail",
+		"emailChangeHint": "Será enviado um link de verificação para o novo endereço",
+		"requestChange": "Solicitar alteração",
+		"pendingChange": "Verificação pendente",
+		"pendingEmailTo": "Aguardando verificação para: {email}",
+		"expiresAt": "Expira: {time}",
+		"emailChangeError": "Erro ao solicitar alteração de e-mail",
+		"cancelEmailError": "Erro ao cancelar alteração de e-mail",
+		"memberId": "ID de membro",
+		"memberSince": "Membro desde",
+		"lastUpdated": "Última atualização",
+		"verifyEmail": {
+			"title": "Verificar e-mail",
+			"noToken": "Nenhum token de verificação fornecido",
+			"verifying": "A verificar o seu e-mail...",
+			"success": "E-mail verificado!",
+			"successMessage": "O seu e-mail foi alterado para {email}",
+			"failed": "Verificação falhou",
+			"error": "Não foi possível verificar o e-mail",
+			"goToLogin": "Ir para início de sessão",
+			"goToProfile": "Ir para o perfil"
 		}
 	},
 	"errors": {

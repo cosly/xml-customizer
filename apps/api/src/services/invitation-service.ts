@@ -1,5 +1,7 @@
 import type { D1Database } from '@cloudflare/workers-types';
 
+export type Salutation = 'mr' | 'ms' | 'mrs' | 'mx' | 'dr' | 'prof' | 'other' | null;
+
 export interface Invitation {
   id: number;
   organization_id: number;
@@ -7,6 +9,9 @@ export interface Invitation {
   token: string;
   invited_by: number;
   role: 'admin' | 'member';
+  salutation: Salutation;
+  first_name: string | null;
+  last_name: string | null;
   expires_at: string;
   accepted_at: string | null;
   created_at: string;
@@ -32,7 +37,12 @@ export class InvitationService {
     organizationId: number,
     email: string,
     invitedBy: number,
-    role: 'admin' | 'member' = 'member'
+    role: 'admin' | 'member' = 'member',
+    profileData?: {
+      salutation?: Salutation;
+      first_name?: string;
+      last_name?: string;
+    }
   ): Promise<Invitation> {
     // Check if user is already a member
     const existingMember = await this.db
@@ -67,11 +77,21 @@ export class InvitationService {
 
     const result = await this.db
       .prepare(`
-        INSERT INTO invitations (organization_id, email, token, invited_by, role, expires_at)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO invitations (organization_id, email, token, invited_by, role, salutation, first_name, last_name, expires_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         RETURNING *
       `)
-      .bind(organizationId, email.toLowerCase(), token, invitedBy, role, expiresAt)
+      .bind(
+        organizationId,
+        email.toLowerCase(),
+        token,
+        invitedBy,
+        role,
+        profileData?.salutation || null,
+        profileData?.first_name || null,
+        profileData?.last_name || null,
+        expiresAt
+      )
       .first<Invitation>();
 
     if (!result) {

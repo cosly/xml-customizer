@@ -35,7 +35,8 @@
 		"manage": "Manage",
 		"optional": "optional",
 		"clear": "Clear",
-		"noResults": "No results found"
+		"noResults": "No results found",
+		"retry": "Retry"
 	},
 	"nav": {
 		"dashboard": "Dashboard",
@@ -431,6 +432,59 @@
 					"content": "As owner you can change member roles or remove them from the team."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Profile",
+		"personalInfo": "Personal Information",
+		"emailSettings": "Email Settings",
+		"accountInfo": "Account Information",
+		"loadError": "Could not load profile",
+		"saveSuccess": "Profile updated successfully",
+		"saveError": "Failed to save profile",
+		"salutation": {
+			"label": "Salutation",
+			"none": "No salutation",
+			"mr": "Mr.",
+			"ms": "Ms.",
+			"mrs": "Mrs.",
+			"mx": "Mx.",
+			"dr": "Dr.",
+			"prof": "Prof.",
+			"other": "Other"
+		},
+		"firstName": "First name",
+		"firstNamePlaceholder": "Enter your first name",
+		"lastName": "Last name",
+		"lastNamePlaceholder": "Enter your last name",
+		"displayName": "Display name",
+		"displayNamePlaceholder": "Name shown to others",
+		"displayNameHint": "This name is visible to your team members",
+		"language": "System language",
+		"languageHint": "The interface language for your account",
+		"currentEmail": "Current email",
+		"newEmail": "New email address",
+		"newEmailPlaceholder": "Enter new email address",
+		"emailChangeHint": "A verification link will be sent to the new address",
+		"requestChange": "Request change",
+		"pendingChange": "Pending verification",
+		"pendingEmailTo": "Awaiting verification for: {email}",
+		"expiresAt": "Expires: {time}",
+		"emailChangeError": "Failed to request email change",
+		"cancelEmailError": "Failed to cancel email change",
+		"memberId": "Member ID",
+		"memberSince": "Member since",
+		"lastUpdated": "Last updated",
+		"verifyEmail": {
+			"title": "Verify Email",
+			"noToken": "No verification token provided",
+			"verifying": "Verifying your email...",
+			"success": "Email verified!",
+			"successMessage": "Your email has been changed to {email}",
+			"failed": "Verification failed",
+			"error": "Could not verify email",
+			"goToLogin": "Go to login",
+			"goToProfile": "Go to profile"
 		}
 	},
 	"errors": {

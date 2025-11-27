@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { _ } from 'svelte-i18n';
-  import { teamApi, type TeamData, type OrganizationMember, type PendingInvitation } from '$lib/api';
+  import { teamApi, type TeamData, type OrganizationMember, type PendingInvitation, type Salutation } from '$lib/api';
   import { auth } from '$lib/stores/auth';
 
   let teamData: TeamData | null = null;
@@ -11,9 +11,23 @@
   // Invitation form
   let inviteEmail = '';
   let inviteRole: 'admin' | 'member' = 'member';
+  let inviteSalutation: Salutation = null;
+  let inviteFirstName = '';
+  let inviteLastName = '';
   let inviteLoading = false;
   let inviteError = '';
   let inviteSuccess = '';
+
+  const salutationOptions: { value: Salutation; labelKey: string }[] = [
+    { value: null, labelKey: 'profile.salutation.none' },
+    { value: 'mr', labelKey: 'profile.salutation.mr' },
+    { value: 'ms', labelKey: 'profile.salutation.ms' },
+    { value: 'mrs', labelKey: 'profile.salutation.mrs' },
+    { value: 'mx', labelKey: 'profile.salutation.mx' },
+    { value: 'dr', labelKey: 'profile.salutation.dr' },
+    { value: 'prof', labelKey: 'profile.salutation.prof' },
+    { value: 'other', labelKey: 'profile.salutation.other' },
+  ];
 
   // Organization name editing
   let editingName = false;
@@ -45,10 +59,17 @@
     inviteSuccess = '';
 
     try {
-      await teamApi.sendInvitation(inviteEmail.trim(), inviteRole);
+      await teamApi.sendInvitation(inviteEmail.trim(), inviteRole, {
+        salutation: inviteSalutation,
+        first_name: inviteFirstName.trim() || undefined,
+        last_name: inviteLastName.trim() || undefined,
+      });
       inviteSuccess = $_('team.invitationSent', { values: { email: inviteEmail } });
       inviteEmail = '';
       inviteRole = 'member';
+      inviteSalutation = null;
+      inviteFirstName = '';
+      inviteLastName = '';
       await loadTeamData();
     } catch (e) {
       inviteError = e instanceof Error ? e.message : $_('team.inviteError');
@@ -256,7 +277,7 @@
           {/if}
           <form on:submit|preventDefault={sendInvitation} class="invite-form">
             <div class="form-group">
-              <label class="label" for="inviteEmail">{$_('team.email')}</label>
+              <label class="label" for="inviteEmail">{$_('team.email')} *</label>
               <input
                 class="input"
                 type="email"
@@ -265,6 +286,38 @@
                 placeholder="email@example.com"
                 disabled={inviteLoading}
               />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label" for="inviteSalutation">{$_('profile.salutation.label')}</label>
+                <select class="input" id="inviteSalutation" bind:value={inviteSalutation} disabled={inviteLoading}>
+                  {#each salutationOptions as option}
+                    <option value={option.value}>{$_(option.labelKey)}</option>
+                  {/each}
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="label" for="inviteFirstName">{$_('profile.firstName')}</label>
+                <input
+                  class="input"
+                  type="text"
+                  id="inviteFirstName"
+                  bind:value={inviteFirstName}
+                  placeholder={$_('profile.firstNamePlaceholder')}
+                  disabled={inviteLoading}
+                />
+              </div>
+              <div class="form-group">
+                <label class="label" for="inviteLastName">{$_('profile.lastName')}</label>
+                <input
+                  class="input"
+                  type="text"
+                  id="inviteLastName"
+                  bind:value={inviteLastName}
+                  placeholder={$_('profile.lastNamePlaceholder')}
+                  disabled={inviteLoading}
+                />
+              </div>
             </div>
             <div class="form-group">
               <label class="label" for="inviteRole">{$_('team.role')}</label>
@@ -463,11 +516,22 @@
   }
 
   .invite-form {
-    max-width: 500px;
+    max-width: 700px;
   }
 
   .invite-form .form-group {
     margin-bottom: 1rem;
+  }
+
+  .invite-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .invite-form .form-row .form-group {
+    margin-bottom: 0;
   }
 
   .invite-form .input {
@@ -476,6 +540,12 @@
 
   .invite-form select.input {
     cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .invite-form .form-row {
+      grid-template-columns: 1fr;
+    }
   }
 
   .form-actions {

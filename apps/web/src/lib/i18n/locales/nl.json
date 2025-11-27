@@ -35,7 +35,8 @@
 		"manage": "Beheren",
 		"optional": "optioneel",
 		"clear": "Wissen",
-		"noResults": "Geen resultaten gevonden"
+		"noResults": "Geen resultaten gevonden",
+		"retry": "Opnieuw proberen"
 	},
 	"nav": {
 		"dashboard": "Dashboard",
@@ -431,6 +432,59 @@
 					"content": "Als eigenaar kun je rollen van leden wijzigen of ze uit het team verwijderen."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Profiel",
+		"personalInfo": "Persoonlijke gegevens",
+		"emailSettings": "E-mailinstellingen",
+		"accountInfo": "Accountinformatie",
+		"loadError": "Kon profiel niet laden",
+		"saveSuccess": "Profiel succesvol bijgewerkt",
+		"saveError": "Profiel opslaan mislukt",
+		"salutation": {
+			"label": "Aanhef",
+			"none": "Geen aanhef",
+			"mr": "Dhr.",
+			"ms": "Mevr.",
+			"mrs": "Mevr.",
+			"mx": "Mx.",
+			"dr": "Dr.",
+			"prof": "Prof.",
+			"other": "Anders"
+		},
+		"firstName": "Voornaam",
+		"firstNamePlaceholder": "Voer je voornaam in",
+		"lastName": "Achternaam",
+		"lastNamePlaceholder": "Voer je achternaam in",
+		"displayName": "Weergavenaam",
+		"displayNamePlaceholder": "Naam zichtbaar voor anderen",
+		"displayNameHint": "Deze naam is zichtbaar voor je teamleden",
+		"language": "Systeemtaal",
+		"languageHint": "De interfacetaal voor je account",
+		"currentEmail": "Huidig e-mailadres",
+		"newEmail": "Nieuw e-mailadres",
+		"newEmailPlaceholder": "Voer nieuw e-mailadres in",
+		"emailChangeHint": "Een verificatielink wordt naar het nieuwe adres gestuurd",
+		"requestChange": "Wijziging aanvragen",
+		"pendingChange": "Wacht op verificatie",
+		"pendingEmailTo": "Wacht op verificatie voor: {email}",
+		"expiresAt": "Verloopt: {time}",
+		"emailChangeError": "E-mailwijziging aanvragen mislukt",
+		"cancelEmailError": "E-mailwijziging annuleren mislukt",
+		"memberId": "Lid-ID",
+		"memberSince": "Lid sinds",
+		"lastUpdated": "Laatst bijgewerkt",
+		"verifyEmail": {
+			"title": "E-mail verifiëren",
+			"noToken": "Geen verificatietoken opgegeven",
+			"verifying": "Je e-mail wordt geverifieerd...",
+			"success": "E-mail geverifieerd!",
+			"successMessage": "Je e-mailadres is gewijzigd naar {email}",
+			"failed": "Verificatie mislukt",
+			"error": "Kon e-mail niet verifiëren",
+			"goToLogin": "Naar inloggen",
+			"goToProfile": "Naar profiel"
 		}
 	},
 	"errors": {

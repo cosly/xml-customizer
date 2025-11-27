@@ -277,9 +277,11 @@ Als je geen wachtwoord reset hebt aangevraagd, kun je deze email negeren.
     inviterName: string,
     organizationName: string,
     inviteUrl: string,
-    role: string
+    role: string,
+    inviteeName?: string
   ): Promise<{ success: boolean }> {
     const roleText = role === 'admin' ? 'beheerder' : 'teamlid';
+    const greeting = inviteeName ? `Beste ${inviteeName}` : 'Hallo';
 
     const html = `
       <!DOCTYPE html>
@@ -309,6 +311,7 @@ Als je geen wachtwoord reset hebt aangevraagd, kun je deze email negeren.
           </div>
           <div class="content">
             <h1>Je bent uitgenodigd!</h1>
+            <p>${greeting},</p>
             <p>${inviterName} heeft je uitgenodigd om deel te nemen aan hun team op XML Customizer.</p>
             <div class="org-box">
               <div class="org-name">${organizationName}</div>
@@ -335,6 +338,8 @@ Als je geen wachtwoord reset hebt aangevraagd, kun je deze email negeren.
     const text = `
 Je bent uitgenodigd!
 
+${greeting},
+
 ${inviterName} heeft je uitgenodigd om deel te nemen aan hun team op XML Customizer.
 
 Organisatie: ${organizationName}
@@ -349,6 +354,78 @@ Let op: Deze uitnodiging is 7 dagen geldig.
     return this.send({
       to,
       subject: `${inviterName} nodigt je uit voor ${organizationName} - XML Customizer`,
+      html,
+      text,
+    });
+  }
+
+  async sendEmailChangeVerification(
+    to: string,
+    name: string,
+    verifyUrl: string
+  ): Promise<{ success: boolean }> {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; }
+          .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+          .header { text-align: center; margin-bottom: 30px; }
+          .logo { height: 50px; width: auto; }
+          .content { background: #f8fafc; border-radius: 8px; padding: 30px; }
+          h1 { font-size: 20px; margin: 0 0 20px 0; }
+          p { margin: 0 0 15px 0; }
+          .button { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; }
+          .warning { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; padding: 15px; margin: 20px 0; font-size: 14px; }
+          .footer { text-align: center; margin-top: 30px; font-size: 14px; color: #64748b; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <img src="${this.env.APP_URL || ''}/logo.png" alt="Tesoro" class="logo" />
+          </div>
+          <div class="content">
+            <h1>Bevestig je nieuwe emailadres</h1>
+            <p>Hallo ${name},</p>
+            <p>Je hebt een verzoek ingediend om je emailadres te wijzigen naar dit adres. Klik op de onderstaande knop om de wijziging te bevestigen.</p>
+            <p style="text-align: center; margin: 25px 0;">
+              <a href="${verifyUrl}" class="button">Emailadres bevestigen</a>
+            </p>
+            <div class="warning">
+              <strong>Let op:</strong> Deze link is 1 uur geldig. Als je geen emailwijziging hebt aangevraagd, kun je deze email negeren.
+            </div>
+            <p style="font-size: 14px; color: #64748b;">Als de knop niet werkt, kopieer dan deze link naar je browser:</p>
+            <p style="font-size: 12px; word-break: break-all; color: #64748b;">${verifyUrl}</p>
+          </div>
+          <div class="footer">
+            <p>Dit is een automatisch gegenereerde email.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const text = `
+Bevestig je nieuwe emailadres
+
+Hallo ${name},
+
+Je hebt een verzoek ingediend om je emailadres te wijzigen naar dit adres.
+
+Klik op deze link om de wijziging te bevestigen:
+${verifyUrl}
+
+Let op: Deze link is 1 uur geldig.
+
+Als je geen emailwijziging hebt aangevraagd, kun je deze email negeren.
+    `.trim();
+
+    return this.send({
+      to,
+      subject: 'Bevestig je nieuwe emailadres - Tesoro',
       html,
       text,
     });

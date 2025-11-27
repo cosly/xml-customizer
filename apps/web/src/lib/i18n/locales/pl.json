@@ -35,7 +35,8 @@
 		"manage": "Zarządzaj",
 		"optional": "opcjonalne",
 		"clear": "Wyczyść",
-		"noResults": "Nie znaleziono wyników"
+		"noResults": "Nie znaleziono wyników",
+		"retry": "Spróbuj ponownie"
 	},
 	"nav": {
 		"dashboard": "Panel",
@@ -431,6 +432,59 @@
 					"content": "Jako właściciel możesz zmieniać role członków lub usuwać ich z zespołu."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Profil",
+		"personalInfo": "Informacje osobiste",
+		"emailSettings": "Ustawienia e-mail",
+		"accountInfo": "Informacje o koncie",
+		"loadError": "Nie udało się załadować profilu",
+		"saveSuccess": "Profil zaktualizowany pomyślnie",
+		"saveError": "Błąd podczas zapisywania profilu",
+		"salutation": {
+			"label": "Forma grzecznościowa",
+			"none": "Brak",
+			"mr": "Pan",
+			"ms": "Pani",
+			"mrs": "Pani",
+			"mx": "Mx.",
+			"dr": "Dr",
+			"prof": "Prof.",
+			"other": "Inna"
+		},
+		"firstName": "Imię",
+		"firstNamePlaceholder": "Wprowadź swoje imię",
+		"lastName": "Nazwisko",
+		"lastNamePlaceholder": "Wprowadź swoje nazwisko",
+		"displayName": "Nazwa wyświetlana",
+		"displayNamePlaceholder": "Nazwa widoczna dla innych",
+		"displayNameHint": "Ta nazwa jest widoczna dla członków zespołu",
+		"language": "Język systemu",
+		"languageHint": "Język interfejsu dla twojego konta",
+		"currentEmail": "Aktualny e-mail",
+		"newEmail": "Nowy e-mail",
+		"newEmailPlaceholder": "Wprowadź nowy e-mail",
+		"emailChangeHint": "Link weryfikacyjny zostanie wysłany na nowy adres",
+		"requestChange": "Poproś o zmianę",
+		"pendingChange": "Weryfikacja oczekuje",
+		"pendingEmailTo": "Oczekiwanie na weryfikację dla: {email}",
+		"expiresAt": "Wygasa: {time}",
+		"emailChangeError": "Błąd podczas żądania zmiany e-mail",
+		"cancelEmailError": "Błąd podczas anulowania zmiany e-mail",
+		"memberId": "ID członka",
+		"memberSince": "Członek od",
+		"lastUpdated": "Ostatnia aktualizacja",
+		"verifyEmail": {
+			"title": "Zweryfikuj e-mail",
+			"noToken": "Nie podano tokenu weryfikacyjnego",
+			"verifying": "Weryfikacja twojego e-maila...",
+			"success": "E-mail zweryfikowany!",
+			"successMessage": "Twój e-mail został zmieniony na {email}",
+			"failed": "Weryfikacja nie powiodła się",
+			"error": "Nie udało się zweryfikować e-maila",
+			"goToLogin": "Przejdź do logowania",
+			"goToProfile": "Przejdź do profilu"
 		}
 	},
 	"errors": {

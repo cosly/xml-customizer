@@ -35,7 +35,8 @@
 		"manage": "Hantera",
 		"optional": "valfritt",
 		"clear": "Rensa",
-		"noResults": "Inga resultat hittades"
+		"noResults": "Inga resultat hittades",
+		"retry": "Försök igen"
 	},
 	"nav": {
 		"dashboard": "Instrumentpanel",
@@ -431,6 +432,59 @@
 					"content": "Som ägare kan du ändra medlemmars roller eller ta bort dem från teamet."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Profil",
+		"personalInfo": "Personlig information",
+		"emailSettings": "E-postinställningar",
+		"accountInfo": "Kontoinformation",
+		"loadError": "Kunde inte ladda profilen",
+		"saveSuccess": "Profilen har uppdaterats",
+		"saveError": "Fel vid sparande av profil",
+		"salutation": {
+			"label": "Tilltal",
+			"none": "Inget tilltal",
+			"mr": "Herr",
+			"ms": "Fru",
+			"mrs": "Fru",
+			"mx": "Mx.",
+			"dr": "Dr",
+			"prof": "Prof.",
+			"other": "Annat"
+		},
+		"firstName": "Förnamn",
+		"firstNamePlaceholder": "Ange ditt förnamn",
+		"lastName": "Efternamn",
+		"lastNamePlaceholder": "Ange ditt efternamn",
+		"displayName": "Visningsnamn",
+		"displayNamePlaceholder": "Namn synligt för andra",
+		"displayNameHint": "Detta namn är synligt för dina teammedlemmar",
+		"language": "Systemspråk",
+		"languageHint": "Gränssnittsspråket för ditt konto",
+		"currentEmail": "Nuvarande e-post",
+		"newEmail": "Ny e-postadress",
+		"newEmailPlaceholder": "Ange ny e-post",
+		"emailChangeHint": "En verifieringslänk skickas till den nya adressen",
+		"requestChange": "Begär ändring",
+		"pendingChange": "Verifiering väntar",
+		"pendingEmailTo": "Väntar på verifiering för: {email}",
+		"expiresAt": "Upphör: {time}",
+		"emailChangeError": "Fel vid begäran om e-poständring",
+		"cancelEmailError": "Fel vid avbrytande av e-poständring",
+		"memberId": "Medlems-ID",
+		"memberSince": "Medlem sedan",
+		"lastUpdated": "Senast uppdaterad",
+		"verifyEmail": {
+			"title": "Verifiera e-post",
+			"noToken": "Ingen verifieringstoken angavs",
+			"verifying": "Verifierar din e-post...",
+			"success": "E-post verifierad!",
+			"successMessage": "Din e-post har ändrats till {email}",
+			"failed": "Verifiering misslyckades",
+			"error": "Kunde inte verifiera e-post",
+			"goToLogin": "Gå till inloggning",
+			"goToProfile": "Gå till profil"
 		}
 	},
 	"errors": {

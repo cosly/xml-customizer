@@ -88,7 +88,7 @@ app.post('/invitations', sessionAuth, async (c) => {
     return c.json({ error: 'Je hebt geen rechten om gebruikers uit te nodigen' }, 403);
   }
 
-  const { email, role = 'member' } = await c.req.json();
+  const { email, role = 'member', salutation, first_name, last_name } = await c.req.json();
 
   if (!email) {
     return c.json({ error: 'Email is verplicht' }, 400);
@@ -105,13 +105,20 @@ app.post('/invitations', sessionAuth, async (c) => {
     return c.json({ error: 'Ongeldige rol' }, 400);
   }
 
+  // Validate salutation if provided
+  const validSalutations = ['mr', 'ms', 'mrs', 'mx', 'dr', 'prof', 'other', null, undefined];
+  if (!validSalutations.includes(salutation)) {
+    return c.json({ error: 'Ongeldige aanhef' }, 400);
+  }
+
   try {
     const invitationService = new InvitationService(c.env.DB);
     const invitation = await invitationService.createInvitation(
       user.organization_id,
       email,
       user.id,
-      role
+      role,
+      { salutation, first_name, last_name }
     );
 
     // Get organization name for email
@@ -130,13 +137,17 @@ app.post('/invitations', sessionAuth, async (c) => {
     console.log('MAILGUN_DOMAIN configured:', !!c.env.MAILGUN_DOMAIN);
     console.log('MAILGUN_API_KEY configured:', !!c.env.MAILGUN_API_KEY);
 
+    // Build invitee name for personalized email
+    const inviteeName = first_name ? `${first_name}${last_name ? ' ' + last_name : ''}` : undefined;
+
     c.executionCtx.waitUntil(
       emailService.sendInvitationEmail(
         email,
         user.name,
         org?.name || 'Organisatie',
         inviteUrl,
-        role
+        role,
+        inviteeName
       ).then(result => {
         console.log('Email send result:', result);
       }).catch(err => {
@@ -150,6 +161,9 @@ app.post('/invitations', sessionAuth, async (c) => {
         id: invitation.id,
         email: invitation.email,
         role: invitation.role,
+        salutation: invitation.salutation,
+        first_name: invitation.first_name,
+        last_name: invitation.last_name,
         expires_at: invitation.expires_at,
       },
     });
@@ -175,6 +189,9 @@ app.get('/invitations/:token', async (c) => {
     organization_name: invitation.organization_name,
     invited_by_name: invitation.invited_by_name,
     role: invitation.role,
+    salutation: invitation.salutation,
+    first_name: invitation.first_name,
+    last_name: invitation.last_name,
     expires_at: invitation.expires_at,
   });
 });
@@ -245,13 +262,17 @@ app.post('/invitations/:id/resend', sessionAuth, async (c) => {
   const origin = c.req.header('origin') || c.env.APP_URL || 'http://localhost:5173';
   const inviteUrl = `${origin}/invite?token=${invitation.token}`;
 
+  // Build invitee name for personalized email
+  const inviteeName = invitation.first_name ? `${invitation.first_name}${invitation.last_name ? ' ' + invitation.last_name : ''}` : undefined;
+
   c.executionCtx.waitUntil(
     emailService.sendInvitationEmail(
       invitation.email,
       user.name,
       org?.name || 'Organisatie',
       inviteUrl,
-      invitation.role
+      invitation.role,
+      inviteeName
     )
   );
 

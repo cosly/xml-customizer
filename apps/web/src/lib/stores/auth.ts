@@ -66,6 +66,10 @@ function createAuthStore() {
         set({ user: null, loading: false, initialized: true });
       }
     },
+
+    updateUser(user: User) {
+      update((state) => ({ ...state, user }));
+    },
   };
 }
 

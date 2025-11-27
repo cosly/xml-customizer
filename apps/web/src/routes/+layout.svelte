@@ -10,7 +10,7 @@
   import HelpPanel from '$lib/components/HelpPanel.svelte';
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/register', '/invite', '/forgot-password', '/reset-password', '/welcome'];
+  const publicRoutes = ['/login', '/register', '/invite', '/forgot-password', '/reset-password', '/welcome', '/verify-email'];
 
   $: isPublicRoute = publicRoutes.some((route) => $page.url.pathname.startsWith(route));
 
@@ -79,7 +79,13 @@
           </svg>
         </button>
         <LanguageSwitcher />
-        <span class="user-name">{$auth.user?.name}</span>
+        <a href="/profile" class="user-name-link" title={$_('profile.title')}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="user-name">{$auth.user?.name}</span>
+        </a>
         <button class="btn btn-secondary btn-sm" on:click={handleLogout}>
           {$_('nav.logout')}
         </button>
@@ -115,9 +121,24 @@
     gap: 1rem;
   }
 
+  .user-name-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-muted);
+    padding: 0.375rem 0.75rem;
+    border-radius: var(--radius);
+    transition: all 0.15s ease;
+  }
+
+  .user-name-link:hover {
+    background: var(--border);
+    color: var(--primary);
+  }
+
   .user-name {
     font-size: 0.875rem;
-    color: var(--text-muted);
   }
 
   .nav-logo {

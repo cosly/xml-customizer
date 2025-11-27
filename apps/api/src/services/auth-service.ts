@@ -1,9 +1,15 @@
 import type { D1Database } from '@cloudflare/workers-types';
 
+export type Salutation = 'mr' | 'ms' | 'mrs' | 'mx' | 'dr' | 'prof' | 'other' | null;
+
 export interface User {
   id: number;
   email: string;
   name: string;
+  salutation: Salutation;
+  first_name: string | null;
+  last_name: string | null;
+  preferred_language: string;
   organization_id: number | null;
   created_at: string;
   updated_at: string;
@@ -152,8 +158,8 @@ export class AuthService {
 
     // Create user
     const result = await this.db
-      .prepare('INSERT INTO users (email, password_hash, name, organization_id) VALUES (?, ?, ?, ?) RETURNING id, email, name, organization_id, created_at, updated_at')
-      .bind(email.toLowerCase(), passwordHash, name, organizationId)
+      .prepare('INSERT INTO users (email, password_hash, name, organization_id, preferred_language) VALUES (?, ?, ?, ?, ?) RETURNING id, email, name, salutation, first_name, last_name, preferred_language, organization_id, created_at, updated_at')
+      .bind(email.toLowerCase(), passwordHash, name, organizationId, 'es')
       .first<User>();
 
     if (!result) {
@@ -201,7 +207,7 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<{ user: User; session: Session }> {
     const user = await this.db
-      .prepare('SELECT id, email, name, organization_id, password_hash, created_at, updated_at FROM users WHERE email = ?')
+      .prepare('SELECT id, email, name, salutation, first_name, last_name, preferred_language, organization_id, password_hash, created_at, updated_at FROM users WHERE email = ?')
       .bind(email.toLowerCase())
       .first<User & { password_hash: string }>();
 
@@ -239,7 +245,7 @@ export class AuthService {
   async validateSession(sessionId: string): Promise<User | null> {
     const result = await this.db
       .prepare(`
-        SELECT u.id, u.email, u.name, u.organization_id, u.created_at, u.updated_at, s.expires_at
+        SELECT u.id, u.email, u.name, u.salutation, u.first_name, u.last_name, u.preferred_language, u.organization_id, u.created_at, u.updated_at, s.expires_at
         FROM sessions s
         JOIN users u ON s.user_id = u.id
         WHERE s.id = ?
@@ -286,7 +292,7 @@ export class AuthService {
   // Generate password reset token
   async createPasswordResetToken(email: string): Promise<{ token: string; user: User } | null> {
     const user = await this.db
-      .prepare('SELECT id, email, name, organization_id, created_at, updated_at FROM users WHERE email = ?')
+      .prepare('SELECT id, email, name, salutation, first_name, last_name, preferred_language, organization_id, created_at, updated_at FROM users WHERE email = ?')
       .bind(email.toLowerCase())
       .first<User>();
 
@@ -326,13 +332,13 @@ export class AuthService {
 
     const resetToken = await this.db
       .prepare(`
-        SELECT prt.*, u.id as uid, u.email, u.name, u.organization_id, u.created_at, u.updated_at
+        SELECT prt.*, u.id as uid, u.email, u.name, u.salutation, u.first_name, u.last_name, u.preferred_language, u.organization_id, u.created_at, u.updated_at
         FROM password_reset_tokens prt
         JOIN users u ON prt.user_id = u.id
         WHERE prt.token = ? AND prt.used_at IS NULL
       `)
       .bind(token)
-      .first<PasswordResetToken & { uid: number; email: string; name: string; organization_id: number | null }>();
+      .first<PasswordResetToken & { uid: number; email: string; name: string; salutation: Salutation; first_name: string | null; last_name: string | null; preferred_language: string; organization_id: number | null }>();
 
     if (!resetToken) {
       throw new Error('Ongeldige of verlopen reset link');
@@ -365,6 +371,10 @@ export class AuthService {
       id: resetToken.uid,
       email: resetToken.email,
       name: resetToken.name,
+      salutation: resetToken.salutation,
+      first_name: resetToken.first_name,
+      last_name: resetToken.last_name,
+      preferred_language: resetToken.preferred_language,
       organization_id: resetToken.organization_id,
       created_at: resetToken.created_at,
       updated_at: new Date().toISOString(),
@@ -374,7 +384,7 @@ export class AuthService {
   // Get user by email (for password reset)
   async getUserByEmail(email: string): Promise<User | null> {
     return this.db
-      .prepare('SELECT id, email, name, organization_id, created_at, updated_at FROM users WHERE email = ?')
+      .prepare('SELECT id, email, name, salutation, first_name, last_name, preferred_language, organization_id, created_at, updated_at FROM users WHERE email = ?')
       .bind(email.toLowerCase())
       .first<User>();
   }

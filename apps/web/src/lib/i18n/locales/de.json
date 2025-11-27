@@ -35,7 +35,8 @@
 		"manage": "Verwalten",
 		"optional": "optional",
 		"clear": "Löschen",
-		"noResults": "Keine Ergebnisse gefunden"
+		"noResults": "Keine Ergebnisse gefunden",
+		"retry": "Wiederholen"
 	},
 	"nav": {
 		"dashboard": "Dashboard",
@@ -431,6 +432,59 @@
 					"content": "Als Eigentümer können Sie Mitgliederrollen ändern oder sie aus dem Team entfernen."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Profil",
+		"personalInfo": "Persönliche Informationen",
+		"emailSettings": "E-Mail-Einstellungen",
+		"accountInfo": "Kontoinformationen",
+		"loadError": "Profil konnte nicht geladen werden",
+		"saveSuccess": "Profil erfolgreich aktualisiert",
+		"saveError": "Fehler beim Speichern des Profils",
+		"salutation": {
+			"label": "Anrede",
+			"none": "Keine Anrede",
+			"mr": "Herr",
+			"ms": "Frau",
+			"mrs": "Frau",
+			"mx": "Mx.",
+			"dr": "Dr.",
+			"prof": "Prof.",
+			"other": "Andere"
+		},
+		"firstName": "Vorname",
+		"firstNamePlaceholder": "Geben Sie Ihren Vornamen ein",
+		"lastName": "Nachname",
+		"lastNamePlaceholder": "Geben Sie Ihren Nachnamen ein",
+		"displayName": "Anzeigename",
+		"displayNamePlaceholder": "Für andere sichtbarer Name",
+		"displayNameHint": "Dieser Name ist für Ihre Teammitglieder sichtbar",
+		"language": "Systemsprache",
+		"languageHint": "Die Schnittstellensprache für Ihr Konto",
+		"currentEmail": "Aktuelle E-Mail",
+		"newEmail": "Neue E-Mail-Adresse",
+		"newEmailPlaceholder": "Geben Sie die neue E-Mail ein",
+		"emailChangeHint": "Ein Bestätigungslink wird an die neue Adresse gesendet",
+		"requestChange": "Änderung beantragen",
+		"pendingChange": "Bestätigung ausstehend",
+		"pendingEmailTo": "Warten auf Bestätigung für: {email}",
+		"expiresAt": "Läuft ab: {time}",
+		"emailChangeError": "Fehler beim Beantragen der E-Mail-Änderung",
+		"cancelEmailError": "Fehler beim Abbrechen der E-Mail-Änderung",
+		"memberId": "Mitglieds-ID",
+		"memberSince": "Mitglied seit",
+		"lastUpdated": "Zuletzt aktualisiert",
+		"verifyEmail": {
+			"title": "E-Mail verifizieren",
+			"noToken": "Kein Verifizierungstoken bereitgestellt",
+			"verifying": "Ihre E-Mail wird verifiziert...",
+			"success": "E-Mail verifiziert!",
+			"successMessage": "Ihre E-Mail wurde zu {email} geändert",
+			"failed": "Verifizierung fehlgeschlagen",
+			"error": "E-Mail konnte nicht verifiziert werden",
+			"goToLogin": "Zur Anmeldung",
+			"goToProfile": "Zum Profil"
 		}
 	},
 	"errors": {

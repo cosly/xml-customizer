@@ -16,10 +16,17 @@ const API_URL = import.meta.env.VITE_API_URL ||
     : 'http://localhost:8787');
 
 // User type
+export type Salutation = 'mr' | 'ms' | 'mrs' | 'mx' | 'dr' | 'prof' | 'other' | null;
+
 export interface User {
   id: number;
   email: string;
   name: string;
+  salutation: Salutation;
+  first_name: string | null;
+  last_name: string | null;
+  preferred_language: string;
+  organization_id: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -77,12 +84,12 @@ async function fetchApi<T>(
 
 // Auth API
 export const authApi = {
-  register: async (email: string, password: string, name: string) => {
+  register: async (email: string, password: string, name: string, invitationToken?: string) => {
     const result = await fetchApi<{ user: User; session: { id: string; expires_at: string } }>(
       '/api/auth/register',
       {
         method: 'POST',
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({ email, password, name, invitationToken }),
       }
     );
     // Store session token for cross-domain requests
@@ -231,6 +238,9 @@ export interface PendingInvitation {
   id: number;
   email: string;
   role: 'admin' | 'member';
+  salutation: Salutation;
+  first_name: string | null;
+  last_name: string | null;
   expires_at: string;
   invited_by_name: string;
 }
@@ -247,6 +257,9 @@ export interface InvitationDetails {
   organization_name: string;
   invited_by_name: string;
   role: string;
+  salutation: Salutation;
+  first_name: string | null;
+  last_name: string | null;
   expires_at: string;
 }
 
@@ -260,14 +273,26 @@ export const teamApi = {
       body: JSON.stringify({ name }),
     }),
 
-  sendInvitation: (email: string, role: 'admin' | 'member' = 'member') =>
-    fetchApi<{ success: boolean; invitation: { id: number; email: string; role: string; expires_at: string } }>(
-      '/api/team/invitations',
-      {
-        method: 'POST',
-        body: JSON.stringify({ email, role }),
-      }
-    ),
+  sendInvitation: (
+    email: string,
+    role: 'admin' | 'member' = 'member',
+    profileData?: { salutation?: Salutation; first_name?: string; last_name?: string }
+  ) =>
+    fetchApi<{
+      success: boolean;
+      invitation: {
+        id: number;
+        email: string;
+        role: string;
+        salutation: Salutation;
+        first_name: string | null;
+        last_name: string | null;
+        expires_at: string;
+      };
+    }>('/api/team/invitations', {
+      method: 'POST',
+      body: JSON.stringify({ email, role, ...profileData }),
+    }),
 
   getInvitation: (token: string) =>
     fetchApi<InvitationDetails>(`/api/team/invitations/${token}`),
@@ -343,4 +368,66 @@ export const adminApi = {
 
   getGrowthStats: (days: number = 14) =>
     fetchApi<unknown[]>(`/api/admin/stats/growth?days=${days}`),
+};
+
+// Profile types
+export interface ProfileData {
+  id: number;
+  email: string;
+  name: string;
+  salutation: Salutation;
+  first_name: string | null;
+  last_name: string | null;
+  preferred_language: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProfileUpdateData {
+  salutation?: Salutation;
+  first_name?: string;
+  last_name?: string;
+  name?: string;
+  preferred_language?: string;
+}
+
+export interface PendingEmailChange {
+  newEmail: string;
+  expiresAt: string;
+}
+
+// Profile API
+export const profileApi = {
+  get: () =>
+    fetchApi<{ profile: ProfileData; pendingEmailChange: PendingEmailChange | null }>('/api/profile'),
+
+  update: (data: ProfileUpdateData) =>
+    fetchApi<{ success: boolean; profile: ProfileData }>('/api/profile', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  requestEmailChange: (newEmail: string) =>
+    fetchApi<{
+      success: boolean;
+      message: string;
+      pendingEmailChange: PendingEmailChange;
+    }>('/api/profile/change-email', {
+      method: 'POST',
+      body: JSON.stringify({ new_email: newEmail }),
+    }),
+
+  cancelEmailChange: () =>
+    fetchApi<{ success: boolean }>('/api/profile/change-email', {
+      method: 'DELETE',
+    }),
+
+  verifyEmailChange: (token: string) =>
+    fetchApi<{ success: boolean; message: string; newEmail: string }>(
+      '/api/profile/verify-email',
+      {
+        method: 'POST',
+        body: JSON.stringify({ token }),
+      }
+    ),
 };

@@ -35,7 +35,8 @@
 		"manage": "Kudeatu",
 		"optional": "aukerakoa",
 		"clear": "Garbitu",
-		"noResults": "Ez da emaitzarik aurkitu"
+		"noResults": "Ez da emaitzarik aurkitu",
+		"retry": "Saiatu berriro"
 	},
 	"nav": {
 		"dashboard": "Kontrol-panela",
@@ -431,6 +432,59 @@
 					"content": "Jabe gisa kideen rolak aldatu ditzakezu edo taldetik kendu."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Profila",
+		"personalInfo": "Informazio pertsonala",
+		"emailSettings": "Posta konfigurazioa",
+		"accountInfo": "Kontuaren informazioa",
+		"loadError": "Ezin izan da profila kargatu",
+		"saveSuccess": "Profila ongi eguneratu da",
+		"saveError": "Errorea profila gordetzean",
+		"salutation": {
+			"label": "Tratamendua",
+			"none": "Tratamendurik gabe",
+			"mr": "Jaun",
+			"ms": "And.",
+			"mrs": "And.",
+			"mx": "Mx.",
+			"dr": "Dr.",
+			"prof": "Prof.",
+			"other": "Bestelakoa"
+		},
+		"firstName": "Izena",
+		"firstNamePlaceholder": "Sartu zure izena",
+		"lastName": "Abizena",
+		"lastNamePlaceholder": "Sartu zure abizena",
+		"displayName": "Bistaratzeko izena",
+		"displayNamePlaceholder": "Besteentzat ikusgai den izena",
+		"displayNameHint": "Izen hau zure taldekideentzat ikusgai dago",
+		"language": "Sistemaren hizkuntza",
+		"languageHint": "Zure konturako interfazearen hizkuntza",
+		"currentEmail": "Uneko posta",
+		"newEmail": "Posta elektroniko berria",
+		"newEmailPlaceholder": "Sartu posta berria",
+		"emailChangeHint": "Egiaztapen-esteka bat bidaliko da helbide berrira",
+		"requestChange": "Aldaketa eskatu",
+		"pendingChange": "Egiaztapena zain",
+		"pendingEmailTo": "Egiaztapena zain: {email}",
+		"expiresAt": "Iraungitzen da: {time}",
+		"emailChangeError": "Errorea posta aldaketa eskatzean",
+		"cancelEmailError": "Errorea posta aldaketa bertan behera uztean",
+		"memberId": "Kidearen IDa",
+		"memberSince": "Kidetza-data",
+		"lastUpdated": "Azken eguneratzea",
+		"verifyEmail": {
+			"title": "Posta egiaztatu",
+			"noToken": "Ez da egiaztapen-tokenik eman",
+			"verifying": "Zure posta egiaztatzen...",
+			"success": "Posta egiaztatuta!",
+			"successMessage": "Zure posta {email}-(e)ra aldatu da",
+			"failed": "Egiaztapenak huts egin du",
+			"error": "Ezin izan da posta egiaztatu",
+			"goToLogin": "Joan saio hasierara",
+			"goToProfile": "Joan profilara"
 		}
 	},
 	"errors": {

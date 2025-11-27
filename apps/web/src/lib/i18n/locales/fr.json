@@ -35,7 +35,8 @@
 		"manage": "Gérer",
 		"optional": "optionnel",
 		"clear": "Effacer",
-		"noResults": "Aucun résultat trouvé"
+		"noResults": "Aucun résultat trouvé",
+		"retry": "Réessayer"
 	},
 	"nav": {
 		"dashboard": "Tableau de bord",
@@ -431,6 +432,59 @@
 					"content": "En tant que propriétaire, vous pouvez changer les rôles des membres ou les supprimer de l'équipe."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Profil",
+		"personalInfo": "Informations personnelles",
+		"emailSettings": "Paramètres d'e-mail",
+		"accountInfo": "Informations du compte",
+		"loadError": "Impossible de charger le profil",
+		"saveSuccess": "Profil mis à jour avec succès",
+		"saveError": "Erreur lors de l'enregistrement du profil",
+		"salutation": {
+			"label": "Civilité",
+			"none": "Aucune civilité",
+			"mr": "M.",
+			"ms": "Mme",
+			"mrs": "Mme",
+			"mx": "Mx.",
+			"dr": "Dr",
+			"prof": "Prof.",
+			"other": "Autre"
+		},
+		"firstName": "Prénom",
+		"firstNamePlaceholder": "Entrez votre prénom",
+		"lastName": "Nom",
+		"lastNamePlaceholder": "Entrez votre nom",
+		"displayName": "Nom d'affichage",
+		"displayNamePlaceholder": "Nom visible par les autres",
+		"displayNameHint": "Ce nom est visible par vos coéquipiers",
+		"language": "Langue du système",
+		"languageHint": "La langue de l'interface pour votre compte",
+		"currentEmail": "E-mail actuel",
+		"newEmail": "Nouvel e-mail",
+		"newEmailPlaceholder": "Entrez le nouvel e-mail",
+		"emailChangeHint": "Un lien de vérification sera envoyé à la nouvelle adresse",
+		"requestChange": "Demander le changement",
+		"pendingChange": "Vérification en attente",
+		"pendingEmailTo": "En attente de vérification pour : {email}",
+		"expiresAt": "Expire : {time}",
+		"emailChangeError": "Erreur lors de la demande de changement d'e-mail",
+		"cancelEmailError": "Erreur lors de l'annulation du changement d'e-mail",
+		"memberId": "ID de membre",
+		"memberSince": "Membre depuis",
+		"lastUpdated": "Dernière mise à jour",
+		"verifyEmail": {
+			"title": "Vérifier l'e-mail",
+			"noToken": "Aucun jeton de vérification fourni",
+			"verifying": "Vérification de votre e-mail...",
+			"success": "E-mail vérifié !",
+			"successMessage": "Votre e-mail a été changé en {email}",
+			"failed": "Échec de la vérification",
+			"error": "Impossible de vérifier l'e-mail",
+			"goToLogin": "Aller à la connexion",
+			"goToProfile": "Aller au profil"
 		}
 	},
 	"errors": {

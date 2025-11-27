@@ -35,7 +35,8 @@
 		"manage": "Gestionar",
 		"optional": "opcional",
 		"clear": "Esborrar",
-		"noResults": "No s'han trobat resultats"
+		"noResults": "No s'han trobat resultats",
+		"retry": "Tornar a intentar"
 	},
 	"nav": {
 		"dashboard": "Tauler de Control",
@@ -431,6 +432,59 @@
 					"content": "Com a propietari pots canviar els rols dels membres o eliminar-los de l'equip."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Perfil",
+		"personalInfo": "Informació personal",
+		"emailSettings": "Configuració de correu",
+		"accountInfo": "Informació de compte",
+		"loadError": "No s'ha pogut carregar el perfil",
+		"saveSuccess": "Perfil actualitzat correctament",
+		"saveError": "Error en desar el perfil",
+		"salutation": {
+			"label": "Tractament",
+			"none": "Sense tractament",
+			"mr": "Sr.",
+			"ms": "Sra.",
+			"mrs": "Sra.",
+			"mx": "Mx.",
+			"dr": "Dr.",
+			"prof": "Prof.",
+			"other": "Altre"
+		},
+		"firstName": "Nom",
+		"firstNamePlaceholder": "Introdueix el teu nom",
+		"lastName": "Cognoms",
+		"lastNamePlaceholder": "Introdueix els teus cognoms",
+		"displayName": "Nom per mostrar",
+		"displayNamePlaceholder": "Nom visible per a altres",
+		"displayNameHint": "Aquest nom és visible per als teus companys d'equip",
+		"language": "Idioma del sistema",
+		"languageHint": "L'idioma de la interfície per al teu compte",
+		"currentEmail": "Correu actual",
+		"newEmail": "Nou correu electrònic",
+		"newEmailPlaceholder": "Introdueix el nou correu",
+		"emailChangeHint": "S'enviarà un enllaç de verificació a la nova adreça",
+		"requestChange": "Sol·licitar canvi",
+		"pendingChange": "Verificació pendent",
+		"pendingEmailTo": "Esperant verificació per a: {email}",
+		"expiresAt": "Expira: {time}",
+		"emailChangeError": "Error en sol·licitar canvi de correu",
+		"cancelEmailError": "Error en cancel·lar canvi de correu",
+		"memberId": "ID de membre",
+		"memberSince": "Membre des de",
+		"lastUpdated": "Última actualització",
+		"verifyEmail": {
+			"title": "Verificar correu",
+			"noToken": "No s'ha proporcionat token de verificació",
+			"verifying": "Verificant el teu correu...",
+			"success": "Correu verificat!",
+			"successMessage": "El teu correu ha estat canviat a {email}",
+			"failed": "Verificació fallida",
+			"error": "No s'ha pogut verificar el correu",
+			"goToLogin": "Anar a inici de sessió",
+			"goToProfile": "Anar al perfil"
 		}
 	},
 	"errors": {

@@ -12,10 +12,16 @@ export interface Env {
   APP_URL?: string;
 }
 
+export type Salutation = 'mr' | 'ms' | 'mrs' | 'mx' | 'dr' | 'prof' | 'other' | null;
+
 export interface AuthUser {
   id: number;
   email: string;
   name: string;
+  salutation: Salutation;
+  first_name: string | null;
+  last_name: string | null;
+  preferred_language: string;
   organization_id: number | null;
   created_at: string;
   updated_at: string;

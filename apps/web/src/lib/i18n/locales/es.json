@@ -35,7 +35,8 @@
 		"manage": "Gestionar",
 		"optional": "opcional",
 		"clear": "Limpiar",
-		"noResults": "No se encontraron resultados"
+		"noResults": "No se encontraron resultados",
+		"retry": "Reintentar"
 	},
 	"nav": {
 		"dashboard": "Panel de Control",
@@ -431,6 +432,59 @@
 					"content": "Como propietario puedes cambiar los roles de los miembros o eliminarlos del equipo."
 				}
 			]
+		}
+	},
+	"profile": {
+		"title": "Perfil",
+		"personalInfo": "Información personal",
+		"emailSettings": "Configuración de correo",
+		"accountInfo": "Información de cuenta",
+		"loadError": "No se pudo cargar el perfil",
+		"saveSuccess": "Perfil actualizado correctamente",
+		"saveError": "Error al guardar el perfil",
+		"salutation": {
+			"label": "Tratamiento",
+			"none": "Sin tratamiento",
+			"mr": "Sr.",
+			"ms": "Sra.",
+			"mrs": "Sra.",
+			"mx": "Mx.",
+			"dr": "Dr.",
+			"prof": "Prof.",
+			"other": "Otro"
+		},
+		"firstName": "Nombre",
+		"firstNamePlaceholder": "Introduce tu nombre",
+		"lastName": "Apellidos",
+		"lastNamePlaceholder": "Introduce tus apellidos",
+		"displayName": "Nombre para mostrar",
+		"displayNamePlaceholder": "Nombre visible para otros",
+		"displayNameHint": "Este nombre es visible para tus compañeros de equipo",
+		"language": "Idioma del sistema",
+		"languageHint": "El idioma de la interfaz para tu cuenta",
+		"currentEmail": "Correo actual",
+		"newEmail": "Nuevo correo electrónico",
+		"newEmailPlaceholder": "Introduce el nuevo correo",
+		"emailChangeHint": "Se enviará un enlace de verificación a la nueva dirección",
+		"requestChange": "Solicitar cambio",
+		"pendingChange": "Verificación pendiente",
+		"pendingEmailTo": "Esperando verificación para: {email}",
+		"expiresAt": "Expira: {time}",
+		"emailChangeError": "Error al solicitar cambio de correo",
+		"cancelEmailError": "Error al cancelar cambio de correo",
+		"memberId": "ID de miembro",
+		"memberSince": "Miembro desde",
+		"lastUpdated": "Última actualización",
+		"verifyEmail": {
+			"title": "Verificar correo",
+			"noToken": "No se proporcionó token de verificación",
+			"verifying": "Verificando tu correo...",
+			"success": "¡Correo verificado!",
+			"successMessage": "Tu correo ha sido cambiado a {email}",
+			"failed": "Verificación fallida",
+			"error": "No se pudo verificar el correo",
+			"goToLogin": "Ir a inicio de sesión",
+			"goToProfile": "Ir al perfil"
 		}
 	},
 	"errors": {

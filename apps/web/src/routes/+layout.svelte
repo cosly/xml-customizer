@@ -4,7 +4,7 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
-  import { _ } from 'svelte-i18n';
+  import { _, isLoading } from 'svelte-i18n';
   import { auth, isAuthenticated } from '$lib/stores/auth';
   import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
   import HelpPanel from '$lib/components/HelpPanel.svelte';
@@ -43,10 +43,10 @@
   }
 </script>
 
-{#if $auth.loading && !$auth.initialized}
+{#if $auth.loading && !$auth.initialized || $isLoading}
   <div class="loading-screen">
     <div class="spinner"></div>
-    <p>{$_('common.loading')}</p>
+    <p>Loading...</p>
   </div>
 {:else if isPublicRoute}
   <slot />

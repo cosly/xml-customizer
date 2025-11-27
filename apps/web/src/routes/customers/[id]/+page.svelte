@@ -593,19 +593,18 @@
           </div>
         {/if}
 
-          {#if hasChanges}
-            <div style="position: sticky; bottom: 1rem; margin-top: 1rem;">
-              <div class="alert alert-success" style="display: flex; align-items: center; justify-content: space-between;">
-                <span>Je hebt onopgeslagen wijzigingen.</span>
-                <button class="btn btn-primary" on:click={saveSelections} disabled={saving}>
-                  {#if saving}
-                    <span class="spinner"></span>
-                  {/if}
-                  Wijzigingen opslaan
-                </button>
-              </div>
+        {#if hasChanges}
+          <div style="position: sticky; bottom: 1rem; margin-top: 1rem;">
+            <div class="alert alert-success" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Je hebt onopgeslagen wijzigingen.</span>
+              <button class="btn btn-primary" on:click={saveSelections} disabled={saving}>
+                {#if saving}
+                  <span class="spinner"></span>
+                {/if}
+                Wijzigingen opslaan
+              </button>
             </div>
-          {/if}
+          </div>
         {/if}
       {/if}
     </div>

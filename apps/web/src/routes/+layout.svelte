@@ -1,12 +1,14 @@
 <script lang="ts">
   import '../app.css';
+  import '$lib/i18n';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { auth, isAuthenticated } from '$lib/stores/auth';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/register', '/invite', '/forgot-password', '/reset-password'];
+  const publicRoutes = ['/login', '/register', '/invite', '/forgot-password', '/reset-password', '/welcome'];
 
   $: isPublicRoute = publicRoutes.some((route) => $page.url.pathname.startsWith(route));
 
@@ -55,6 +57,7 @@
         </a>
       </div>
       <div class="nav-user">
+        <LanguageSwitcher />
         <span class="user-name">{$auth.user?.name}</span>
         <button class="btn btn-secondary btn-sm" on:click={handleLogout}>
           Uitloggen

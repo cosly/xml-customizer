@@ -211,7 +211,7 @@
                 <select
                   class="role-select"
                   value={member.role}
-                  on:change={(e) => updateMemberRole(member, e.currentTarget.value as 'admin' | 'member')}
+                  on:change={(e) => updateMemberRole(member, e.currentTarget.value)}
                 >
                   <option value="admin">Beheerder</option>
                   <option value="member">Lid</option>

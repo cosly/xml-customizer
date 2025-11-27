@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { _ } from 'svelte-i18n';
+  import { _, isLoading } from 'svelte-i18n';
   import { auth } from '$lib/stores/auth';
   import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
@@ -31,9 +31,16 @@
 </script>
 
 <svelte:head>
-  <title>{$_('auth.login')} - Tesoro</title>
+  <title>{$isLoading ? 'Laden...' : $_('auth.login')} - Tesoro</title>
 </svelte:head>
 
+{#if $isLoading}
+  <div class="auth-container">
+    <div class="auth-card">
+      <p>Laden...</p>
+    </div>
+  </div>
+{:else}
 <div class="auth-container">
   <div class="language-switcher-wrapper">
     <LanguageSwitcher />
@@ -87,6 +94,7 @@
     </div>
   </div>
 </div>
+{/if}
 
 <style>
   .auth-container {

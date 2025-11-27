@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { feedsApi } from '$lib/api';
   import type { SourceFeed } from '@xml-customizer/shared';
+  import { _ } from 'svelte-i18n';
 
   let feeds: SourceFeed[] = [];
   let loading = true;
@@ -135,7 +136,7 @@
     <input
       class="input"
       type="text"
-      placeholder="Zoek op naam of URL..."
+      placeholder={$_('feeds.searchFeeds')}
       bind:value={searchQuery}
     />
     {#if searchQuery}
@@ -265,7 +266,7 @@
               type="text"
               id="name"
               bind:value={formData.name}
-              placeholder="Bijv. Tesoro XML Feed"
+              placeholder={$_('feeds.namePlaceholder')}
             />
           </div>
           <div class="form-group">
@@ -275,7 +276,7 @@
               type="url"
               id="url"
               bind:value={formData.url}
-              placeholder="https://api.tesoro.estate/mls/..."
+              placeholder={$_('feeds.urlPlaceholder')}
             />
           </div>
         </div>

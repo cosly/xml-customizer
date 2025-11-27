@@ -283,7 +283,7 @@
                 type="email"
                 id="inviteEmail"
                 bind:value={inviteEmail}
-                placeholder="email@example.com"
+                placeholder={$_('auth.emailPlaceholder')}
                 disabled={inviteLoading}
               />
             </div>

@@ -127,10 +127,12 @@
 		"feedRefreshed": "Feed succesvol vernieuwd",
 		"cachePurged": "Cache succesvol geleegd",
 		"noFeeds": "Geen feeds",
-		"searchFeeds": "Feeds zoeken...",
+		"searchFeeds": "Zoek op naam of URL...",
 		"active": "Actief",
 		"inactive": "Inactief",
-		"propertyCount": "{count} woningen"
+		"propertyCount": "{count} woningen",
+		"namePlaceholder": "Bijv. Tesoro XML Feed",
+		"urlPlaceholder": "https://api.tesoro.estate/mls/..."
 	},
 	"customers": {
 		"title": "Klanten",

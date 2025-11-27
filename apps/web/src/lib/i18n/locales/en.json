@@ -127,10 +127,12 @@
 		"feedRefreshed": "Feed refreshed successfully",
 		"cachePurged": "Cache purged successfully",
 		"noFeeds": "No feeds",
-		"searchFeeds": "Search feeds...",
+		"searchFeeds": "Search by name or URL...",
 		"active": "Active",
 		"inactive": "Inactive",
-		"propertyCount": "{count} properties"
+		"propertyCount": "{count} properties",
+		"namePlaceholder": "e.g. Tesoro XML Feed",
+		"urlPlaceholder": "https://api.tesoro.estate/mls/..."
 	},
 	"customers": {
 		"title": "Customers",

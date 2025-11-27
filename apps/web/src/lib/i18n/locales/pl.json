@@ -220,20 +220,30 @@
 	"team": {
 		"title": "Zespół",
 		"organization": "Organizacja",
+		"organizationName": "Nazwa organizacji",
+		"yourRole": "Twoja rola",
 		"members": "Członkowie zespołu",
 		"invitations": "Zaproszenia",
 		"inviteMember": "Zaproś członka",
+		"pendingInvitations": "Oczekujące zaproszenia",
 		"email": "Adres e-mail",
 		"role": "Rola",
 		"owner": "Właściciel",
 		"admin": "Administrator",
 		"member": "Członek",
-		"invite": "Zaproś",
+		"memberRole": "Członek - może zarządzać kanałami i klientami",
+		"adminRole": "Admin - może też zarządzać członkami zespołu",
+		"invite": "Wyślij zaproszenie",
+		"sending": "Wysyłanie...",
+		"invitationSent": "Zaproszenie wysłane do {email}",
 		"cancel": "Anuluj",
 		"resend": "Wyślij ponownie",
+		"cancelInvitation": "Anuluj",
 		"pending": "Oczekujące",
 		"expires": "Wygasa",
+		"expiresOn": "Wygasa",
 		"remove": "Usuń",
+		"invitedBy": "Zaproszony przez",
 		"changeRole": "Zmień rolę",
 		"leaveTeam": "Opuść zespół",
 		"editName": "Edytuj nazwę",
@@ -245,7 +255,16 @@
 		"roleUpdated": "Rola zaktualizowana",
 		"nameUpdated": "Nazwa organizacji zaktualizowana",
 		"noMembers": "Brak członków",
-		"noInvitations": "Brak oczekujących zaproszeń"
+		"noInvitations": "Brak oczekujących zaproszeń",
+		"confirmCancel": "Czy na pewno chcesz anulować zaproszenie dla {email}?",
+		"confirmRemove": "Czy na pewno chcesz usunąć {name} z zespołu?",
+		"loadError": "Nie udało się załadować danych zespołu",
+		"inviteError": "Nie udało się wysłać zaproszenia",
+		"cancelError": "Nie udało się anulować",
+		"resendError": "Nie udało się wysłać ponownie",
+		"removeError": "Nie udało się usunąć",
+		"roleChangeError": "Nie udało się zmienić roli",
+		"nameChangeError": "Nie udało się zmienić nazwy"
 	},
 	"analyzer": {
 		"title": "Analizator Feedów",
@@ -261,6 +280,152 @@
 		"byBedrooms": "Według sypialni",
 		"priceDistribution": "Rozkład cen",
 		"noData": "Brak dostępnych danych"
+	},
+	"help": {
+		"title": "Pomoc",
+		"close": "Zamknij",
+		"dashboard": {
+			"title": "Panel",
+			"description": "Twój centralny widok Tesoro CRM.",
+			"sections": [
+				{
+					"title": "Statystyki",
+					"content": "Zobacz na pierwszy rzut oka ile kanałów, klientów, nieruchomości i wyborów masz w systemie."
+				},
+				{
+					"title": "Szybkie akcje",
+					"content": "Twórz nowe kanały lub klientów bezpośrednio z panelu."
+				},
+				{
+					"title": "Ostatnia aktywność",
+					"content": "Twoje ostatnio dodane kanały i klienci są wyświetlani tutaj."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Kanały",
+			"description": "Zarządzaj swoimi kanałami XML nieruchomości z portali.",
+			"sections": [
+				{
+					"title": "Czym jest kanał?",
+					"content": "Kanał to połączenie ze źródłem XML zawierającym oferty nieruchomości. Może pochodzić z Kyero, Resales Online lub innych portali."
+				},
+				{
+					"title": "Dodawanie kanału",
+					"content": "Kliknij 'Nowy kanał' i wprowadź nazwę oraz URL XML. System automatycznie pobierze i przetworzy nieruchomości."
+				},
+				{
+					"title": "Sprawdzanie aktualizacji",
+					"content": "Użyj 'Sprawdź' aby zobaczyć czy źródło ma nowe dane bez pobierania. Użyj 'Pobierz' aby pobrać i zaktualizować nieruchomości."
+				},
+				{
+					"title": "Status kanału",
+					"content": "'Pobrano' pokazuje kiedy dane zostały ostatnio pobrane. 'Sprawdzono' pokazuje kiedy źródło zostało ostatnio sprawdzone."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Szczegóły kanału",
+			"description": "Przeglądaj i zarządzaj nieruchomościami z tego kanału.",
+			"sections": [
+				{
+					"title": "Lista nieruchomości",
+					"content": "Tutaj widzisz wszystkie nieruchomości z tego kanału z podstawowymi informacjami jak referencja, typ, lokalizacja i cena."
+				},
+				{
+					"title": "Odśwież kanał",
+					"content": "Kliknij 'Odśwież' aby pobrać najnowsze dane ze źródła XML."
+				},
+				{
+					"title": "Wybór nieruchomości",
+					"content": "Wybierz nieruchomości tutaj aby później przypisać je do klientów."
+				}
+			]
+		},
+		"customers": {
+			"title": "Klienci",
+			"description": "Zarządzaj swoimi klientami i ich wyborami nieruchomości.",
+			"sections": [
+				{
+					"title": "Przegląd klientów",
+					"content": "Zobacz wszystkich swoich klientów z imieniem, e-mailem i liczbą wybranych nieruchomości."
+				},
+				{
+					"title": "Dodawanie klienta",
+					"content": "Kliknij 'Nowy klient' i wprowadź imię oraz opcjonalnie adres e-mail."
+				},
+				{
+					"title": "URL kanału klienta",
+					"content": "Każdy klient otrzymuje unikalny URL do przeglądania wybranych nieruchomości. Udostępnij ten link przez e-mail lub wiadomość."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Szczegóły klienta",
+			"description": "Zarządzaj wyborami nieruchomości dla tego klienta.",
+			"sections": [
+				{
+					"title": "Wybieranie nieruchomości",
+					"content": "Wybierz kanał i zaznacz nieruchomości, które chcesz pokazać temu klientowi. Użyj pól wyboru do zaznaczania."
+				},
+				{
+					"title": "Filtrowanie",
+					"content": "Użyj filtrów aby szybko znaleźć nieruchomości według typu, lokalizacji, sypialni lub zakresu cen."
+				},
+				{
+					"title": "Udostępnianie",
+					"content": "Skopiuj unikalny URL klienta lub wyślij go bezpośrednio przez e-mail przyciskiem 'Udostępnij'."
+				},
+				{
+					"title": "Widok tabela/karta",
+					"content": "Przełączaj między widokiem tabeli dla szybkiego przeglądu lub widokiem kart ze zdjęciami."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Analizator kanałów",
+			"description": "Uzyskaj wgląd w swoje portfolio nieruchomości dzięki wizualnym statystykom.",
+			"sections": [
+				{
+					"title": "Wybór kanału",
+					"content": "Wybierz kanał z listy rozwijanej aby przeanalizować jego nieruchomości."
+				},
+				{
+					"title": "Kluczowe liczby",
+					"content": "Zobacz całkowitą wartość, średnią cenę, medianę ceny i cenę za m² na pierwszy rzut oka."
+				},
+				{
+					"title": "Wykresy",
+					"content": "Interaktywne wykresy pokazują rozkład według ceny, typu, sypialni, lokalizacji i więcej."
+				},
+				{
+					"title": "Drill-down",
+					"content": "Kliknij segment wykresu aby zobaczyć leżące u podstaw nieruchomości. Idealne do szczegółowej analizy."
+				}
+			]
+		},
+		"team": {
+			"title": "Zespół",
+			"description": "Zarządzaj swoją organizacją i członkami zespołu.",
+			"sections": [
+				{
+					"title": "Organizacja",
+					"content": "Nazwa Twojej organizacji jest widoczna dla członków zespołu. Administratorzy i właściciele mogą ją zmienić."
+				},
+				{
+					"title": "Członkowie zespołu",
+					"content": "Zobacz wszystkich członków z ich rolą: Właściciel (pełny dostęp), Admin (może zarządzać zespołem) lub Członek (tylko kanały i klienci)."
+				},
+				{
+					"title": "Zapraszanie członków",
+					"content": "Wysyłaj zaproszenia przez e-mail. Wybierz rolę, jaką ma mieć nowy członek."
+				},
+				{
+					"title": "Zarządzanie rolami",
+					"content": "Jako właściciel możesz zmieniać role członków lub usuwać ich z zespołu."
+				}
+			]
+		}
 	},
 	"errors": {
 		"general": "Wystąpił błąd",

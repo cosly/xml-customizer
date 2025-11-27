@@ -220,20 +220,30 @@
 	"team": {
 		"title": "Equip",
 		"organization": "Organització",
+		"organizationName": "Nom de l'organització",
+		"yourRole": "El teu rol",
 		"members": "Membres de l'equip",
 		"invitations": "Invitacions",
 		"inviteMember": "Convidar membre",
+		"pendingInvitations": "Invitacions pendents",
 		"email": "Adreça electrònica",
 		"role": "Rol",
 		"owner": "Propietari",
 		"admin": "Administrador",
 		"member": "Membre",
-		"invite": "Convidar",
+		"memberRole": "Membre - pot gestionar feeds i clients",
+		"adminRole": "Admin - també pot gestionar membres de l'equip",
+		"invite": "Enviar invitació",
+		"sending": "Enviant...",
+		"invitationSent": "Invitació enviada a {email}",
 		"cancel": "Cancel·lar",
 		"resend": "Reenviar",
+		"cancelInvitation": "Cancel·lar",
 		"pending": "Pendent",
 		"expires": "Expira",
+		"expiresOn": "Expira",
 		"remove": "Eliminar",
+		"invitedBy": "Convidat per",
 		"changeRole": "Canviar rol",
 		"leaveTeam": "Abandonar equip",
 		"editName": "Editar nom",
@@ -245,7 +255,16 @@
 		"roleUpdated": "Rol actualitzat",
 		"nameUpdated": "Nom de l'organització actualitzat",
 		"noMembers": "Sense membres",
-		"noInvitations": "Sense invitacions pendents"
+		"noInvitations": "Sense invitacions pendents",
+		"confirmCancel": "Estàs segur que vols cancel·lar la invitació a {email}?",
+		"confirmRemove": "Estàs segur que vols eliminar {name} de l'equip?",
+		"loadError": "No s'han pogut carregar les dades de l'equip",
+		"inviteError": "Error en enviar la invitació",
+		"cancelError": "Error en cancel·lar",
+		"resendError": "Error en reenviar",
+		"removeError": "Error en eliminar",
+		"roleChangeError": "Error en canviar el rol",
+		"nameChangeError": "Error en canviar el nom"
 	},
 	"analyzer": {
 		"title": "Analitzador de Feeds",
@@ -261,6 +280,152 @@
 		"byBedrooms": "Per dormitoris",
 		"priceDistribution": "Distribució de preus",
 		"noData": "Sense dades disponibles"
+	},
+	"help": {
+		"title": "Ajuda",
+		"close": "Tancar",
+		"dashboard": {
+			"title": "Tauler de Control",
+			"description": "La teva visió central de Tesoro CRM.",
+			"sections": [
+				{
+					"title": "Estadístiques",
+					"content": "Veu d'un cop d'ull quants feeds, clients, propietats i seleccions tens al sistema."
+				},
+				{
+					"title": "Accions Ràpides",
+					"content": "Crea nous feeds o clients directament des del tauler."
+				},
+				{
+					"title": "Activitat Recent",
+					"content": "Els teus feeds i clients afegits més recentment es mostren aquí."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Feeds",
+			"description": "Gestiona els teus feeds XML de propietats de portals immobiliaris.",
+			"sections": [
+				{
+					"title": "Què és un feed?",
+					"content": "Un feed és una connexió a una font XML que conté llistats de propietats. Pot ser de Kyero, Resales Online o altres portals."
+				},
+				{
+					"title": "Afegir un feed",
+					"content": "Fes clic a 'Nou Feed' i introdueix un nom i la URL XML. El sistema buscarà i processarà automàticament les propietats."
+				},
+				{
+					"title": "Comprovar actualitzacions",
+					"content": "Usa 'Comprovar' per veure si la font té noves dades sense descarregar. Usa 'Obtenir' per descarregar i actualitzar les propietats."
+				},
+				{
+					"title": "Estat del feed",
+					"content": "'Obtingut' mostra quan es van descarregar les dades per última vegada. 'Comprovat' mostra quan es va verificar la font per última vegada."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Detalls del Feed",
+			"description": "Veure i gestionar propietats d'aquest feed.",
+			"sections": [
+				{
+					"title": "Llista de propietats",
+					"content": "Aquí veus totes les propietats d'aquest feed amb informació bàsica com referència, tipus, ubicació i preu."
+				},
+				{
+					"title": "Actualitzar feed",
+					"content": "Fes clic a 'Actualitzar' per descarregar les últimes dades de la font XML."
+				},
+				{
+					"title": "Selecció de propietats",
+					"content": "Selecciona propietats aquí per assignar-les posteriorment a clients."
+				}
+			]
+		},
+		"customers": {
+			"title": "Clients",
+			"description": "Gestiona els teus clients i les seves seleccions de propietats.",
+			"sections": [
+				{
+					"title": "Vista general de clients",
+					"content": "Veu tots els teus clients amb el seu nom, email i nombre de propietats seleccionades."
+				},
+				{
+					"title": "Afegir un client",
+					"content": "Fes clic a 'Nou Client' i introdueix un nom i opcionalment una adreça d'email."
+				},
+				{
+					"title": "URL del feed del client",
+					"content": "Cada client rep una URL única per veure les seves propietats seleccionades. Comparteix aquest enllaç per email o missatge."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Detalls del Client",
+			"description": "Gestiona les seleccions de propietats per a aquest client.",
+			"sections": [
+				{
+					"title": "Seleccionar propietats",
+					"content": "Tria un feed i selecciona les propietats que vols mostrar a aquest client. Usa les caselles de verificació per seleccionar."
+				},
+				{
+					"title": "Filtrat",
+					"content": "Usa els filtres per trobar ràpidament propietats per tipus, ubicació, dormitoris o rang de preus."
+				},
+				{
+					"title": "Compartir",
+					"content": "Copia la URL única del client o envia-la directament per email amb el botó 'Compartir'."
+				},
+				{
+					"title": "Vista taula/targeta",
+					"content": "Alterna entre vista de taula per una visió ràpida o vista de targetes amb imatges."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Analitzador de Feeds",
+			"description": "Obtén informació sobre la teva cartera de propietats amb estadístiques visuals.",
+			"sections": [
+				{
+					"title": "Seleccionar un feed",
+					"content": "Tria un feed del desplegable per analitzar les seves propietats."
+				},
+				{
+					"title": "Xifres clau",
+					"content": "Veu el valor total, preu mitjà, preu medià i preu per m² d'un cop d'ull."
+				},
+				{
+					"title": "Gràfics",
+					"content": "Els gràfics interactius mostren la distribució per preu, tipus, dormitoris, ubicació i més."
+				},
+				{
+					"title": "Desglossament",
+					"content": "Fes clic a un segment del gràfic per veure les propietats subjacents. Perfecte per anàlisis detallades."
+				}
+			]
+		},
+		"team": {
+			"title": "Equip",
+			"description": "Gestiona la teva organització i membres de l'equip.",
+			"sections": [
+				{
+					"title": "Organització",
+					"content": "El nom de la teva organització és visible per als membres de l'equip. Els administradors i propietaris poden canviar-lo."
+				},
+				{
+					"title": "Membres de l'equip",
+					"content": "Veu tots els membres amb el seu rol: Propietari (accés complet), Admin (pot gestionar equip) o Membre (només feeds i clients)."
+				},
+				{
+					"title": "Convidar membres",
+					"content": "Envia invitacions per email. Tria el rol que ha de tenir el nou membre."
+				},
+				{
+					"title": "Gestionar rols",
+					"content": "Com a propietari pots canviar els rols dels membres o eliminar-los de l'equip."
+				}
+			]
+		}
 	},
 	"errors": {
 		"general": "S'ha produït un error",

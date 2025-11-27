@@ -220,20 +220,30 @@
 	"team": {
 		"title": "Equipo",
 		"organization": "Organización",
+		"organizationName": "Nombre de la organización",
+		"yourRole": "Tu rol",
 		"members": "Miembros del equipo",
 		"invitations": "Invitaciones",
 		"inviteMember": "Invitar miembro",
+		"pendingInvitations": "Invitaciones pendientes",
 		"email": "Correo electrónico",
 		"role": "Rol",
 		"owner": "Propietario",
 		"admin": "Administrador",
 		"member": "Miembro",
-		"invite": "Invitar",
+		"memberRole": "Miembro - puede gestionar feeds y clientes",
+		"adminRole": "Admin - también puede gestionar miembros del equipo",
+		"invite": "Enviar invitación",
+		"sending": "Enviando...",
+		"invitationSent": "Invitación enviada a {email}",
 		"cancel": "Cancelar",
 		"resend": "Reenviar",
+		"cancelInvitation": "Cancelar",
 		"pending": "Pendiente",
 		"expires": "Expira",
+		"expiresOn": "Expira",
 		"remove": "Eliminar",
+		"invitedBy": "Invitado por",
 		"changeRole": "Cambiar rol",
 		"leaveTeam": "Abandonar equipo",
 		"editName": "Editar nombre",
@@ -245,7 +255,16 @@
 		"roleUpdated": "Rol actualizado",
 		"nameUpdated": "Nombre de organización actualizado",
 		"noMembers": "Sin miembros",
-		"noInvitations": "Sin invitaciones pendientes"
+		"noInvitations": "Sin invitaciones pendientes",
+		"confirmCancel": "¿Estás seguro de que quieres cancelar la invitación a {email}?",
+		"confirmRemove": "¿Estás seguro de que quieres eliminar a {name} del equipo?",
+		"loadError": "No se pudieron cargar los datos del equipo",
+		"inviteError": "Error al enviar la invitación",
+		"cancelError": "Error al cancelar",
+		"resendError": "Error al reenviar",
+		"removeError": "Error al eliminar",
+		"roleChangeError": "Error al cambiar el rol",
+		"nameChangeError": "Error al cambiar el nombre"
 	},
 	"analyzer": {
 		"title": "Analizador de Feeds",
@@ -261,6 +280,152 @@
 		"byBedrooms": "Por dormitorios",
 		"priceDistribution": "Distribución de precios",
 		"noData": "Sin datos disponibles"
+	},
+	"help": {
+		"title": "Ayuda",
+		"close": "Cerrar",
+		"dashboard": {
+			"title": "Panel de Control",
+			"description": "Tu visión central de Tesoro CRM.",
+			"sections": [
+				{
+					"title": "Estadísticas",
+					"content": "Ve de un vistazo cuántos feeds, clientes, propiedades y selecciones tienes en el sistema."
+				},
+				{
+					"title": "Acciones Rápidas",
+					"content": "Crea nuevos feeds o clientes directamente desde el panel."
+				},
+				{
+					"title": "Actividad Reciente",
+					"content": "Tus feeds y clientes añadidos más recientemente se muestran aquí."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Feeds",
+			"description": "Gestiona tus feeds XML de propiedades de portales inmobiliarios.",
+			"sections": [
+				{
+					"title": "¿Qué es un feed?",
+					"content": "Un feed es una conexión a una fuente XML que contiene listados de propiedades. Puede ser de Kyero, Resales Online u otros portales."
+				},
+				{
+					"title": "Añadir un feed",
+					"content": "Haz clic en 'Nuevo Feed' e introduce un nombre y la URL XML. El sistema buscará y procesará automáticamente las propiedades."
+				},
+				{
+					"title": "Comprobar actualizaciones",
+					"content": "Usa 'Comprobar' para ver si la fuente tiene nuevos datos sin descargar. Usa 'Obtener' para descargar y actualizar las propiedades."
+				},
+				{
+					"title": "Estado del feed",
+					"content": "'Obtenido' muestra cuándo se descargaron los datos por última vez. 'Comprobado' muestra cuándo se verificó la fuente por última vez."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Detalles del Feed",
+			"description": "Ver y gestionar propiedades de este feed.",
+			"sections": [
+				{
+					"title": "Lista de propiedades",
+					"content": "Aquí ves todas las propiedades de este feed con información básica como referencia, tipo, ubicación y precio."
+				},
+				{
+					"title": "Actualizar feed",
+					"content": "Haz clic en 'Actualizar' para descargar los últimos datos de la fuente XML."
+				},
+				{
+					"title": "Selección de propiedades",
+					"content": "Selecciona propiedades aquí para asignarlas posteriormente a clientes."
+				}
+			]
+		},
+		"customers": {
+			"title": "Clientes",
+			"description": "Gestiona tus clientes y sus selecciones de propiedades.",
+			"sections": [
+				{
+					"title": "Vista general de clientes",
+					"content": "Ve todos tus clientes con su nombre, email y número de propiedades seleccionadas."
+				},
+				{
+					"title": "Añadir un cliente",
+					"content": "Haz clic en 'Nuevo Cliente' e introduce un nombre y opcionalmente una dirección de email."
+				},
+				{
+					"title": "URL del feed del cliente",
+					"content": "Cada cliente recibe una URL única para ver sus propiedades seleccionadas. Comparte este enlace por email o mensaje."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Detalles del Cliente",
+			"description": "Gestiona las selecciones de propiedades para este cliente.",
+			"sections": [
+				{
+					"title": "Seleccionar propiedades",
+					"content": "Elige un feed y selecciona las propiedades que quieres mostrar a este cliente. Usa las casillas de verificación para seleccionar."
+				},
+				{
+					"title": "Filtrado",
+					"content": "Usa los filtros para encontrar rápidamente propiedades por tipo, ubicación, dormitorios o rango de precios."
+				},
+				{
+					"title": "Compartir",
+					"content": "Copia la URL única del cliente o envíala directamente por email con el botón 'Compartir'."
+				},
+				{
+					"title": "Vista tabla/tarjeta",
+					"content": "Alterna entre vista de tabla para una visión rápida o vista de tarjetas con imágenes."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Analizador de Feeds",
+			"description": "Obtén información sobre tu cartera de propiedades con estadísticas visuales.",
+			"sections": [
+				{
+					"title": "Seleccionar un feed",
+					"content": "Elige un feed del desplegable para analizar sus propiedades."
+				},
+				{
+					"title": "Cifras clave",
+					"content": "Ve el valor total, precio medio, precio mediano y precio por m² de un vistazo."
+				},
+				{
+					"title": "Gráficos",
+					"content": "Los gráficos interactivos muestran la distribución por precio, tipo, dormitorios, ubicación y más."
+				},
+				{
+					"title": "Desglose",
+					"content": "Haz clic en un segmento del gráfico para ver las propiedades subyacentes. Perfecto para análisis detallados."
+				}
+			]
+		},
+		"team": {
+			"title": "Equipo",
+			"description": "Gestiona tu organización y miembros del equipo.",
+			"sections": [
+				{
+					"title": "Organización",
+					"content": "El nombre de tu organización es visible para los miembros del equipo. Los administradores y propietarios pueden cambiarlo."
+				},
+				{
+					"title": "Miembros del equipo",
+					"content": "Ve todos los miembros con su rol: Propietario (acceso completo), Admin (puede gestionar equipo) o Miembro (solo feeds y clientes)."
+				},
+				{
+					"title": "Invitar miembros",
+					"content": "Envía invitaciones por email. Elige el rol que debe tener el nuevo miembro."
+				},
+				{
+					"title": "Gestionar roles",
+					"content": "Como propietario puedes cambiar los roles de los miembros o eliminarlos del equipo."
+				}
+			]
+		}
 	},
 	"errors": {
 		"general": "Ha ocurrido un error",

@@ -220,20 +220,30 @@
 	"team": {
 		"title": "Taldea",
 		"organization": "Erakundea",
+		"organizationName": "Erakundearen izena",
+		"yourRole": "Zure rola",
 		"members": "Taldekideak",
 		"invitations": "Gonbidapenak",
 		"inviteMember": "Kidea gonbidatu",
+		"pendingInvitations": "Zain dauden gonbidapenak",
 		"email": "Helbide elektronikoa",
 		"role": "Rola",
 		"owner": "Jabea",
 		"admin": "Administratzailea",
 		"member": "Kidea",
-		"invite": "Gonbidatu",
+		"memberRole": "Kidea - jarioak eta bezeroak kudeatu ditzake",
+		"adminRole": "Admin - taldekideak ere kudeatu ditzake",
+		"invite": "Gonbidapena bidali",
+		"sending": "Bidaltzen...",
+		"invitationSent": "Gonbidapena {email}-(r)a bidalita",
 		"cancel": "Utzi",
 		"resend": "Birbidali",
+		"cancelInvitation": "Utzi",
 		"pending": "Zain",
 		"expires": "Iraungitzen da",
+		"expiresOn": "Iraungitzen da",
 		"remove": "Kendu",
+		"invitedBy": "Nork gonbidatu",
 		"changeRole": "Rola aldatu",
 		"leaveTeam": "Taldea utzi",
 		"editName": "Izena editatu",
@@ -245,7 +255,16 @@
 		"roleUpdated": "Rola eguneratuta",
 		"nameUpdated": "Erakundearen izena eguneratuta",
 		"noMembers": "Kiderik ez",
-		"noInvitations": "Gonbidapen zainean ez"
+		"noInvitations": "Gonbidapen zainean ez",
+		"confirmCancel": "Ziur zaude {email}-(r)i gonbidapena bertan behera utzi nahi duzula?",
+		"confirmRemove": "Ziur zaude {name} taldetik kendu nahi duzula?",
+		"loadError": "Ezin izan dira taldearen datuak kargatu",
+		"inviteError": "Errorea gonbidapena bidaltzean",
+		"cancelError": "Errorea bertan behera uztean",
+		"resendError": "Errorea birbidaltzean",
+		"removeError": "Errorea kentzean",
+		"roleChangeError": "Errorea rola aldatzean",
+		"nameChangeError": "Errorea izena aldatzean"
 	},
 	"analyzer": {
 		"title": "Feed Aztertzailea",
@@ -261,6 +280,152 @@
 		"byBedrooms": "Logelen arabera",
 		"priceDistribution": "Prezio banaketa",
 		"noData": "Daturik ez"
+	},
+	"help": {
+		"title": "Laguntza",
+		"close": "Itxi",
+		"dashboard": {
+			"title": "Kontrol-panela",
+			"description": "Tesoro CRM-ren zure ikuspegi zentrala.",
+			"sections": [
+				{
+					"title": "Estatistikak",
+					"content": "Ikusi begirada batean zenbat jario, bezero, higiezin eta hautapen dituzun sisteman."
+				},
+				{
+					"title": "Ekintza Azkarrak",
+					"content": "Sortu jario edo bezero berriak zuzenean kontrolpaneletik."
+				},
+				{
+					"title": "Azken Jarduera",
+					"content": "Zure azken jarioak eta bezeroak hemen agertzen dira."
+				}
+			]
+		},
+		"feeds": {
+			"title": "Jarioak",
+			"description": "Kudeatu zure XML higiezinen jarioak atarietatik.",
+			"sections": [
+				{
+					"title": "Zer da jario bat?",
+					"content": "Jario bat higiezinen zerrendak dituen XML iturri baterako konexioa da. Kyero, Resales Online edo beste atarietatik izan daiteke."
+				},
+				{
+					"title": "Jarioa gehitu",
+					"content": "Egin klik 'Jario berria' botoian eta sartu izen bat eta XML URLa. Sistemak automatikoki bilatu eta prozesatuko ditu higiezinak."
+				},
+				{
+					"title": "Eguneratzeak egiaztatu",
+					"content": "Erabili 'Egiaztatu' iturburuak datu berriak dituen ikusteko deskargatu gabe. Erabili 'Lortu' higiezinak deskargatu eta eguneratzeko."
+				},
+				{
+					"title": "Jarioaren egoera",
+					"content": "'Lortuta' datuak azkeneko aldiz noiz deskargatu ziren erakusten du. 'Egiaztatuta' iturburua azkeneko aldiz noiz egiaztatu zen erakusten du."
+				}
+			]
+		},
+		"feedDetail": {
+			"title": "Jarioaren Xehetasunak",
+			"description": "Ikusi eta kudeatu jario honen higiezinak.",
+			"sections": [
+				{
+					"title": "Higiezinen zerrenda",
+					"content": "Hemen jario honetako higiezin guztiak ikusten dituzu oinarrizko informazioarekin: erreferentzia, mota, kokalekua eta prezioa."
+				},
+				{
+					"title": "Jarioa eguneratu",
+					"content": "Egin klik 'Eguneratu' XML iturburu-tik azken datuak deskargatzeko."
+				},
+				{
+					"title": "Higiezinen hautapena",
+					"content": "Hautatu higiezinak hemen geroago bezeroei esleitzeko."
+				}
+			]
+		},
+		"customers": {
+			"title": "Bezeroak",
+			"description": "Kudeatu zure bezeroak eta haien higiezinen hautapenak.",
+			"sections": [
+				{
+					"title": "Bezeroen ikuspegi orokorra",
+					"content": "Ikusi zure bezero guztiak izenarekin, emailarekin eta hautatutako higiezin kopuruarekin."
+				},
+				{
+					"title": "Bezeroa gehitu",
+					"content": "Egin klik 'Bezero berria' eta sartu izen bat eta aukeran email helbide bat."
+				},
+				{
+					"title": "Bezeroaren jario URLa",
+					"content": "Bezero bakoitzak URL bakarra jasotzen du hautatutako higiezinak ikusteko. Partekatu esteka hau emailez edo mezuz."
+				}
+			]
+		},
+		"customerDetail": {
+			"title": "Bezeroaren Xehetasunak",
+			"description": "Kudeatu bezero honentzako higiezin hautapenak.",
+			"sections": [
+				{
+					"title": "Higiezinak hautatu",
+					"content": "Aukeratu jario bat eta hautatu bezero honi erakutsi nahi dizkiozun higiezinak. Erabili kontrol-laukiak hautatzeko."
+				},
+				{
+					"title": "Iragazketa",
+					"content": "Erabili iragazkiak higiezinak motaren, kokalekuaren, logelen edo prezio tartearen arabera azkar aurkitzeko."
+				},
+				{
+					"title": "Partekatu",
+					"content": "Kopiatu bezeroaren URL bakarra edo bidali zuzenean emailez 'Partekatu' botoiarekin."
+				},
+				{
+					"title": "Taula/txartel ikuspegia",
+					"content": "Aldatu taula ikuspegiaren eta irudidun txartel ikuspegiaren artean."
+				}
+			]
+		},
+		"analyzer": {
+			"title": "Jario Aztertzailea",
+			"description": "Lortu informazioa zure higiezin zorroari buruz estatistika bisualekin.",
+			"sections": [
+				{
+					"title": "Jario bat hautatu",
+					"content": "Aukeratu jario bat goitibeherako zerrendatik bere higiezinak aztertzeko."
+				},
+				{
+					"title": "Zifra klabeak",
+					"content": "Ikusi guztizko balioa, batez besteko prezioa, prezio mediana eta m²-ko prezioa begirada batean."
+				},
+				{
+					"title": "Grafikoak",
+					"content": "Grafiko interaktiboek prezioaren, motaren, logelen, kokalekuaren eta gehiagoren araberako banaketa erakusten dute."
+				},
+				{
+					"title": "Sakontze",
+					"content": "Egin klik grafiko segmentu batean azpiko higiezinak ikusteko. Ezin hobea analisi zehatzetarako."
+				}
+			]
+		},
+		"team": {
+			"title": "Taldea",
+			"description": "Kudeatu zure erakundea eta taldekideak.",
+			"sections": [
+				{
+					"title": "Erakundea",
+					"content": "Zure erakundearen izena taldekideentzat ikusgai dago. Administratzaileek eta jabeek alda dezakete."
+				},
+				{
+					"title": "Taldekideak",
+					"content": "Ikusi kide guztiak haien rolarekin: Jabea (sarbide osoa), Admin (taldea kudeatu dezake) edo Kidea (jarioak eta bezeroak bakarrik)."
+				},
+				{
+					"title": "Kideak gonbidatu",
+					"content": "Bidali gonbidapenak emailez. Aukeratu kide berriak izan behar duen rola."
+				},
+				{
+					"title": "Rolak kudeatu",
+					"content": "Jabe gisa kideen rolak aldatu ditzakezu edo taldetik kendu."
+				}
+			]
+		}
 	},
 	"errors": {
 		"general": "Errore bat gertatu da",

@@ -1,5 +1,7 @@
 <script lang="ts">
   import { authApi } from '$lib/api';
+  import { _, isLoading } from 'svelte-i18n';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
   let email = '';
   let error = '';
@@ -8,7 +10,7 @@
 
   async function handleSubmit() {
     if (!email) {
-      error = 'Vul je email adres in';
+      error = $_('auth.emailRequired');
       return;
     }
 
@@ -21,7 +23,7 @@
       success = result.message;
       email = '';
     } catch (e) {
-      error = e instanceof Error ? e.message : 'Er is iets misgegaan';
+      error = e instanceof Error ? e.message : $_('errors.generic');
     } finally {
       loading = false;
     }
@@ -29,14 +31,24 @@
 </script>
 
 <svelte:head>
-  <title>Wachtwoord vergeten - Tesoro</title>
+  <title>{$isLoading ? 'Loading...' : $_('auth.forgotPassword')} - Tesoro</title>
 </svelte:head>
 
+{#if $isLoading}
+  <div class="auth-container">
+    <div class="auth-card">
+      <p>Loading...</p>
+    </div>
+  </div>
+{:else}
 <div class="auth-container">
+  <div class="language-switcher-wrapper">
+    <LanguageSwitcher />
+  </div>
   <div class="auth-card">
     <div class="auth-header">
       <img src="/logo.png" alt="Tesoro" class="auth-logo" />
-      <p class="auth-subtitle">Wachtwoord vergeten?</p>
+      <p class="auth-subtitle">{$_('auth.forgotPassword')}</p>
     </div>
 
     {#if error}
@@ -47,18 +59,18 @@
       <div class="alert alert-success">{success}</div>
     {:else}
       <p class="description">
-        Vul je email adres in en we sturen je een link om je wachtwoord te resetten.
+        {$_('auth.forgotPasswordDescription')}
       </p>
 
       <form on:submit|preventDefault={handleSubmit}>
         <div class="form-group">
-          <label class="label" for="email">Email</label>
+          <label class="label" for="email">{$_('auth.email')}</label>
           <input
             class="input"
             type="email"
             id="email"
             bind:value={email}
-            placeholder="jouw@email.nl"
+            placeholder={$_('auth.emailPlaceholder')}
             autocomplete="email"
           />
         </div>
@@ -67,16 +79,17 @@
           {#if loading}
             <span class="spinner"></span>
           {/if}
-          Reset link versturen
+          {$_('auth.sendResetLink')}
         </button>
       </form>
     {/if}
 
     <div class="auth-footer">
-      <p><a href="/login">Terug naar inloggen</a></p>
+      <p><a href="/login">{$_('auth.backToLogin')}</a></p>
     </div>
   </div>
 </div>
+{/if}
 
 <style>
   .auth-container {
@@ -86,6 +99,13 @@
     justify-content: center;
     padding: 1rem;
     background: var(--background);
+    position: relative;
+  }
+
+  .language-switcher-wrapper {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
   }
 
   .auth-card {

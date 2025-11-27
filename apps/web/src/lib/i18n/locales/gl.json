@@ -154,7 +154,18 @@
 		"searchCustomers": "Buscar clientes...",
 		"selectProperties": "Seleccionar Propiedades",
 		"selectedProperties": "Propiedades Seleccionadas",
-		"noSelections": "Non hai propiedades seleccionadas"
+		"noSelections": "Non hai propiedades seleccionadas",
+		"searchPlaceholder": "Referencia, localización...",
+		"minPrice": "Mín",
+		"maxPrice": "Máx",
+		"shareEmailPlaceholder": "exemplo@email.gal",
+		"shareMessagePlaceholder": "Engade unha mensaxe persoal...",
+		"allTypes": "Todos os tipos",
+		"allLocations": "Todas as localizacións",
+		"search": "Buscar",
+		"type": "Tipo",
+		"location": "Localización",
+		"priceRange": "Rango de prezos"
 	},
 	"properties": {
 		"title": "Propiedades",

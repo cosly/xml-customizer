@@ -154,7 +154,18 @@
 		"searchCustomers": "Pesquisar clientes...",
 		"selectProperties": "Selecionar Imóveis",
 		"selectedProperties": "Imóveis Selecionados",
-		"noSelections": "Sem imóveis selecionados"
+		"noSelections": "Sem imóveis selecionados",
+		"searchPlaceholder": "Referência, localização...",
+		"minPrice": "Mín",
+		"maxPrice": "Máx",
+		"shareEmailPlaceholder": "exemplo@email.pt",
+		"shareMessagePlaceholder": "Adicione uma mensagem pessoal...",
+		"allTypes": "Todos os tipos",
+		"allLocations": "Todas as localizações",
+		"search": "Pesquisar",
+		"type": "Tipo",
+		"location": "Localização",
+		"priceRange": "Faixa de preços"
 	},
 	"properties": {
 		"title": "Imóveis",

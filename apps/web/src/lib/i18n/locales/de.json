@@ -154,7 +154,18 @@
 		"searchCustomers": "Kunden suchen...",
 		"selectProperties": "Immobilien auswählen",
 		"selectedProperties": "Ausgewählte Immobilien",
-		"noSelections": "Keine Immobilien ausgewählt"
+		"noSelections": "Keine Immobilien ausgewählt",
+		"searchPlaceholder": "Referenz, Standort...",
+		"minPrice": "Min",
+		"maxPrice": "Max",
+		"shareEmailPlaceholder": "beispiel@email.de",
+		"shareMessagePlaceholder": "Fügen Sie eine persönliche Nachricht hinzu...",
+		"allTypes": "Alle Typen",
+		"allLocations": "Alle Standorte",
+		"search": "Suchen",
+		"type": "Typ",
+		"location": "Standort",
+		"priceRange": "Preisbereich"
 	},
 	"properties": {
 		"title": "Immobilien",

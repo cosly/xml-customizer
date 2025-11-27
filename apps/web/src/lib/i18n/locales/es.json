@@ -154,7 +154,18 @@
 		"searchCustomers": "Buscar clientes...",
 		"selectProperties": "Seleccionar Propiedades",
 		"selectedProperties": "Propiedades Seleccionadas",
-		"noSelections": "No hay propiedades seleccionadas"
+		"noSelections": "No hay propiedades seleccionadas",
+		"searchPlaceholder": "Referencia, ubicación...",
+		"minPrice": "Mín",
+		"maxPrice": "Máx",
+		"shareEmailPlaceholder": "ejemplo@email.com",
+		"shareMessagePlaceholder": "Añade un mensaje personal...",
+		"allTypes": "Todos los tipos",
+		"allLocations": "Todas las ubicaciones",
+		"search": "Buscar",
+		"type": "Tipo",
+		"location": "Ubicación",
+		"priceRange": "Rango de precios"
 	},
 	"properties": {
 		"title": "Propiedades",

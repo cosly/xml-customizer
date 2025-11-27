@@ -154,7 +154,18 @@
 		"searchCustomers": "Cercar clients...",
 		"selectProperties": "Seleccionar Propietats",
 		"selectedProperties": "Propietats Seleccionades",
-		"noSelections": "No hi ha propietats seleccionades"
+		"noSelections": "No hi ha propietats seleccionades",
+		"searchPlaceholder": "Referència, ubicació...",
+		"minPrice": "Mín",
+		"maxPrice": "Màx",
+		"shareEmailPlaceholder": "exemple@email.cat",
+		"shareMessagePlaceholder": "Afegeix un missatge personal...",
+		"allTypes": "Tots els tipus",
+		"allLocations": "Totes les ubicacions",
+		"search": "Cercar",
+		"type": "Tipus",
+		"location": "Ubicació",
+		"priceRange": "Rang de preus"
 	},
 	"properties": {
 		"title": "Propietats",

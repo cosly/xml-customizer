@@ -154,7 +154,18 @@
 		"searchCustomers": "Поиск клиентов...",
 		"selectProperties": "Выбрать объекты",
 		"selectedProperties": "Выбранные объекты",
-		"noSelections": "Объекты не выбраны"
+		"noSelections": "Объекты не выбраны",
+		"searchPlaceholder": "Референс, местоположение...",
+		"minPrice": "Мин",
+		"maxPrice": "Макс",
+		"shareEmailPlaceholder": "пример@email.ru",
+		"shareMessagePlaceholder": "Добавьте личное сообщение...",
+		"allTypes": "Все типы",
+		"allLocations": "Все местоположения",
+		"search": "Поиск",
+		"type": "Тип",
+		"location": "Местоположение",
+		"priceRange": "Диапазон цен"
 	},
 	"properties": {
 		"title": "Объекты",

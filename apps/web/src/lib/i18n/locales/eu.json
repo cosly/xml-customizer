@@ -154,7 +154,18 @@
 		"searchCustomers": "Bezeroak bilatu...",
 		"selectProperties": "Higiezinak hautatu",
 		"selectedProperties": "Hautatutako higiezinak",
-		"noSelections": "Ez dago higiezinik hautatuta"
+		"noSelections": "Ez dago higiezinik hautatuta",
+		"searchPlaceholder": "Erreferentzia, kokapena...",
+		"minPrice": "Min",
+		"maxPrice": "Max",
+		"shareEmailPlaceholder": "adibidea@emaila.eus",
+		"shareMessagePlaceholder": "Gehitu mezu pertsonala...",
+		"allTypes": "Mota guztiak",
+		"allLocations": "Kokapen guztiak",
+		"search": "Bilatu",
+		"type": "Mota",
+		"location": "Kokapena",
+		"priceRange": "Prezio tartea"
 	},
 	"properties": {
 		"title": "Higiezinak",

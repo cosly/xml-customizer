@@ -154,7 +154,18 @@
 		"searchCustomers": "Sök kunder...",
 		"selectProperties": "Välj fastigheter",
 		"selectedProperties": "Valda fastigheter",
-		"noSelections": "Inga fastigheter valda"
+		"noSelections": "Inga fastigheter valda",
+		"searchPlaceholder": "Referens, plats...",
+		"minPrice": "Min",
+		"maxPrice": "Max",
+		"shareEmailPlaceholder": "exempel@email.se",
+		"shareMessagePlaceholder": "Lägg till ett personligt meddelande...",
+		"allTypes": "Alla typer",
+		"allLocations": "Alla platser",
+		"search": "Sök",
+		"type": "Typ",
+		"location": "Plats",
+		"priceRange": "Prisintervall"
 	},
 	"properties": {
 		"title": "Fastigheter",

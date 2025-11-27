@@ -154,7 +154,18 @@
 		"searchCustomers": "Rechercher des clients...",
 		"selectProperties": "Sélectionner des propriétés",
 		"selectedProperties": "Propriétés sélectionnées",
-		"noSelections": "Aucune propriété sélectionnée"
+		"noSelections": "Aucune propriété sélectionnée",
+		"searchPlaceholder": "Référence, emplacement...",
+		"minPrice": "Min",
+		"maxPrice": "Max",
+		"shareEmailPlaceholder": "exemple@email.fr",
+		"shareMessagePlaceholder": "Ajoutez un message personnel...",
+		"allTypes": "Tous les types",
+		"allLocations": "Tous les emplacements",
+		"search": "Rechercher",
+		"type": "Type",
+		"location": "Emplacement",
+		"priceRange": "Fourchette de prix"
 	},
 	"properties": {
 		"title": "Propriétés",

@@ -25,7 +25,12 @@
     if (result.success) {
       goto('/');
     } else {
-      error = result.error || $_('auth.invalidCredentials');
+      // Map error codes to i18n keys
+      if (result.error === 'INVALID_CREDENTIALS') {
+        error = $_('auth.invalidCredentials');
+      } else {
+        error = result.error || $_('auth.invalidCredentials');
+      }
     }
   }
 </script>

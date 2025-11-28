@@ -212,12 +212,12 @@ export class AuthService {
       .first<User & { password_hash: string }>();
 
     if (!user) {
-      throw new Error('Ongeldige inloggegevens');
+      throw new Error('INVALID_CREDENTIALS');
     }
 
     const valid = await verifyPassword(password, user.password_hash);
     if (!valid) {
-      throw new Error('Ongeldige inloggegevens');
+      throw new Error('INVALID_CREDENTIALS');
     }
 
     // Create session (expires in 7 days)
